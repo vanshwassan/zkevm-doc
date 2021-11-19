@@ -15,7 +15,7 @@
 
 [link-website]: https://iden3.io/circom
 [link-telegram]: https://t.me/iden3io
-[link-github]: https://github.com/iden3/circom
+[link-github]: https://github.com/hermeznetwork/zkevmdoc
 
 ---
 

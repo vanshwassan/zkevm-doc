@@ -3,11 +3,7 @@ Introduction
 
 First Example: The Fibonacci Sequence
 
-0.3
-
-![image](fibonacci-sequence){width="\textwidth"}
-
-0.7
+![A good looking figure!](figures/fibonacci-sequence.jpg)
 
 -   We can build the Fibonacci state machine with two registries: $A$
     and $B$.
@@ -23,12 +19,6 @@ First Example: The Fibonacci Sequence
     A(\omega^i) &= A_i \quad \Longrightarrow \quad A = [0, 1, 1, 2, 3] \\
     B(\omega^i) &= B_i \quad \Longrightarrow \quad B = [1, 1, 2, 3, 5]\end{aligned}$$
     for $i \in [5]$.
-
-0.3
-
-![image](fibonacci-sequence){width="\textwidth"}
-
-0.7
 
 -   We can now translate the previous relations to the polynomial
     setting: $$\begin{aligned}
@@ -46,11 +36,7 @@ First Example: The Fibonacci Sequence
     relations between successive points in H, we will make the state
     machine cyclic, that is, to start again in (0,1).
 
-0.4
-
-![image](fibonacci-sequence-aux){width="\textwidth"}
-
-0.6
+![image!](figures/fibonacci-sequence-aux.jpg)
 
 -   Similarly to $A$ and $B$, represent the state $C$ as a polynomial
     evaluated on $H$: $$\begin{aligned}
@@ -69,7 +55,7 @@ First Example: The Fibonacci Sequence
 
 Starting from the Basics: Move State Machine
 
-![image](main-state-machine-simplified){width="80%"}
+![image](figures/main-state-machine-simplified.jpg)
 
 -   We have used the following notation:
 
