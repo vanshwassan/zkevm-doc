@@ -156,11 +156,29 @@ B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_0 C(x\omega).
 
 
 
-\begin{frame}{Proving our State Machine (High Level)}
+
+\begin{frame}[allowframebreaks]{Proving our State Machine (High Level)}
 \begin{align*}
-A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega))+ A_0C(x\omega), \\
-B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_0 C(x\omega).
+p_1(x)&= A(x\omega) - B(x)(1 - C(x\omega)) - A_0C(x\omega) = \bigg\lvert_H 0,\\
+p_2(x) &= B(x\omega) - (A(x) + B(x))(1 - C(x\omega)) - B_0 C(x\omega) = \bigg\lvert_H 0.
 \end{align*}
+
+\begin{itemize}
+\item We are going to convert these H-ranged identities into an $\FF$-ranged identities that 
+is valid for any $x \in \FF$.
+\item To do so, we are going to use the \textbf{zero polynomial} $Z_H(x)$.
+\item $Z_H(x)$ is computed as the polynomial that is zero in $H$:
+\[
+(\omega,0), (\omega^2,0), (\omega^3,0), (\omega^4,0) \quad \Longrightarrow \quad Z_H(x) = (x-\omega)(x-\omega^2)(x-\omega^3)(x-\omega^4) = x^n-1.
+\]
+
+\item Notice that $p_1(x)$ and $p_2(x)$ have roots at $H$.
+\item That means $Z_H(x) | p_1(x)$ and $Z_H(x) | p_2(x)$ 
+because $(x-\omega)$, $(x-\omega^2)$, etc. are monomials of $p_1(x)$ and  $p_2(x)$.
+\item Now we can compute $d_1(x) = p_1(x) / Z_H(x)$ and $d_2(x) = p_2(x) / Z_H(x)$.
+\item The identities that need to be checked are $p_1(x) - d_1(x)Z_H(x) = 0$ and $p_2(x) - d_2(x)Z_H(x) = 0$ 
+for any $x \in \FF$.
+\end{itemize}
 
 \begin{figure}
 \includegraphics[width=0.8\columnwidth]{\zkevmdir/architecture/figures/proving_fibonacci}
