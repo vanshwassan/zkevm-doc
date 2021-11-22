@@ -3,6 +3,7 @@ Introduction
 
 First Example: The Fibonacci Sequence
 
+<<<<<<< HEAD
 Let's build a state machine to create a Fibonacci sequence
 with two registries: $A$ and $B$.
 
@@ -19,6 +20,17 @@ B_{i+1} &= A_i + B_i,
 \end{aligned}$$ 
     
 For $i \in [5]$.
+=======
+![A good looking figure!](figures/fibonacci-sequence.jpg)
+
+-   We can build the Fibonacci state machine with two registries: $A$
+    and $B$.
+
+-   Then, we have the following relations between the states of these
+    registries: $$\begin{aligned}
+    A_{i+1} &= B_i, \\
+    B_{i+1} &= A_i + B_i,\end{aligned}$$ for $i \in [5]$.
+>>>>>>> dca21d851adc00fa3f57b4de96bdca4637c9228c
 
 -   Now, represent these states as polynomials evaluated on the group
     $H = \{\omega, \omega^2, \omega^3, \omega^4, \omega^5 = 1\}$:
@@ -26,12 +38,6 @@ For $i \in [5]$.
     A(\omega^i) &= A_i \quad \Longrightarrow \quad A = [0, 1, 1, 2, 3] \\
     B(\omega^i) &= B_i \quad \Longrightarrow \quad B = [1, 1, 2, 3, 5]\end{aligned}$$
     for $i \in [5]$.
-
-0.3
-
-![image](fibonacci-sequence){width="\textwidth"}
-
-0.7
 
 -   We can now translate the previous relations to the polynomial
     setting: $$\begin{aligned}
@@ -49,11 +55,7 @@ For $i \in [5]$.
     relations between successive points in H, we will make the state
     machine cyclic, that is, to start again in (0,1).
 
-0.4
-
-![image](fibonacci-sequence-aux){width="\textwidth"}
-
-0.6
+![image!](figures/fibonacci-sequence-aux.jpg)
 
 -   Similarly to $A$ and $B$, represent the state $C$ as a polynomial
     evaluated on $H$: $$\begin{aligned}
@@ -72,7 +74,7 @@ For $i \in [5]$.
 
 Starting from the Basics: Move State Machine
 
-![image](main-state-machine-simplified){width="80%"}
+![image](figures/main-state-machine-simplified.jpg)
 
 -   We have used the following notation:
 
