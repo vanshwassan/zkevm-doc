@@ -558,9 +558,35 @@ keys
 	\tableofcontents
 \end{frame}
 	
+\section{Architecture}
 \input{\zkevmdir/architecture/latex/introduction}
 \input{\zkevmdir/architecture/latex/simple-vm}
-\input{\zkevmdir/architecture/latex/microVM-architecture}
+\input{\zkevmdir/architecture/latex/prover-architecture}
+\input{\zkevmdir/architecture/latex/microVM-architecture} %divide and conquer, plookup, permutation
+\input{\zkevmdir/architecture/latex/pil}
 \input{\zkevmdir/architecture/latex/zkvm}
-	
+
+\section{zkVMs}
+\input{\zkevmdir/vms/latex/main} % Assembly
+\input{\zkevmdir/vms/latex/memory}
+\input{\zkevmdir/vms/latex/storage} % poseidon hash
+\input{\zkevmdir/vms/latex/arithmetics}
+\input{\zkevmdir/vms/latex/shifts} % left, right
+\input{\zkevmdir/vms/latex/keccack}
+\input{\zkevmdir/vms/latex/ecrecover}
+\input{\zkevmdir/vms/latex/comparators}
+\input{\zkevmdir/vms/latex/binary-functions}
+
+\section{Prover}
+\input{\zkevmdir/prover/latex/executor}
+\input{\zkevmdir/prover/latex/stark-generator}
+\input{\zkevmdir/prover/latex/circom-groth16}
+
+\section{Node}
+\input{\zkevmdir/node/latex/proof-of-donation}
+\input{\zkevmdir/node/latex/bridge}
+
+\section{Tools \& Optimizations}
+\input{\zkevmdir/tools/latex/ffts}
+
 \end{document}
