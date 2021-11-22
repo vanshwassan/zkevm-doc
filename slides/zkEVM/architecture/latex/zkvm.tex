@@ -3,188 +3,12 @@
 
 \section{Main State Machine}
 
-
-
-\begin{frame}{Main State Machine of a Simplified Virtual Machine}
-\begin{figure}
-	\includegraphics[width=0.65\textwidth]{main-state-machine-simplified-overview}
-\end{figure}
-\end{frame}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-\begin{frame}[allowframebreaks]{Example Program}
-\begin{itemize}
-\item Let's now work with a real program:
-\[
-\begin{array}{|c|l|c|}
-\hline
-\mathbf{Position} & \multicolumn{2}{|c|}{\mathbf{Instruction}} \\ \hline
-0 & \mathbf{FREELOAD} & A \\ \hline
-1 & \mathbf{MOV} & B, 3 \\ \hline
-2 & \mathbf{JMP}~(if~B = 0) & 6 \\ \hline
-3 & \mathbf{MUL} & A, A \\ \hline
-4 & \mathbf{DEC} & B \\ \hline
-5 & \mathbf{JMP} & 2 \\ \hline
-6 & \mathbf{STOP} & \emptyset \\ \hline
-\end{array}
-\]
-
-\item First, we encode each instruction in hexadecimal as follows:
-\begin{columns}
-\begin{column}{0.5\textwidth}
-\begin{align*}
-\mathbf{FREELOAD}~A &\to 0x00010000 \\
-\mathbf{MOV}~B,n &\to 0x00020000 + n \\
-\mathbf{JMP}~(if~B = 0)~n &\to 0x00040000 + n \\
-\mathbf{JMP}~n &\to 0x00080000 + n \\
-\mathbf{MUL}~A,A &\to 0x00100000 \\
-\mathbf{DEC}~B &\to 0x00200000 \\
-\mathbf{STOP} &\to 0x00400000 
-\end{align*}
-\end{column}
-\begin{column}{0.5\textwidth}
-\[
-\begin{array}{|c|l|c|c|}
-\hline
-\mathbf{Position} & \multicolumn{2}{|c|}{\mathbf{Instruction}} & \mathbf{Inst.~Value}\\ \hline
-0 & \mathbf{FREELOAD} & A & 0x00010000 \\ \hline
-1 & \mathbf{MOV} & B, 3 & 0x00020003 \\ \hline
-2 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 \\ \hline
-3 & \mathbf{MUL} & A, A & 0x00100000 \\ \hline
-4 & \mathbf{DEC} & B & 0x00200000 \\ \hline
-5 & \mathbf{JMP} & 2 & 0x00080002 \\ \hline
-6 & \mathbf{STOP} & \emptyset & 0x00400000 \\ \hline
-\end{array}
-\]
-\end{column}
-\end{columns}
-
-\framebreak
-\item With the support of this encoding, now we can compute the whole trace of the execution of this program:
-\end{itemize}
-\scriptsize
-\[
-\begin{array}{|c|l|c|c|c|c|c|c|}
-\hline
-\mathbf{Position} & \multicolumn{2}{|c|}{\mathbf{Instruction}} & \mathbf{Inst.~Value} & \mathbf{freeLoad} & \mathbf{PC} & \mathbf{A} & \mathbf{B} \\ \hline
-0 & \mathbf{FREELOAD} & A & 0x00010000 & 10 & 0 & 0 & 0 \\ \hline
-1 & \mathbf{MOV} & B, 3 & 0x00020003 & 0 & 1 & 10 & 0 \\ \hline
-2 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 10 & 3 \\ \hline
-3 & \mathbf{MUL} & A, A & 0x00100000 & 0 & 3 & 10 & 3 \\ \hline
-4 & \mathbf{DEC} & B & 0x00200000 & 0 & 4 & 100 & 3 \\ \hline
-5 & \mathbf{JMP} & 2 & 0x00080002 & 0 & 5 & 100 & 2 \\ \hline
-6 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 100 & 2 \\ \hline
-7 & \mathbf{MUL} & A, A & 0x00100000 & 0 & 3 & 100 & 2 \\ \hline
-8 & \mathbf{DEC} & B & 0x00200000 & 0 & 4 & 1000 & 2 \\ \hline
-9 & \mathbf{JMP} & 2 & 0x00080002 & 0 & 5 & 1000 & 1 \\ \hline
-10 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 1000 & 1 \\ \hline
-11 & \mathbf{MUL} & A, A & 0x00100000 & 0 & 3 & 1000 & 1 \\ \hline
-12 & \mathbf{DEC} & B & 0x00200000 & 0 & 4 & 10000 & 1 \\ \hline
-13 & \mathbf{JMP} & 2 & 0x00080002 & 0 & 5 & 10000 & 0 \\ \hline
-14 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 10000 & 0 \\ \hline
-15 & \mathbf{STOP} & \emptyset & 0x00400000 & 0 & 6 & 10000 & 0 \\ \hline
-\end{array}
-\]
-\end{frame}
-
-
-
-
-
-\begin{frame}[allowframebreaks]{Checking the Correct Program Execution}
-\begin{itemize}
-\item The question that arises now is:
-\begin{center}
-\textbf{How do we actually verify that we are executing the correct program?}
-\end{center}
-
-\item The solution seems obvious: Check that every row of the trace of the execution coincides with some row of the program.
-
-\item Then, the question becomes to:
-\begin{center}
-\textbf{How do we actually verify that we are executing the correct program \\ in an efficient manner?}
-\end{center}
-
-\item We can do it with Plookup!
-
-\framebreak
-
-\item On the one side:
-\[
-\begin{array}{|c|l|c|c|c|}
-\hline
-\mathbf{Position} & \multicolumn{2}{|c|}{\mathbf{Instruction}} & \mathbf{Inst.~Value} & \mathbf{Rom} = \mathbf{inst} + 2^{32} \cdot \mathbf{position} \\ \hline
-0 & \mathbf{FREELOAD} & A & 0x00010000 & 0x0.00010000 \\ \hline
-1 & \mathbf{MOV} & B, 3 & 0x00020003 & 0x1.00020003 \\ \hline
-2 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0x2.00040006 \\ \hline
-3 & \mathbf{MUL} & A, A & 0x00100000 & 0x3.00100000 \\ \hline
-4 & \mathbf{DEC} & B & 0x00200000 & 0x4.00200000 \\ \hline
-5 & \mathbf{JMP} & 2 & 0x00080002 & 0x5.00080002 \\ \hline
-6 & \mathbf{STOP} & \emptyset & 0x00400000 & 0x6.00400000 \\ \hline
-\end{array}
-\]
-
-\item On the other side:
-\scriptsize
-\[
-\begin{array}{|c|l|c|c|c|c|c|c|c|}
-\hline
-\mathbf{Position} & \multicolumn{2}{|c|}{\mathbf{Instruction}} & \mathbf{Inst.~Value} & \mathbf{freeLoad} & \mathbf{PC} & \mathbf{A} & \mathbf{B} &  \mathbf{instTrace} = \mathbf{inst} + 2^{32} \cdot \mathbf{PC} \\ \hline
-0 & \mathbf{FREELOAD} & A & 0x00010000 & 10 & 0 & 0 & 0 & 0x0.00010000 \\ \hline
-1 & \mathbf{MOV} & B, 3 & 0x00020003 & 0 & 1 & 10 & 0 & 0x1.00020003 \\ \hline
-2 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 10 & 3 & 0x2.00040006 \\ \hline
-3 & \mathbf{MUL} & A, A & 0x00100000 & 0 & 3 & 10 & 3 & 0x3.00100000 \\ \hline
-4 & \mathbf{DEC} & B & 0x00200000 & 0 & 4 & 100 & 3 & 0x4.00200000 \\ \hline
-5 & \mathbf{JMP} & 2 & 0x00080002 & 0 & 5 & 100 & 2 & 0x5.00080002 \\ \hline
-6 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 100 & 2 & 0x2.00040006 \\ \hline
-7 & \mathbf{MUL} & A, A & 0x00100000 & 0 & 3 & 100 & 2 & 0x3.00100000 \\ \hline
-8 & \mathbf{DEC} & B & 0x00200000 & 0 & 4 & 1000 & 2 & 0x4.00200000 \\ \hline
-9 & \mathbf{JMP} & 2 & 0x00080002 & 0 & 5 & 1000 & 1 & 0x5.00080002 \\ \hline
-10 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 1000 & 1 & 0x2.00040006 \\ \hline
-11 & \mathbf{MUL} & A, A & 0x00100000 & 0 & 3 & 1000 & 1 & 0x3.00100000 \\ \hline
-12 & \mathbf{DEC} & B & 0x00200000 & 0 & 4 & 10000 & 1 & 0x4.00200000 \\ \hline
-13 & \mathbf{JMP} & 2 & 0x00080002 & 0 & 5 & 10000 & 0 & 0x5.00080002 \\ \hline
-14 & \mathbf{JMP}~(if~B = 0) & 6 & 0x00040006 & 0 & 2 & 10000 & 0 & 0x2.00040006 \\ \hline
-15 & \mathbf{STOP} & \emptyset & 0x00400000 & 0 & 6 & 10000 & 0 & 0x6.00400000 \\ \hline
-\end{array}
-\]
-
-\normalsize
-\item So, to check that the correct program is being executed, we simply have to use Plookup to determine if:
-\[
-\mathbf{instTrace} \subset \mathbf{Rom}
-\]
-
-\item In simple words, the trace being executed is an execution of the actual program if the instruction trace is contained in the ROM of the program.
-\end{itemize}
-\end{frame}
-
-
-
-
-
-
-
-
-
 \subsection{Storage}
+
+
 \begin{frame}{Main State Machine of a Virtual Machine}
 \begin{figure}
-	\includegraphics[width=0.65\textwidth]{main-state-machine-overview}
+	\includegraphics[width=0.65\textwidth]{\zkevmdir/architecture/figures/main-state-machine-overview}
 \end{figure}
 \end{frame}
 
@@ -379,7 +203,7 @@ f_2(x) + 2^8 g_2(x) + 2^{16} h_2(x) \subset \XOR(x) \\
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
-	\includegraphics[width=0.8\textwidth]{multiplication}
+	\includegraphics[width=0.8\textwidth]{\zkevmdir/architecture/figures/multiplication}
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
