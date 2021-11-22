@@ -26,8 +26,10 @@
 - Introduction
 - Simple VM
 - Prover architecture
-- microVM-architecture (divide and conquer, plookup, permutations)
-- PIL
+- MicroVM architecture (divide and conquer, plookup, permutations)
+
+## PIL
+- Polynomial indentity language
 
 ## zkVMs
 - Main (assembly)
@@ -38,16 +40,19 @@
 - Keccack
 - Ecrecover
 - Comparators
-- Binary-functions
+- Binary functions
 
 ## Prover
 - Executor
-- Stark-generator
-- Circom-groth16
+- Stark generator
+- Stark verifier
 
-## Node
+## Structures and protocols
 - Proof of donation
 - Bridge
+- Smart contracts
+
+## Node
 
 ## Tools & Optimizations
 - FFTs
