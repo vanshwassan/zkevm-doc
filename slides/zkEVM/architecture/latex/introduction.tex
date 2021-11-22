@@ -3,7 +3,9 @@
 
 \section{Introduction}
 
-\begin{frame}[allowframebreaks]{First Example: The Fibonacci Sequence}
+\begin{frame}[allowframebreaks]{First Example: The Fibonacci State Machine}
+
+%% i
 \begin{columns}
 \begin{column}{0.3\textwidth}
 \begin{figure}
@@ -13,25 +15,25 @@
 %\hspace{-1.4cm}
 \begin{column}{0.7\textwidth}
 \begin{itemize}
-\small
-\item We can build the Fibonacci state machine with two registries: $A$ and $B$.
-\item Then, we have the following relations between the states of these registries:
+\item We can build the Fibonacci state machine with two registries, $A$ and $B$.
+\item In the Fibonacci sequence, we have the following relations between the states of these registries:
 \begin{align*}
 A_{i+1} &= B_i, \\
 B_{i+1} &= A_i + B_i,
 \end{align*}
-for $i \in [5]$.
 
-\item Now, represent these states as polynomials evaluated on the group $H = \{\omega, \omega^2, \omega^3, \omega^4, \omega^5 = 1\}$:
+\item Let's represent the states of these registries for four steps as polynomials in $\FF_p$ evaluated 
+on the group $H = \{\omega, \omega^2, \omega^3, \omega^4 = 1\}$:
 \begin{align*}
-A(\omega^i) &= A_i \quad \Longrightarrow \quad A = [0, 1, 1, 2, 3] \\
-B(\omega^i) &= B_i \quad \Longrightarrow \quad B = [1, 1, 2, 3, 5]
+A(\omega^i) &= A_i \quad \Longrightarrow \quad A = [0, 1, 1, 2] \\
+B(\omega^i) &= B_i \quad \Longrightarrow \quad B = [1, 1, 2, 3]
 \end{align*}
-for $i \in [5]$.
 \end{itemize}
 \end{column}
 \end{columns}
 
+
+%% ii
 \begin{columns}
 \begin{column}{0.3\textwidth}
 \begin{figure}
@@ -41,26 +43,59 @@ for $i \in [5]$.
 %\hspace{-1.4cm}
 \begin{column}{0.7\textwidth}
 \begin{itemize}
-\small
-\item We can now translate the previous relations to the polynomial setting:
+\item The relations between the states of registries:
 \begin{align*}
-A(x\omega) &=  B(x), \\
-B(x\omega) &=  A(x) + B(x).
+A_{i+1} &= B_i, \\
+B_{i+1} &= A_i + B_i,
 \end{align*}
-
-\item However, this is not completely correct, since when we evaluate in $\omega^5$ we obtain:
+for $i \in [4]$.
+\item Are translated into relations (A.K.A identities) in the polynomial setting:
 \begin{align*}
-A(\omega^6) = A(\omega) = 0 &\neq  5 = B(\omega^5), \\
-B(\omega^6) = B(\omega) = 1 &\neq  8 = A(\omega^5) + B(\omega^5).
+A(x\omega) &= \bigg\lvert_H  B(x), \\
+B(x\omega) &= \bigg\lvert_H  A(x) + B(x).
 \end{align*}
-
-\item Let's add an auxiliary registry $C$ to solve this problem.
-\item To create simple polynomial identities that can can be described as relations between successive points in H, 
-we will make the state machine cyclic, that is, to start again in (0,1).
 \end{itemize}
 \end{column}
 \end{columns}
 
+
+%% iii
+\begin{columns}
+\begin{column}{0.3\textwidth}
+\begin{figure}
+	\includegraphics[width=\textwidth]{\zkevmdir/architecture/figures/fibonacci-sequence}
+\end{figure}
+\end{column}
+%\hspace{-1.4cm}
+\begin{column}{0.7\textwidth}
+
+\begin{itemize}
+\item So we have:
+
+\vspace{-0.8cm}
+\begin{align*}
+A(x\omega) &= \bigg\lvert_H  B(x), \\
+B(x\omega) &= \bigg\lvert_H  A(x) + B(x).
+\end{align*}
+\item However, the previous identities do not correctly and uniquely describe our sequence because:
+\begin{enumerate}
+\item When we evaluate the identities in $\omega^4$:
+\begin{align*}
+A(\omega^5) = A(\omega) = 0 &\neq  3 = B(\omega^4), \\
+B(\omega^5) = B(\omega) = 1 &\neq  5 = A(\omega^4) + B(\omega^4).
+\end{align*}
+
+The equations are not cyclic.
+\item Other initial conditions also fulfil the identities, e.g:
+(2,3),~(3,5),~(5,8),~(8,13).
+\end{enumerate}
+\end{itemize}
+\end{column}
+\end{columns}
+
+
+
+%% iv
 \begin{columns}
 \begin{column}{0.4\textwidth}
 \begin{figure}
@@ -70,15 +105,15 @@ we will make the state machine cyclic, that is, to start again in (0,1).
 %\hspace{-1.4cm}
 \begin{column}{0.6\textwidth}
 \begin{itemize}
-\small
-\item Similarly to $A$ and $B$, represent the state $C$ as a polynomial evaluated on $H$:
+\item Let's add an auxiliary registry $C$ to solve the problems.
+\item The corresponding polynomial is:
 \begin{align*}
-C(\omega^i) &= C_i \quad \forall i \in [5] \quad \Longrightarrow \quad C = [1, 0, 0, 0, 0].
+C(\omega^i) &= C_i \quad \forall i \in [4] \quad \Longrightarrow \quad C = [1, 0, 0, 0].
 \end{align*}
 \item With this auxiliary state, we can now fix the polynomial identities as follows:
 \begin{align*}
-A(x\omega) &=  B(x)(1 - C(x\omega)), \\
-B(x\omega) &=  (A(x) + B(x))(1 - C(x\omega)) + C(x\omega).
+A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega)), \\
+B(x\omega) &= \bigg\lvert_H (A(x) + B(x))(1 - C(x\omega)) + C(x\omega).
 \end{align*}
 %\begin{align*}
 %C(x)A(x) &= 0, \\
@@ -86,16 +121,53 @@ B(x\omega) &=  (A(x) + B(x))(1 - C(x\omega)) + C(x\omega).
 %A(x\omega) &=  B(x), \\
 %B(x\omega) &=  A(x) + B(x).
 %\end{align*}
+\end{itemize}
+\end{column}
+\end{columns}
 
-Notice that now, when $x = w^5$:
 
-$A(Xw) = A(w^6) \neq B(X)$ ; $A(Xw) = A(w^6) = 0$.
+%% v
+\begin{columns}
+\begin{column}{0.4\textwidth}
+\begin{figure}
+\includegraphics[width=\textwidth]{\zkevmdir/architecture/figures/fibonacci-sequence-aux}
+\end{figure}
+$C(x)$ is publicly known (A.K.A \textbf{pre-processed} or \textbf{constant}).
+\end{column}
 
-$B(Xw) = B(w^6) \neq A(X)+B(X)$ ; $B(Xw) = B(w^6) = 1$.
+\begin{column}{0.6\textwidth}
+\begin{itemize}
+\item Now at $x = w^4$:
+\begin{align*}
+A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega)), \\
+B(x\omega) &= \bigg\lvert_H (A(x) + B(x))(1 - C(x\omega)) + C(x\omega).\\
+A(w^4 w) &= A(w^5) = A(w) = 0, \\
+B(w^4 w) &= B(w^5) = B(w) = 1.
+\end{align*}
+\item We can also use other initial conditions $(A_0, B_0)$:
+\begin{align*}
+A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega))+ A_0C(x\omega), \\
+B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_0 C(x\omega).
+\end{align*}
 \end{itemize}
 \end{column}
 \end{columns}
 \end{frame}
+
+
+
+
+\begin{frame}{Proving our State Machine (High Level)}
+\begin{align*}
+A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega))+ A_0C(x\omega), \\
+B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_0 C(x\omega).
+\end{align*}
+
+\begin{figure}
+\includegraphics[width=0.8\columnwidth]{\zkevmdir/architecture/figures/proving_fibonacci}
+\end{figure}
+\end{frame}
+
 
 
 
@@ -129,12 +201,6 @@ E_{i+1} &= \set E_i \cdot (\op_i - E_i) + E_i.
 \end{align*}
 \end{itemize}
 \end{frame}
-
-
-
-
-
-
 
 
 

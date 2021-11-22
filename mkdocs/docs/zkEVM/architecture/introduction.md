@@ -3,19 +3,22 @@ Introduction
 
 First Example: The Fibonacci Sequence
 
-0.3
+Let's build a state machine to create a Fibonacci sequence
+with two registries: $A$ and $B$.
 
-![image](fibonacci-sequence){width="\textwidth"}
+xfun::embed_file("homework.pdf")
 
-0.7
+![Fibonacci sequence](figures/fibonacci-sequence.pdf.png)
 
--   We can build the Fibonacci state machine with two registries: $A$
-    and $B$.
-
--   Then, we have the following relations between the states of these
-    registries: $$\begin{aligned}
-    A_{i+1} &= B_i, \\
-    B_{i+1} &= A_i + B_i,\end{aligned}$$ for $i \in [5]$.
+Then, we have the following relations between the states of these
+registries: 
+    
+$$\begin{aligned}
+A_{i+1} &= B_i, \\
+B_{i+1} &= A_i + B_i,
+\end{aligned}$$ 
+    
+For $i \in [5]$.
 
 -   Now, represent these states as polynomials evaluated on the group
     $H = \{\omega, \omega^2, \omega^3, \omega^4, \omega^5 = 1\}$:
