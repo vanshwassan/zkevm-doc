@@ -121,12 +121,12 @@ PC_{i+1} &= PC_i + 1 + (isJMP_i + isJMPC_i \cdot isSatisfied_i) \cdot (dest - PC
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{inA} & \textbf{inB} & \textbf{inFREE} & \textbf{setA} & \textbf{setB} & \textbf{isJMP} & \textbf{isJMPC} & \textbf{isSatisfied} \\ \hline
-1 & 0 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 1 \\ \hline
-0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 \\ \hline
-0 & 0 & 0 & 0 & 0 & 0 & 1 & 0 \\ \hline
-0 & 0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
+\textbf{inA} & \textbf{inB} & \textbf{inFREE} & \textbf{setA} & \textbf{setB} & \textbf{isJMP} & \textbf{isJMPC} \\ \hline
+1 & 0 & 1 & 1 & 0 & 0 & 0 \\ \hline
+0 & 0 & 0 & 0 & 0 & 0 & 1 \\ \hline
+0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
+0 & 0 & 0 & 0 & 0 & 0 & 1  \\ \hline
+0 & 0 & 0 & 0 & 0 & 0 & 0 \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|}
@@ -142,11 +142,11 @@ PC_{i+1} &= PC_i + 1 + (isJMP_i + isJMPC_i \cdot isSatisfied_i) \cdot (dest - PC
 \begin{array}{|c|}
 \hline
 \mathbf{Inst.~Value} \\ \hline
-0000.0111.00001101 \\ \hline
-0101.0000.11000000 \\ \hline
-0000.0011.00001110 \\ \hline
-0001.0000.01000000 \\ \hline
-0000.0000.00000000 \\ \hline
+0000.0111.0001101 \\ \hline
+0101.0000.1000000 \\ \hline
+0000.0011.0001110 \\ \hline
+0001.0000.1000000 \\ \hline
+0000.0000.0000000 \\ \hline
 \end{array}
 \]
 
@@ -154,21 +154,21 @@ PC_{i+1} &= PC_i + 1 + (isJMP_i + isJMPC_i \cdot isSatisfied_i) \cdot (dest - PC
 \begin{itemize}
 \item Here, we computed the instruction values as follows:
 \begin{align*}
-\mathsf{inst} = &~\inp A + 2 \cdot \inp B + 2^2 \cdot \inp FREE + 2^3 \cdot \set A + 2^4 \cdot \set B + 2^5 \cdot isJMP + 2^6 \cdot isJMPC \\ 
-& + 2^7 \cdot isSatisfied + 2^{11} \cdot FREE + 2^{15} \cdot dest.
+\mathsf{inst}_i = &~\inp A_i + 2 \cdot \inp B_i + 2^2 \cdot \inp FREE_i + 2^3 \cdot \set A_i + 2^4 \cdot \set B_i + 2^5 \cdot isJMP_i + 2^6 \cdot isJMPC_i \\ 
+& + 2^{10} \cdot FREE_i + 2^{14} \cdot dest_i.
 \end{align*}
 
 \item We can write the previous table values as the following polynomial identity:
 \begin{align*}
 \mathsf{inst}(x) = &~\inp A(x) + 2 \cdot \inp B(x) + 2^2 \cdot \inp FREE(x) + 2^3 \cdot \set A(x) + 2^4 \cdot \set B(x) + 2^5 \cdot isJMP(x) \\
-& + 2^6 \cdot isJMPC(x) + 2^7 \cdot isSatisfied(x) + 2^{11} \cdot FREE(x) + 2^{15} \cdot dest(x).
+& + 2^6 \cdot isJMPC(x) + 2^{10} \cdot FREE(x) + 2^{14} \cdot dest(x).
 \end{align*}
 
 \item Now, to build the program, every instruction will be uniquely identified by its value and the position of the program in which it is executed.
 
 \item We define the polynomial $\mathsf{rom}(x)$ which consists on an instruction value concatenated with its position:
 \[
-\mathsf{rom}(x) = \mathsf{inst}(x) + 2^{19} \cdot position
+\mathsf{rom}(x) = \mathsf{inst}(x) + 2^{18} \cdot position(x)
 \]
 \end{itemize}
 \end{frame}
@@ -200,12 +200,12 @@ PC_{i+1} &= PC_i + 1 + (isJMP_i + isJMPC_i \cdot isSatisfied_i) \cdot (dest - PC
 \begin{array}{|c|c|}
 \hline
 \mathbf{Rom} = inst(x) + 2^{19} \cdot position(x) \\ \hline
-0000.0000.0111.00001101 \\ \hline
-0001.0101.0000.11000000 \\ \hline
-0010.0000.0011.00001110 \\ \hline
-0011.0000.0000.00001101 \\ \hline
-0100.0001.0000.01000000 \\ \hline
-0101.0000.0000.00000000 \\ \hline
+0000.0000.0111.0001101 \\ \hline
+0001.0101.0000.1000000 \\ \hline
+0010.0000.0011.0001110 \\ \hline
+0011.0000.0000.0001101 \\ \hline
+0100.0001.0000.1000000 \\ \hline
+0101.0000.0000.0000000 \\ \hline
 \end{array}
 \]
 
@@ -226,13 +226,13 @@ PC_{i+1} &= PC_i + 1 + (isJMP_i + isJMPC_i \cdot isSatisfied_i) \cdot (dest - PC
 \begin{array}{|c|c|}
 \hline
 \mathbf{instTrace} = inst(x) + 2^{19} \cdot PC(x) \\ \hline
-0000.0000.0111.00001101 \\ \hline
-0001.0000.0000.01000000 \\ \hline
-0010.0000.0011.00001110 \\ \hline
-0011.0000.0000.00001101 \\ \hline
-0100.0001.0000.01000000 \\ \hline
-0001.0101.0000.11000000 \\ \hline
-0000.0000.0000.00000000 \\ \hline
+0000.0000.0111.0001101 \\ \hline
+0001.0101.0000.1000000 \\ \hline
+0010.0000.0011.0001110 \\ \hline
+0011.0000.0000.0001101 \\ \hline
+0100.0001.0000.1000000 \\ \hline
+0001.0101.0000.1000000 \\ \hline
+0000.0000.0000.0000000 \\ \hline
 \end{array}
 \]
 \end{itemize}
@@ -263,9 +263,9 @@ PC_{i+1} &= PC_i + 1 + (isJMP_i + isJMPC_i \cdot isSatisfied_i) \cdot (dest - PC
 \textbf{How do we actually verify that we are executing the correct program \\ in an efficient manner?}
 \end{center}
 
-\item We can do it with Plookup!
-
 \framebreak
+
+\item We can do it with the Plookup protocol!
 
 \item So, to check that the correct program is being executed, we simply have to use Plookup to determine if:
 \[
