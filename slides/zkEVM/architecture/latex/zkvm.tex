@@ -1,5 +1,5 @@
 % !TeX spellcheck = en_GB
-% !TeX root = ../../build/zkEVM-architecture.tex
+% !TeX root = ../../build/architecture.tex
 
 \section{Main State Machine}
 
@@ -203,18 +203,18 @@ f_2(x) + 2^8 g_2(x) + 2^{16} h_2(x) \subset \XOR(x) \\
 \begin{columns}
 \begin{column}{0.5\textwidth}
 \begin{figure}
-	\includegraphics[width=0.8\textwidth]{\zkevmdir/architecture/figures/multiplication}
+	\includegraphics[width=\textwidth]{\zkevmdir/architecture/figures/multiplication}
 \end{figure}
 \end{column}
 \begin{column}{0.5\textwidth}
 \begin{align*}
-A = &~a_2 \cdot 256^{22} + a_1 \cdot 256^{11} + a_0, \\
-B = &~b_2 \cdot 256^{22} + b_1 \cdot 256^{11} + b_0, \\
-C = &~c_2 \cdot 256^{22} + c_1 \cdot 256^{11} + c_0, \\
-D = &~d_5 \cdot 256^{55} + d_4 \cdot 256^{44} + d_3 \cdot 256^{33} \\
-&+ d_2 \cdot 256^{22} + d_1 \cdot 256^{11} + d_0, \\
-E = &~e_2 \cdot 256^{22} + e_1 \cdot 256^{11} + e_0, \\
-F = &~f_2 \cdot 256^{22} + f_1 \cdot 256^{11} + f_0,
+A = &~a_3 \cdot 256^{24} + a_2 \cdot 256^{16} + a_1 \cdot 256^{8} + a_0, \\
+B = &~b_3 \cdot 256^{24} + b_2 \cdot 256^{16} + b_1 \cdot 256^{8} + b_0, \\
+C = &~c_3 \cdot 256^{24} + c_2 \cdot 256^{16} + c_1 \cdot 256^{8} + c_0, \\
+D = &~d_7 \cdot 256^{56} + d_6 \cdot 256^{48} + d_5 \cdot 256^{40} + d_4 \cdot 256^{32} \\
+&+ d_3 \cdot 256^{24} + d_2 \cdot 256^{16} + d_1 \cdot 256^{8} + d_0, \\
+E = &~e_3 \cdot 256^{24} + e_2 \cdot 256^{16} + e_1 \cdot 256^{8} + e_0, \\
+F = &~f_3 \cdot 256^{24} + f_2 \cdot 256^{16} + f_1 \cdot 256^{8} + f_0,
 \end{align*}
 \end{column}
 \end{columns}
@@ -226,8 +226,7 @@ A \cdot B + C = D = E \cdot 2^{256} + F
 \end{column}
 \begin{column}{0.33\textwidth}
 \begin{align*}
-&d_0 = f_0, \\
-&d_1 = f_1, \\
+&d_0 = f_0, d_1 = f_1, d_2 = f_2,\\
 &d_2 = f_2 + \mathsf{carry_1} \cdot 256^{10}, \\
 &d_3 \cdot 256 + \mathsf{carry_1} = e_0 + \mathsf{carry_2} \cdot 256^{11}, \\
 &d_4 \cdot 256 + \mathsf{carry_2} = e_1 + \mathsf{carry_3} \cdot 256^{11}, \\
