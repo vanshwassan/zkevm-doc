@@ -56,3 +56,4 @@
 
 ## Tools & Optimizations
 - FFTs
+- Plookup
