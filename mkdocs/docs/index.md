@@ -43,12 +43,13 @@
 - Binary functions
 
 ## Prover
+- zkROM (Ethereum assembly program)
 - Executor
 - Stark generator
 - Stark verifier
 
 ## Structures and protocols
-- Proof of donation
+- Proof of efficiency
 - Bridge
 - Smart contracts
 
@@ -57,3 +58,10 @@
 ## Tools & Optimizations
 - FFTs
 - Plookup
+
+## Related crypto
+- Plookup
+- Starks
+
+
+## References
