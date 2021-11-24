@@ -5,7 +5,6 @@
 *.snm
 *.toc
 *.synctex.gz
-*.pdf
 *.listing
 *.vrb
 *.fdb_latexmk
