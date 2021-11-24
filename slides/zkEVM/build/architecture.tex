@@ -451,7 +451,7 @@ keys
 
 
 % Titlepage
-\title{Zero Knowledge Ethereum Virtual Machine}
+\title{Zero Knowledge Virtual Machine}
 %\subtitle{Subtitle}
 \author{\textbf{Jordi Baylina ~~~ Héctor Masip ~~~ Jose L. Muñoz-Tapia}}
 \institute{Polygon-Hermez \\ Information Security Group, Universitat Politècnica de Catalunya (UPC)}
@@ -555,14 +555,15 @@ keys
 	
 \begin{frame}{Table of Contents}
   \hypersetup{linkcolor=.}
+  \setcounter{tocdepth}{1}
 	\tableofcontents
 \end{frame}
 	
 \input{\zkevmdir/architecture/latex/introduction}
-\input{\zkevmdir/architecture/latex/simple-vm}
-\input{\zkevmdir/architecture/latex/prover-architecture}
+\input{\zkevmdir/architecture/latex/simple-state-machine}
 \input{\zkevmdir/architecture/latex/microVM-architecture} %divide and conquer, plookup, permutation
-%\input{\zkevmdir/architecture/latex/pil}
-\input{\zkevmdir/architecture/latex/zkvm}
+\input{\zkevmdir/architecture/latex/individual-state-machines}
+\input{\zkevmdir/architecture/latex/main-state-machine}
+\input{\zkevmdir/architecture/latex/prover-workflow}
 
 \end{document}
