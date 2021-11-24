@@ -30,4 +30,5 @@ extra:
 nav:
   - Architecture:
       - Introduction: "zkEVM/architecture/introduction.md"
+      - Simple VM: "zkEVM/architecture/simple-vm.md"  
       - Prover architecture: "zkEVM/architecture/prover-architecture.md"  
