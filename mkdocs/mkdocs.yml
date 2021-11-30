@@ -37,3 +37,5 @@ nav:
     - State Machines: "zkEVM/PIL/state-machines.md"
   - Tools & Optimizations:
     - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
+  - References: "zkEVM/references.md"
+

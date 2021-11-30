@@ -25,12 +25,8 @@
 
 - Introduction
 - Simple VM
-- Prover architecture
-- MicroVM architecture (divide and conquer, plookup, permutations)
-
-## [Polynomial Indentity Language (PIL)](zkEVM/PIL/introduction.md)
-- Introduction
-- State Machines
+- Prover Architecture
+- MicroVM Architecture (divide and conquer, plookup, permutations)
 
 ## zkVMs
 - Main (assembly)
@@ -43,27 +39,31 @@
 - Comparators
 - Binary functions
 
+## [Polynomial Indentity Language (PIL)](zkEVM/PIL/introduction.md)
+- Introduction
+- State Machines
+
 ## Prover
 - zkROM (Ethereum assembly program)
 - Executor
-- Stark generator
-- Stark verifier
+- Stark Generator
+- Stark Verifier
 
-## Structures and protocols
-- Proof of efficiency
+## Structures and Protocols
+- Proof of Efficiency
 - Bridge
-- Smart contracts
+- Smart Contracts
 
 ## Node
 
 ## [Tools & Optimizations](zkEVM/tools-optimizations/merkle-tree.md)
 - Merkle Tree
-- FFTs
+- DFTs
+
+## Related Cryptography
+- Groth16
+- PLONK
 - Plookup
+- STARKS
 
-## Related crypto
-- Plookup
-- Starks
-
-
-## References
+## [References](zkEVM/references.md)

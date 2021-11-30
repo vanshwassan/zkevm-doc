@@ -1,4 +1,4 @@
-# Byte 4
+## Byte 4
 
 This state machine is able to build any number of 4 bytes (32 bits).
 
@@ -40,4 +40,4 @@ namespace byte4;
            (1-SET)*(out * 2**16 + freeIN);
 ```
 
-# Main
+## Main
