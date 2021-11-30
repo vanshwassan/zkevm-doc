@@ -29,6 +29,11 @@ extra:
 
 nav:
   - Architecture:
-      - Introduction: "zkEVM/architecture/introduction.md"
-      - Simple VM: "zkEVM/architecture/simple-vm.md"  
-      - Prover architecture: "zkEVM/architecture/prover-architecture.md"  
+    - Introduction: "zkEVM/architecture/introduction.md"
+    - Simple VM: "zkEVM/architecture/simple-vm.md"  
+    - Prover architecture: "zkEVM/architecture/prover-architecture.md"  
+  - PIL:
+    - Introduction: "zkEVM/PIL/introduction.md"
+    - State Machines: "zkEVM/PIL/state-machines.md"
+  - Tools & Optimizations:
+    - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"

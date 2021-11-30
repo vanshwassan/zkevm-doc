@@ -19,17 +19,18 @@
 
 ---
 
-# zkEVM
+# zk Ethereum Virtual Machine
 
-## Architecture
+## [Architecture](zkEVM/architecture/introduction.md)
 
 - Introduction
 - Simple VM
 - Prover architecture
 - MicroVM architecture (divide and conquer, plookup, permutations)
 
-## PIL
-- Polynomial indentity language
+## [Polynomial Indentity Language (PIL)](zkEVM/PIL/introduction.md)
+- Introduction
+- State Machines
 
 ## zkVMs
 - Main (assembly)
@@ -55,7 +56,8 @@
 
 ## Node
 
-## Tools & Optimizations
+## [Tools & Optimizations](zkEVM/tools-optimizations/merkle-tree.md)
+- Merkle Tree
 - FFTs
 - Plookup
 
