@@ -39,8 +39,8 @@
 - Comparators
 - Binary functions
 
-## [Polynomial Indentity Language (PIL)](zkEVM/PIL/introduction.md)
-- Introduction
+## [Polynomial Indentity Language (PIL)](zkEVM/PIL/tutorial.md)
+- Tutorial
 - State Machines
 
 ## zkROM (Ethereum assembly program)
