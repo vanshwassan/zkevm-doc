@@ -24,7 +24,7 @@
 ## [Architecture](zkEVM/architecture/introduction.md)
 
 - Introduction
-- Simple VM
+- Simple State Machine
 - Prover Architecture
 - MicroVM Architecture (divide and conquer, plookup, permutations)
 
@@ -43,11 +43,17 @@
 - Introduction
 - State Machines
 
-## Prover
-- zkROM (Ethereum assembly program)
-- Executor
-- Stark Generator
-- Stark Verifier
+## zkROM (Ethereum assembly program)
+
+## Prover Workflow
+- PIL Compiler
+- PIL 2 Circom
+- zkASM Compiler
+- zkExecutor
+- Witness Calculator
+- STARK Generator
+- SNARK Generator
+- SNARK Verifier (Solidity)
 
 ## Structures and Protocols
 - Proof of Efficiency
