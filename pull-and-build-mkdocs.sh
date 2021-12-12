@@ -1,7 +1,7 @@
 #!/bin/sh
 
 while true; do
-	git pull origin master
+	git pull origin main
   cd mkdocs && mkdocs build
-	sleep 3600
+	sleep 60
 done
