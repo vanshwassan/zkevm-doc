@@ -7,7 +7,7 @@
 [![GitHub repo][ico-github]][link-github]
 <!-- ![Issues](https://img.shields.io/github/issues-raw/iden3/circom?color=blue) -->
 <!-- ![GitHub top language](https://img.shields.io/github/languages/top/iden3/circom) -->
-![Contributors](https://img.shields.io/github/contributors-anon/hermeznetwork/zkevmdoc)
+<!-- ![Contributors](https://img.shields.io/github/contributors-anon/hermeznetwork/zkevmdoc) -->
 
 [ico-website]: https://img.shields.io/website?up_color=blue&up_message=circom&url=https%3A%2F%2Fiden3.io%2Fcircom
 [ico-telegram]: https://img.shields.io/badge/@iden3-2CA5E0.svg?style=flat-square&logo=telegram&label=Telegram
