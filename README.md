@@ -1,4 +1,4 @@
-# How to run this documentation 
+# How to run this documentation (locally)
 # Install mkdocs
 ```
 pip3 install mkdocs
@@ -21,3 +21,20 @@ At the mkdocs directory execute:
 mkdocs serve
 ```
 
+
+# Other option for deploying static content on server
+
+- clone repo
+```
+git clone https://github.com/hermeznetwork/docs.git
+```
+- go to mkdocs folder
+```
+cd mkdocs
+```
+
+- deploy static content
+```
+../pull-and-build-mkdocs.sh
+```
+This automatically pulls last changes, and builds mkdocs static content.
