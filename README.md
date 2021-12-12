@@ -1,5 +1,5 @@
 # How to run this documentation (locally)
-# Install mkdocs
+## Install mkdocs
 ```
 pip3 install mkdocs
 ```
@@ -9,12 +9,12 @@ In case you have a rendering problem with the pieces of code, please execute:
 pip install --upgrade mkdocs
 ```
 
-# Install mkdocs-material theme
+## Install mkdocs-material theme
 ```
 pip install mkdocs-material
 ```
 
-# Run the webserver
+## Run the webserver
 At the mkdocs directory execute:
 
 ```
@@ -24,16 +24,16 @@ mkdocs serve
 
 # Other option for deploying static content on server
 
-- clone repo
+## Clone repo
 ```
 git clone https://github.com/hermeznetwork/docs.git
 ```
-- go to mkdocs folder
+## Go to mkdocs folder
 ```
 cd mkdocs
 ```
 
-- deploy static content
+## Deploy static content
 ```
 ../pull-and-build-mkdocs.sh
 ```
