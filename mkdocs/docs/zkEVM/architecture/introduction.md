@@ -1,5 +1,3 @@
-# Introduction
-
 ## First Example: The Fibonacci State Machine
 
 ![Fibonacci Sequence](figures/fibonacci-sequence.pdf.png)
