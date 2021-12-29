@@ -25,8 +25,6 @@
 
 - Introduction
 - Simple State Machine
-- Proving the Simple State Machine
-- Verifying the Simple State Machine
 - Prover Architecture
 - MicroVM Architecture (divide and conquer, plookup, permutations)
 

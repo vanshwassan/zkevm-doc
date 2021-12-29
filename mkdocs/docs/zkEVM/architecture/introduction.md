@@ -16,7 +16,7 @@ A(\omega^i) &= A_i \quad \Longrightarrow \quad A = [0, 1, 1, 2, 3, 5, 8, 13] \\
 B(\omega^i) &= B_i \quad \Longrightarrow \quad B = [1, 1, 2, 3, 5, 8, 13, 21]
 \end{aligned}
 
-The relations between the states of registries are translated into relations (A.K.A identities) in the polynomial setting:
+The relations between the states of registries are translated into identities in the polynomial setting:
 
 \begin{aligned}
 A(x\omega) &= \bigg\lvert_H  B(x), \\
@@ -25,7 +25,7 @@ B(x\omega) &= \bigg\lvert_H  A(x) + B(x).
 
 However, the previous identities do not correctly and uniquely describe our sequence because:
 
-  1.  The equations are not cyclic: When we evaluate the identities at $\omega^8$:
+  1.  The registries are not cyclic: When we evaluate the identities at $\omega^8$:
 
     \begin{aligned}
     A(\omega^9) &= A(\omega) = 0 \neq  21 = B(\omega^8), \\
@@ -67,7 +67,7 @@ B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_0 C(x\omega).
 
 ![Polynomial Commitment](figures/polynomial-commitment.pdf.png)
 
-The previous polynomial relations can be efficiently proven through \textbf{polynomial commitments} such as [Kate](https://www.iacr.org/archive/asiacrypt2010/6477178/6477178.pdf) and [FRI-based](https://drops.dagstuhl.de/opus/volltexte/2018/9018/pdf/LIPIcs-ICALP-2018-14.pdf).
+The previous polynomial relations can be efficiently proven through **polynomial commitments** such as [Kate](https://www.iacr.org/archive/asiacrypt2010/6477178/6477178.pdf) and [FRI-based](https://drops.dagstuhl.de/opus/volltexte/2018/9018/pdf/LIPIcs-ICALP-2018-14.pdf).
 
 Commitment schemes are binding and hiding:
 

@@ -31,8 +31,6 @@ nav:
   - Architecture:
     - Introduction: "zkEVM/architecture/introduction.md"
     - Simple State Machine: "zkEVM/architecture/simple-state-machine.md"  
-    - Proving the Simple State Machine: "zkEVM/architecture/proving-simple-state-machine.md"  
-    - Verifying the Simple State Machine: "zkEVM/architecture/verifying-simple-state-machine.md"  
   - PIL:
     - Tutorial: "zkEVM/PIL/tutorial.md"
     - State Machines: "zkEVM/PIL/state-machines.md"

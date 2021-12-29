@@ -2,7 +2,7 @@
 
 ![image](figures/simple-state-machine-overview.pdf.png)
 
-The following program describes a state machine with two registries $A$ and $B$ that accepts a free input: 
+The following assembly program describes a state machine with two registries $A$ and $B$ that accepts a free input:
 
 $$\begin{array}{|l|}
 \hline
@@ -45,7 +45,8 @@ $$\begin{aligned}
 &\mathsf{B_{i+1}} = \mathsf{B_i} + \mathsf{setB_i} \cdot (\mathsf{inA_i} \cdot \mathsf{A_i} + \mathsf{inB_i} \cdot \mathsf{B_i} +   \mathsf{inFreeIn}_i \cdot \mathsf{freeIn_i} + \mathsf{const_i} - \mathsf{B_i}).
 \end{aligned}$$
 
-$$\scriptsize
+$$
+\scriptsize
 \begin{array}{|l|}
 \hline
 \mathbf{Instruction} \\ \hline
@@ -71,26 +72,29 @@ $$\scriptsize
 7 & 7 & 0 & 3\\ \hline
 7 & 10 & 3 & 3\\ \hline
 10 & 0 & 3 & 0\\ \hline
-\end{array}$$
+\end{array}
+$$
 
-Let's represent the states of these registries for four steps as polynomials in $\ZZ_p[x]$ evaluated on the subgroup $H = \{\omega, \omega^2, \omega^3, \omega^4 = 1\}$:
+Let's represent the states of these registries for four steps as polynomials in $\mathbb{Z}_p[x]$ evaluated on the subgroup $H = \{\omega, \omega^2, \omega^3, \omega^4 = 1\}$:
 
 $$\begin{aligned}
 &\mathsf{A(x\omega)} = \mathsf{A(x)} + \mathsf{setA(x)} \cdot (\mathsf{inA(x)} \cdot \mathsf{A(x)} + \mathsf{inB(x)} \cdot \mathsf{B(x)} + \mathsf{inFreeIn}(x) \cdot \mathsf{freeIn(x)} + \mathsf{const(x)} - \mathsf{A(x)}), \\
 &\mathsf{B(x\omega)} = \mathsf{B(x)} + \mathsf{setB(x)} \cdot (\mathsf{inA(x)} \cdot \mathsf{A(x)} + \mathsf{inB(x)} \cdot \mathsf{B(x)} + \mathsf{inFreeIn}(x) \cdot \mathsf{freeIn(x)} + \mathsf{const(x)} - B(x)).
 \end{aligned}$$
 
-The "program" is described by the public polynomials **inA(x)**, **inB(x)**, **setA(x)**, **setB(x)**, **inFreeIn(x)** and **cons(x)**.
+The "program" is described by the constant (and public) polynomials **inA(x)**, **inB(x)**, **setA(x)**, **setB(x)**, **inFreeIn(x)** and **cons(x)**.
 
 The polynomial **freeIn(x)** can be public or committed and by changing this polynomial, we can proof different executions for different initial conditions for the same "program".
 
 ## Programs with Conditional Jumps
 
-The instruction `JMPIZ` jumps to a position in the program if the preceding operation is zero.
+We are going to add the instruction **JMPIZ** to our assembly. **JMPIZ** jumps to a position in the program if the 
+preceding operation is zero.
 
-In the next program, `JMPIZ` will jump to position $4$ if $\mathbf{ADD}~~A~B$ is $0$: 
+In the next program, **JMPIZ** will jump to position $4$ if $\mathbf{ADD}~~A~B$ is $0$: 
 
-$$\begin{array}{|c|l|}
+$$
+\begin{array}{|c|l|}
 \hline
 \textbf{Position} & \mathbf{Instruction} \\ \hline
 0 & \mathbf{FREELOAD}~~A \\ \hline
@@ -99,9 +103,9 @@ $$\begin{array}{|c|l|}
 3 & \mathbf{ADD}~~A~B \\ \hline
 4 & \mathbf{STOP} \\ \hline
 \end{array}
-\hspace{0.1cm}$$
+$$
 
-In programs with conditional jumps, things get more tricky because the length of the execution trace might vary depending on the free input.
+In programs with conditional jumps, things get more tricky because the length of the execution trace might vary depending  on the values of the free input.
 
 As it can be seen next, with conditional jumps, the length of the execution trace is **not constant** (it depends on the free input):
 
@@ -132,9 +136,58 @@ $$\scriptsize
 
 To manage jumps, we need to add the **Program Counter (PC)**. The $\mathsf{PC}$ is a special registry that contains the position of the instruction in the program being executed.
 
-We add to our table the selector $\textsf{JMPIZ}_i \in \{0,1\}$ that, whenever the condition passed to **JMPIZ** is is zero, jumps to position $\textsf{addr}_i$:
+We use $\textsf{op}_i$ as a shorthand for the linear combination of our state machine to simplify the forthcoming constraints:
+$$
+\mathsf{op}_i := \mathsf{inA_i} \cdot \mathsf{A_i} + \mathsf{inB_i} \cdot \mathsf{B_i} + \mathsf{inFreeIn}_i \cdot \mathsf{freeIn_i} + \mathsf{const_i}.
+$$
 
-$$\tiny
+![image](figures/simple-state-machine-op.pdf.png)
+
+The **JMPIZ** instruction will jump to $\textsf{addr}_i$ if $\textsf{op}_i$ is zero.
+
+To check that a number in the field $\mathbb{Z}_p$ is zero, we use the fact that a number $a$ has a multiplicative inverse $a^{-1}$ if and only if $a \neq 0$.
+
+Using this fact, we use the following definition and constraint to do the **isZero** check:
+
+$$\begin{aligned}
+&\mathsf{isZero}_i := (1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}), \\
+&\mathsf{isZero}_i \cdot \mathsf{op}_i = 0.
+\end{aligned}$$
+
+We can proof that the previous constraints are correct by case examination where $a \neq 0$
+and $\alpha, \beta \in \mathbb{Z}_p$:
+
+$(\mathsf{op}_i = 0,~\mathsf{op}_i^{-1} = \alpha,~\mathsf{isZero}_i = 1)$ **passes** the definition and constraint,
+
+$(\mathsf{op}_i = a,~\mathsf{op}_i^{-1} = a^{-1},~\mathsf{isZero}_i = 0)$ **passes** the definition and constraint.
+
+$(\mathsf{op}_i = 0,~\mathsf{op}_i^{-1} = \alpha,~\mathsf{isZero}_i \neq 1)$ **does not pass** the definition and constraint.
+
+$(\mathsf{op}_i = a,~\mathsf{op}_i^{-1} = \beta,~\mathsf{isZero}_i \neq 0)$ **does not pass** the definition and constraint, 
+either you consider $\beta = 0$, $\beta = a^{-1}$ or $\beta \neq a^{-1}$.
+
+We can mix the two constraints into just one constraint:
+$$
+\mathsf{isZero}_i \cdot \mathsf{op}_i = 0,~~\mathsf{isZero}_i = (1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1})~~\rightarrow~~(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot \mathsf{op}_i = 0.
+$$
+
+![image](figures/simple-state-machine-jump.pdf.png)
+
+We add a selector $\textsf{selJMPIZ}_i \in \{0,1\}$ to our state machine to code the **JMPIZ** instruction and express the behaviour of the **PC**. Then, the set of constraints is the following:
+
+$$\begin{aligned}
+&\mathsf{op}_i := \mathsf{inA_i} \cdot \mathsf{A_i} + \mathsf{inB_i} \cdot \mathsf{B_i} + \mathsf{inFreeIn}_i \cdot \mathsf{freeIn_i} + \mathsf{const_i}, \\
+&\mathsf{PC}_{i+1} = \mathsf{PC}_i + 1 + \mathsf{selJMPIZ}_i \cdot (1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot (\mathsf{addr}_i  - \mathsf{PC}_i - 1),\\
+&(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot \mathsf{op}_i = 0.
+\end{aligned}$$
+
+1. If $\mathsf{op}_i \neq 0$, then $(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) = 0$ and hence $\mathsf{PC}_{i+1} = \mathsf{PC}_{i} + 1$; 
+1. If $\mathsf{op}_i = 0$, then $(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) = 1$ and hence $\mathsf{PC}_{i+1} = \mathsf{PC}_{i} + 1 + \mathsf{addr}_i  - \mathsf{PC}_i - 1 = \mathsf{addr}_i$.
+
+Next, we show the execution traces for different free inputs:
+
+$$
+\tiny
 \begin{array}{|l|}
 \hline
 \mathbf{Instruction} \\ \hline
@@ -145,14 +198,14 @@ $$\tiny
 \mathbf{STOP} \\ \hline
 \end{array}
 \hspace{0.1cm}
-\begin{array}{|c|c|c|c|c|c|c|c|c|}
+\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{JMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} \\ \hline
-7 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-0 & -3 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\ \hline
-0 & 0 & 4 & 1 & 0 & 1 & 0 & 1 & 1 \\ \hline
-0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 \\ \hline
-0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
+\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} & \textbf{(op)} & \textbf{invOp} \\ \hline
+7 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 7 & 7^{-1} \\ \hline
+0 & -3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & -3 & (-3)^{-1} \\ \hline
+0 & 0 & 4 & 1 & 0 & 1 & 0 & 1 & 1 & \mathbf{\color{blue!75!black} 4} & \mathbf{\color{blue!75!black} 4^{-1}} \\ \hline
+0 & 0 & 0 & 0 & 0 & 1 & 0 & 1 & 1 & 1 & 1 \\ \hline
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|}
@@ -163,9 +216,11 @@ $$\tiny
 2 & 3 & 7 & 4 & -3 & -3\\ \hline
 3 & 4 & 4 & 1 & -3 & -3\\ \hline
 4 & 0 & 1 & 0 & -3 & 0\\ \hline
-\end{array}$$ 
+\end{array}
+$$ 
 
-$$\tiny
+$$
+\tiny
 \begin{array}{|l|}
 \hline
 \mathbf{Instruction} \\ \hline
@@ -175,13 +230,13 @@ $$\tiny
 \mathbf{STOP} \\ \hline
 \end{array}
 \hspace{0.1cm}
-\begin{array}{|c|c|c|c|c|c|c|c|c|c|}
+\begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{JMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} \\ \hline
-3 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-0 & -3 & 0 & 0 & 1 & 0 & 0 & 1 & 0 \\ \hline
-0 & 0 & 4 & 1 & 0 & 1 & 0 & 1 & 1 \\ \hline
-0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
+\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} & \textbf{(op)} & \textbf{invOp} \\ \hline
+3 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 3 & 3^{-1} \\ \hline
+0 & -3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & -3 & (-3)^{-1} \\ \hline
+0 & 0 & 4 & 1 & 0 & 1 & 0 & 1 & 1 & \mathbf{\color{blue!75!black} 0} & \mathbf{\color{blue!75!black} \alpha} \\ \hline
+0 & 0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0 & 0 \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|}
@@ -191,38 +246,10 @@ $$\tiny
 1 & 2 & 3 & 3 & 0 & -3\\ \hline
 2 & 4 & 3 & 0 & -3 & -3\\ \hline
 4 & 0 & 0 & 0 & -3 & 0\\ \hline
-\end{array}$$
+\end{array}
+$$
 
-The **PC** turns to be an important registry when **JUMP**s and **JUMPIZ**s are included in our set of possible instructions. This is because **JUMP**s and **JUMPIZ**s (possibly) modify the position (i.e., the instruction) that we are pointing to in the program.
-
-For this reason, we have to find the set of constraints that perfectly describe the behavior of the **PC** in **any** execution.
-
-This set of constraints turns out to be: 
-
-$$\begin{aligned}
-&\mathsf{op}_i := \mathsf{inA_i} \cdot \mathsf{A_i} + \mathsf{inB_i} \cdot \mathsf{B_i} + \mathsf{inFreeIn}_i \cdot \mathsf{freeIn_i} + \mathsf{const_i}, \\
-&\mathsf{PC}_{i+1} = \mathsf{PC}_i + 1 + \mathsf{JMPIZ}_i \cdot (1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot (\mathsf{addr}_i  - \mathsf{PC}_i - 1),\\
-&(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot \mathsf{op}_i = 0.\end{aligned}$$
-
-Let's see the correctness:
-
-1.  First, we use $\textsf{op}_i$ as a shorthand for the linear combination to simplify the forthcoming constraints.
-
-2.  Now, notice that a number $a$ in the field $\mathbb{Z}_p$ has an inverse if and only if $a \neq 0$.
-
-3.  Using the previous fact, the **JMPIZ** instruction will jump to the passed position if the condition passed to it is zero. For the shake of generality, this condition is parameterized by the linear combination $\textsf{op}_i$. Hence, the **JMPIZ** instruction will jump to the passed position whenever $\textsf{op}_i$ is zero.
-
-4.  Combining the previous, we obtain the constraint:
-
-    $$\mathsf{PC}_{i+1} = \mathsf{PC}_i + 1 + \mathsf{JMPIZ}_i \cdot (1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot (\mathsf{addr}_i  - \mathsf{PC}_i - 1)$$
-
-    says that if $\mathsf{op}_i \neq 0$, then $(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) = 0$ and hence $\mathsf{PC}_{i+1} = \mathsf{PC}_{i} + 1$; while if $\mathsf{op}_i = 0$, then $(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) = 1$ (it does not matter what $\mathsf{op}_i^{-1}$ is in this case) and hence $\mathsf{PC}_{i+1} = \mathsf{PC}_{i} + 1 + \mathsf{addr}_i  - \mathsf{PC}_i - 1 = \mathsf{addr}_i$.
-
-5.  The last constraint
-        $(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot \mathsf{op}_i = 0$
-        ensure the correctness of the relation between $\mathsf{op}_i$
-        and $\mathsf{op}_i^{-1}$; otherwise one could set
-        $\mathsf{op}_i^{-1} = 0$.
+Note that the **(op)** column, noted between parenthesis, is just used as a definition (it will not be interpolated into a polynomial). Note also that the **PC** turns to be an important registry when jumps are included in the set of possible instructions because jumps can modify the sequence of instructions that is executed.
 
 ### Proving the Execution of the "Correct Program"
 
@@ -260,7 +287,8 @@ $$const(x) + 7 \in \{0,1,2,...,14\}$$
 
 Let's now explain how to encode every **distinct** instruction to be executed by the program: 
 
-$$\scriptsize
+$$
+\scriptsize
 \begin{array}{|c|l|}
 \hline
 \mathbf{Instruction} \\ \hline
@@ -273,58 +301,56 @@ $$\scriptsize
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{const+7} & \textbf{addr} & \textbf{JMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} & \textbf{inB} & \textbf{inA} & \textbf{instruction code} \\ \hline
-0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0000.0000.001100 \\ \hline
-3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0011.0000.010000 \\ \hline
-0 & 4 & 1 & 0 & 0 & 0 & 0 & 1 & 0000.0100.100001 \\ \hline
-0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 & 0000.0000.001010 \\ \hline
-0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0000.0000.111000 \\ \hline
-\end{array}$$
+\mathbf{\color{blue!75!black} \textbf{const+7}} & \textbf{addr} & \textbf{JMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} & \textbf{inB} & \textbf{inA} & \textbf{instruction code} \\ \hline
+\mathbf{\color{blue!75!black} 7} & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0111.0000.001100 \\ \hline
+\mathbf{\color{blue!75!black} 4} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0100.0000.010000 \\ \hline
+\mathbf{\color{blue!75!black} 7} & 4 & 1 & 0 & 1 & 0 & 1 & 1 & 0111.0100.101011 \\ \hline
+\mathbf{\color{blue!75!black} 7} & 0 & 0 & 0 & 1 & 0 & 1 & 1 & 0111.0000.001011 \\ \hline
+\mathbf{\color{blue!75!black} 7} & 0 & 1 & 1 & 1 & 0 & 0 & 0 & 0111.0000.111000 \\ \hline
+\end{array}
+$$
 
-$$\textsf{instruction}_i := 2^{13}\cdot\textsf{const}_i + 2^9\cdot \textsf{addr}_i + 2^5\cdot \textsf{JMPIZ}_i + 2^4 \cdot \textsf{setB}_i + 2^3 \cdot \textsf{setA}_i + 2^2 \cdot \textsf{inFreeIn}_i + 2 \cdot \textsf{inB}_i + \textsf{inA}_i.$$
+$$
+\textsf{instruction}_i := 2^{13}\cdot(\textsf{const}_i + 7) + 2^9\cdot \textsf{addr}_i + 2^5\cdot \textsf{selJMPIZ}_i + 2^4 \cdot \textsf{setB}_i + 2^3 \cdot \textsf{setA}_i + 2^2 \cdot \textsf{inFreeIn}_i + 2 \cdot \textsf{inB}_i + \textsf{inA}_i.
+$$
 
-As a polynomial identity: 
+Note that additionally, we will need to check that the selectors are binary and that **addr} is composed of $4$ bits, i.e., $\textsf{addr}_i \in \{0, 1, \dots, 15\}$
 
-$$\begin{aligned}
-\textsf{instruction}(x) := &~2^{13}\cdot\textsf{const}(x) + 2^9\cdot \textsf{addr}(x) + 2^5\cdot \textsf{setJMPC}(x) + 2^4 \cdot \textsf{setB}(x) + \\ 
-&2^3 \cdot \textsf{setA}(x) + 2^2 \cdot \textsf{inFreeIn}(x) + 2 \cdot \textsf{inB}(x) + \textsf{inA}(x).
-\end{aligned}$$
-
-Note that additionally, we will need to check that the selectors are binary and that **const** and **addr** are composed of $4$ bits.
-
-The ROM of a Program
-
-Now, to prove the program, every instruction will be uniquely identified by its code and position in the program.
+Now, to prove the program, every instruction will be uniquely identified by its code and position in the program (we also use 4 bits in this example for the position)
 
 We define the **ROM** of the program as the sum between every instruction and the position in which it is defined:
-
-$$\textsf{ROM}_i := 2^{17}  \cdot \textsf{position}_i + \textsf{instruction}_i \quad \Longrightarrow \quad \textsf{ROM}(x) := 2^{17}  \cdot \textsf{position}(x) + \textsf{instruction}(x).$$
+$$
+\textsf{ROM}_i := 2^{17}  \cdot \textsf{position}_i + \textsf{instruction}_i.
+$$
 
 The resulting ROM of our program is the following:
 
-$$\begin{array}{|c|c|c|}
+$$
+\begin{array}{|c|c|}
 \hline
-\textbf{Position} & \multicolumn{2}{|c|}{\mathbf{Instruction}} \\ \hline
-0 & \mathbf{FREELOAD} & A \\ \hline
-1 & \mathbf{MOV} & B, 3 \\ \hline
-2 & \mathbf{JUMPC}~(A=0) & 4 \\ \hline
-3 & \mathbf{ADD} & A, B \\ \hline
-4 & \mathbf{STOP} & \emptyset \\ \hline
+\textbf{Position} & \mathbf{Instruction} \\ \hline
+0 & \mathbf{FREELOAD}~~A \\ \hline
+1 & \mathbf{MOV}~~B~-3 \\ \hline
+2 & \mathbf{ADD}~~A~B,~\mathbf{JMPIZ}~~4 \\ \hline
+3 & \mathbf{ADD}~~A~B \\ \hline
+4 & \mathbf{STOP} \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|}
 \hline
 \textbf{ROM} \\ \hline
-0000.0000.0000.001100 \\ \hline
-0001.0011.0000.010000 \\ \hline
-0010.0000.0100.100001 \\ \hline
-0011.0000.0000.001010 \\ \hline
-0100.0000.0000.111000 \\ \hline
-\end{array}$$
+0000.0111.0000.001100 \\ \hline
+0001.0100.0000.010000 \\ \hline
+0010.0111.0100.101011 \\ \hline
+0011.0111.0000.001011 \\ \hline
+0100.0111.0000.111000 \\ \hline
+\end{array}
+$$
 
-We can do a similar procedure with the execution traces. Here, however, we consider the program counter instead in place of the execution step:
+We encode the program trace using the PC:
 
-$$\scriptsize
+$$
+\scriptsize
 \begin{array}{|c|c|c|c|c|c|}
 \hline
 \mathbf{PC} \\ \hline
@@ -337,35 +363,37 @@ $$\scriptsize
 \hspace{0.1cm}
 \begin{array}{|c|c|c|}
 \hline
-\multicolumn{2}{|c|}{\mathbf{Instruction}} \\ \hline
-\mathbf{FREELOAD} & A \\ \hline
-\mathbf{MOV} & B, 3 \\ \hline
-\mathbf{JUMPC}~(A=0) & 4 \\ \hline
-\mathbf{ADD} & A, B \\ \hline
-\mathbf{STOP} & \emptyset \\ \hline
+\mathbf{Instruction} \\ \hline
+\mathbf{FREELOAD}~~A \\ \hline
+\mathbf{MOV}~~B~-3 \\ \hline
+\mathbf{ADD}~~A~B,~\mathbf{JMPIZ}~~4 \\ \hline
+\mathbf{ADD}~~A~B \\ \hline
+\mathbf{STOP} \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{const} & \textbf{addr} & \textbf{setJMPC} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} \\ \hline
-0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
-0 & 4 & 1 & 0 & 0 & 0 & 0 & 1 \\ \hline
-0 & 0 & 0 & 0 & 1 & 0 & 1 & 0 \\ \hline
-0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
+\textbf{const+7} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} \\ \hline
+7 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
+4 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+7 & 4 & 1 & 0 & 1 & 0 & 1 & 1 \\ \hline
+7 & 0 & 0 & 0 & 1 & 0 & 1 & 1 \\ \hline
+7 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|}
 \hline
 \mathbf{insTrace} \\ \hline
-0000.0000.0000.001100 \\ \hline
-0001.0011.0000.010000 \\ \hline
-0010.0000.0100.100001 \\ \hline
-0011.0000.0000.001010 \\ \hline
-0100.0000.0000.111000 \\ \hline
-\end{array}$$
+0000.0111.0000.001100 \\ \hline
+0001.0100.0000.010000 \\ \hline
+0010.0111.0100.101011 \\ \hline
+0011.0111.0000.001011 \\ \hline
+0100.0111.0000.111000 \\ \hline
+\end{array}
+$$
 
-$$\scriptsize
+$$
+\scriptsize
 \begin{array}{|c|c|c|c|c|c|}
 \hline
 \mathbf{PC} \\ \hline
@@ -377,30 +405,33 @@ $$\scriptsize
 \hspace{0.1cm}
 \begin{array}{|c|c|c|}
 \hline
-\multicolumn{2}{|c|}{\mathbf{Instruction}} \\ \hline
-\mathbf{FREELOAD} & A \\ \hline
-\mathbf{MOV} & B, 3 \\ \hline
-\mathbf{JUMPC}~(A=0) & 4 \\ \hline
-\mathbf{STOP} & \emptyset \\ \hline
+\mathbf{Instruction} \\ \hline
+\mathbf{FREELOAD}~~A \\ \hline
+\mathbf{MOV}~~B~-3 \\ \hline
+\mathbf{ADD}~~A~B,~\mathbf{JMPIZ}~~4 \\ \hline
+\mathbf{STOP} \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{const} & \textbf{addr} & \textbf{setJMPC} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} \\ \hline
-0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
-0 & 4 & 1 & 0 & 0 & 0 & 0 & 1 \\ \hline
-0 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
+\textbf{const+7} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} \\ \hline
+7 & 0 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
+4 & 0 & 0 & 1 & 0 & 0 & 0 & 0 \\ \hline
+7 & 4 & 1 & 0 & 1 & 0 & 1 & 1 \\ \hline
+7 & 0 & 1 & 1 & 1 & 0 & 0 & 0 \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|}
 \hline
 \mathbf{insTrace} \\ \hline
-0000.0000.0000.001100 \\ \hline
-0001.0011.0000.010000 \\ \hline
-0010.0000.0100.100001 \\ \hline
-0100.0000.0000.111000 \\ \hline
-\end{array}$$
+0000.0111.0000.001100 \\ \hline
+0001.0100.0000.010000 \\ \hline
+0010.0111.0100.101011 \\ \hline
+0100.0111.0000.111000 \\ \hline
+\end{array}
+$$
+
+Notice that the STOP instruction also sets the PC to zero, which will make the polynomial identities cyclic.
 
 Recall that our main question was: **How do we actually check correctness in an efficient manner?**
 
@@ -412,28 +443,48 @@ In words, the trace being executed is an execution of the actual program if the 
 
 ### Identities to Prove an Execution Trace 
 
-We have seen that the following set of relations (almost) define our program: 
+We have seen that the following set of identities are used to define our program:
 
 $$\begin{aligned}
-&\mathsf{op}(x) = \mathsf{inA}(x) \cdot \mathsf{A}(x) + \mathsf{inB}(x) \cdot \mathsf{B}(x) + \mathsf{inFreeIn}(x) \cdot \mathsf{freeIn}(x) + \mathsf{const}(x), \\
 &\mathsf{A(x\omega)} = \mathsf{A(x)} + \mathsf{setA(x)} \cdot (\mathsf{op}(x) - \mathsf{A(x)}), \\
 &\mathsf{B(x\omega)} = \mathsf{B(x)} + \mathsf{setB(x)} \cdot (\mathsf{op}(x) - B(x)), \\
-&(1 - \mathsf{op}(x) \cdot \mathsf{op}(x)^{-1}) \cdot \mathsf{op}(x) = 0,\\
-&\mathsf{PC}(x\omega) = \mathsf{PC}(x) + 1 + \mathsf{setJMPC}(x) \cdot (1 - \mathsf{op}(x) \cdot \mathsf{op}(x)^{-1}) \cdot (\mathsf{addr}(x)  - \mathsf{PC}(x) - 1), \\
-&\textsf{instruction}(x) = 2^{13}\cdot\textsf{const}(x) + 2^9\cdot \textsf{addr}(x) + 2^5\cdot \textsf{setJMPC}(x) + 2^4 \cdot \textsf{setB}(x) + \\ 
-&\qquad \qquad \qquad \quad~~ 2^3 \cdot \textsf{setA}(x) + 2^2 \cdot \textsf{inFreeIn}(x) + 2 \cdot \textsf{inB}(x) + \textsf{inA}(x),\\
-&\textsf{ROM}(x) = 2^{17}  \cdot \textsf{position}(x) + \textsf{instruction}(x), \\
-&\textsf{insTrace}(x) = 2^{17}  \cdot \textsf{PC}(x) + \textsf{instruction}(x).
+&\mathsf{PC}(x\omega) = \mathsf{PC}(x) + 1 + \mathsf{selJMPIZ}(x) \cdot (1 - \mathsf{op}(x) \cdot \mathsf{invOp}(x)) \cdot (\mathsf{addr}(x)  - \mathsf{PC}(x) - 1), \\
+&(1 - \mathsf{op}(x) \cdot \mathsf{invOp}(x)) \cdot \mathsf{op}(x) = 0.
 \end{aligned}$$
 
-Moreover, we should add the Plookup check $\textbf{insTrace} \subset \textbf{ROM}$.
+With the following definition:
+$$
+\mathsf{op}(x) := \mathsf{inA}(x) \cdot \mathsf{A}(x) + \mathsf{inB}(x) \cdot \mathsf{B}(x) + \mathsf{inFreeIn}(x) \cdot \mathsf{freeIn}(x) + \mathsf{const}(x).
+$$
 
-Finally, it should be checked that the whole set of selectors are, in fact, binary: 
+Moreover, we should add the following Plookup checks: 
 
 $$\begin{aligned}
-&\mathsf{inA(x)} \times (\mathsf{setA(x)} - 1) = 0, \quad \mathsf{setA(x)} \times (\mathsf{setA(x)} - 1) = 0, \quad\\
-&\mathsf{inB(x)} \times (\mathsf{setB(x)}- 1) = 0, \quad \mathsf{setB(x)} \times (\mathsf{setB(x)} - 1) = 0, \quad\\
-&\mathsf{inFreeIn(x)} \times (\mathsf{inFreeIn(x)} - 1) = 0, \quad \mathsf{setJMPC(x)} \times (\mathsf{setJMPC(x)} - 1) = 0.
+&\textsf{const}(x) + 7 \subset \{0,1, \dots, 14\},\\
+&\mathsf{addr}(x) \subset \{0,1, \dots, 15\},\\
+&\mathsf{position}(x) \subset \{0,1, \dots, 15\},\\
+&\mathsf{PC}(x) \subset \{0,1, \dots, 15\},\\
+&\textsf{insTrace}(x) \subset \textsf{ROM}(x).
 \end{aligned}$$
 
-In our encoding example, we also need to check that $\mathsf{const}(x), \mathsf{addr}(x), \mathsf{position}(x), \mathsf{PC}(x)$ are composed of $4$ bits.
+With the following definitions:
+
+$$\begin{aligned}
+&\textsf{instruction}(x) := 2^{13}\cdot(\textsf{const}(x) + 7) + 2^9\cdot \textsf{addr}(x) + 2^5\cdot \textsf{selJMPIZ}(x) + 2^4 \cdot \textsf{setB}(x) + \\ 
+&\qquad \qquad \qquad \quad~~ 2^3 \cdot \textsf{setA}(x) + 2^2 \cdot \textsf{inFreeIn}(x) + 2 \cdot \textsf{inB}(x) + \textsf{inA}(x),\\
+&\textsf{ROM}(x) := 2^{17}  \cdot \textsf{position}(x) + \textsf{instruction}(x), \\
+&\textsf{insTrace}(x) := 2^{17}  \cdot \textsf{PC}(x) + \textsf{instruction}(x).
+\end{aligned}$$
+
+Finally, it should be checked that the whole set of selectors are, in fact, binary:
+
+$$\begin{aligned}
+&\mathsf{inA(x)} \cdot (\mathsf{setA(x)} - 1) = 0, \quad \mathsf{setA(x)} \cdot (\mathsf{setA(x)} - 1) = 0, \quad\\
+&\mathsf{inB(x)} \cdot (\mathsf{setB(x)}- 1) = 0, \quad \mathsf{setB(x)} \cdot (\mathsf{setB(x)} - 1) = 0, \quad\\
+&\mathsf{inFreeIn(x)} \cdot (\mathsf{inFreeIn(x)} - 1) = 0, \quad \mathsf{selJMPIZ(x)} \cdot (\mathsf{JMPIZ(x)} - 1) = 0.
+\end{aligned}$$
+
+
+Regarding the polynomials, in this state machine:
+1. We have to commit $\textsf{inFreeIn}(x), \textsf{inA}(x), \textsf{inB}(x), \textsf{setA}(x), \textsf{setB}(x)$ $\textsf{A}(x), \textsf{B}(x), \textsf{const}(x),$ $\textsf{selJMPIZ}(x),$ $\textsf{invOp}(x)$, $\textsf{addr}(x)$, $\textsf{freeIn}(x)$, $\textsf{position}(x)$ and $\textsf{PC}(x)$.
+1. While the only constant (preprocessed) polynomial is $\textsf{ROM}(x)$.
