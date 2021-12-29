@@ -31,6 +31,7 @@ nav:
   - Architecture:
     - Introduction: "zkEVM/architecture/introduction.md"
     - Simple State Machine: "zkEVM/architecture/simple-state-machine.md"  
+    - Modular Design: "zkEVM/architecture/modular-design.md"  
   - PIL:
     - Tutorial: "zkEVM/PIL/tutorial.md"
     - State Machines: "zkEVM/PIL/state-machines.md"
