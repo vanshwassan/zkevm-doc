@@ -63,7 +63,7 @@ $$\begin{aligned}
 \mathcal{C'} &= \mathbf{sel}\mathcal{C}\cdot(\mathbf{freeIn}-\mathcal{C}) + \mathcal{C} \\
 \mathcal{D'} &= \mathbf{sel}\mathcal{D}\cdot(\mathbf{freeIn}-\mathcal{D}) + \mathcal{D} \\
 \mathcal{E'} &= \mathbf{sel}\mathcal{E}\cdot(\mathbf{freeIn}-\mathcal{E}) + \mathcal{E} \\
-0 &= \mathcal{A} \cdot \mathcal{B} + \mathcal{C} - (2^{32} \mathcal{D} + \mathcal{E}) \cdot \mathbf{latch} \\
+0 &= [ \mathcal{A} \cdot \mathcal{B} + \mathcal{C} - (2^{32} \mathcal{D} + \mathcal{E}) ] \cdot \mathbf{latch} \\
 \mathbf{freeIn} &\subset byte4\end{aligned}$$
 
 ![image](figures/arith_state_machine.pdf.png)
@@ -77,6 +77,6 @@ Taking our main state machine as reference, we extend it to 5 registries and add
 
 ![image](figures/plookup_basic.pdf.png)
 
-$$[arith \cdot A , arith \cdot B , arith \cdot C , arith \cdot D, arith \cdot op] \subset [latch \cdot \mathcal{A} , latch \cdot \mathcal{B} , latch \cdot \mathcal{C} , latch \cdot \mathcal{D} , latch \cdot \mathcal{E}]$$
+$$[arith \cdot A , arith \cdot B , arith \cdot C , arith \cdot D, arith \cdot E] \subset [latch \cdot \mathcal{A} , latch \cdot \mathcal{B} , latch \cdot \mathcal{C} , latch \cdot \mathcal{D} , latch \cdot \mathcal{E}]$$
 
 ![image](figures/microVM-architecture.pdf.png)

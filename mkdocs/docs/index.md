@@ -47,13 +47,14 @@
 
 ## Prover Workflow
 - PIL Compiler
-- PIL 2 Circom
+- PIL to Circom
 - zkASM Compiler
 - zkExecutor
 - Witness Calculator
 - STARK Generator
 - SNARK Generator
 - SNARK Verifier (Solidity)
+- zk-prover server (mock)
 
 ## Structures and Protocols
 - Proof of Efficiency

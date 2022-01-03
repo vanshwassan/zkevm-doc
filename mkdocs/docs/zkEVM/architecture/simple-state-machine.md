@@ -86,6 +86,9 @@ The "program" is described by the constant (and public) polynomials **inA(x)**, 
 
 The polynomial **freeIn(x)** can be public or committed and by changing this polynomial, we can proof different executions for different initial conditions for the same "program".
 
+In our previous program, we can provide a result of the execution by giving $A(\omega^4)$.
+
+
 ## Programs with Conditional Jumps
 
 We are going to add the instruction **JMPIZ** to our assembly. **JMPIZ** jumps to a position in the program if the 
@@ -105,7 +108,7 @@ $$
 \end{array}
 $$
 
-In programs with conditional jumps, things get more tricky because the length of the execution trace might vary depending  on the values of the free input.
+In programs with conditional jumps, things get more tricky because the length of the execution trace might vary depending on the values of the free input.
 
 As it can be seen next, with conditional jumps, the length of the execution trace is **not constant** (it depends on the free input):
 
@@ -154,7 +157,7 @@ $$\begin{aligned}
 &\mathsf{isZero}_i \cdot \mathsf{op}_i = 0.
 \end{aligned}$$
 
-We can proof that the previous constraints are correct by case examination where $a \neq 0$
+We can proof that the previous equations describe the desired check by case examination where $a \neq 0$
 and $\alpha, \beta \in \mathbb{Z}_p$:
 
 $(\mathsf{op}_i = 0,~\mathsf{op}_i^{-1} = \alpha,~\mathsf{isZero}_i = 1)$ **passes** the definition and constraint,
@@ -166,7 +169,7 @@ $(\mathsf{op}_i = 0,~\mathsf{op}_i^{-1} = \alpha,~\mathsf{isZero}_i \neq 1)$ **d
 $(\mathsf{op}_i = a,~\mathsf{op}_i^{-1} = \beta,~\mathsf{isZero}_i \neq 0)$ **does not pass** the definition and constraint, 
 either you consider $\beta = 0$, $\beta = a^{-1}$ or $\beta \neq a^{-1}$.
 
-We can mix the two constraints into just one constraint:
+We can mix the two equations into just one constraint:
 $$
 \mathsf{isZero}_i \cdot \mathsf{op}_i = 0,~~\mathsf{isZero}_i = (1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1})~~\rightarrow~~(1 - \mathsf{op}_i \cdot \mathsf{op}_i^{-1}) \cdot \mathsf{op}_i = 0.
 $$
@@ -200,7 +203,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} & \textbf{(op)} & \textbf{invOp} \\ \hline
+\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} & \textbf{op} & \textbf{invOp} \\ \hline
 7 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 7 & 7^{-1} \\ \hline
 0 & -3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & -3 & (-3)^{-1} \\ \hline
 0 & 0 & 4 & 1 & 0 & 1 & 0 & 1 & 1 & \mathbf{\color{blue!75!black} 4} & \mathbf{\color{blue!75!black} 4^{-1}} \\ \hline
@@ -232,7 +235,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} & \textbf{(op)} & \textbf{invOp} \\ \hline
+\textbf{freeIn} & \textbf{const} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} &  \textbf{inB} & \textbf{inA} & \textbf{op} & \textbf{invOp} \\ \hline
 3 & 0 & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 3 & 3^{-1} \\ \hline
 0 & -3 & 0 & 0 & 1 & 0 & 0 & 0 & 0 & -3 & (-3)^{-1} \\ \hline
 0 & 0 & 4 & 1 & 0 & 1 & 0 & 1 & 1 & \mathbf{\color{blue!75!black} 0} & \mathbf{\color{blue!75!black} \alpha} \\ \hline
@@ -249,7 +252,9 @@ $$
 \end{array}
 $$
 
-Note that the **(op)** column, noted between parenthesis, is just used as a definition (it will not be interpolated into a polynomial). Note also that the **PC** turns to be an important registry when jumps are included in the set of possible instructions because jumps can modify the sequence of instructions that is executed.
+Note that we use **invOp** for the column containing the inverses of **op**.
+
+Note also that the **PC** turns to be an important registry when jumps are included in the set of possible instructions because jumps can modify the sequence of instructions that is executed.
 
 ### Proving the Execution of the "Correct Program"
 
@@ -301,7 +306,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
-\mathbf{\color{blue!75!black} \textbf{const+7}} & \textbf{addr} & \textbf{JMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} & \textbf{inB} & \textbf{inA} & \textbf{instruction code} \\ \hline
+\mathbf{\color{blue!75!black} \textbf{const+7}} & \textbf{addr} & \textbf{selJMPIZ} & \textbf{setB} & \textbf{setA} & \textbf{inFreeIn} & \textbf{inB} & \textbf{inA} & \textbf{instruction code} \\ \hline
 \mathbf{\color{blue!75!black} 7} & 0 & 0 & 0 & 1 & 1 & 0 & 0 & 0111.0000.001100 \\ \hline
 \mathbf{\color{blue!75!black} 4} & 0 & 0 & 1 & 0 & 0 & 0 & 0 & 0100.0000.010000 \\ \hline
 \mathbf{\color{blue!75!black} 7} & 4 & 1 & 0 & 1 & 0 & 1 & 1 & 0111.0100.101011 \\ \hline
@@ -481,10 +486,12 @@ Finally, it should be checked that the whole set of selectors are, in fact, bina
 $$\begin{aligned}
 &\mathsf{inA(x)} \cdot (\mathsf{setA(x)} - 1) = 0, \quad \mathsf{setA(x)} \cdot (\mathsf{setA(x)} - 1) = 0, \quad\\
 &\mathsf{inB(x)} \cdot (\mathsf{setB(x)}- 1) = 0, \quad \mathsf{setB(x)} \cdot (\mathsf{setB(x)} - 1) = 0, \quad\\
-&\mathsf{inFreeIn(x)} \cdot (\mathsf{inFreeIn(x)} - 1) = 0, \quad \mathsf{selJMPIZ(x)} \cdot (\mathsf{JMPIZ(x)} - 1) = 0.
+&\mathsf{inFreeIn(x)} \cdot (\mathsf{inFreeIn(x)} - 1) = 0, \quad \mathsf{selJMPIZ(x)} \cdot (\mathsf{selJMPIZ(x)} - 1) = 0.
 \end{aligned}$$
 
 
 Regarding the polynomials, in this state machine:
+
 1. We have to commit $\textsf{inFreeIn}(x), \textsf{inA}(x), \textsf{inB}(x), \textsf{setA}(x), \textsf{setB}(x)$ $\textsf{A}(x), \textsf{B}(x), \textsf{const}(x),$ $\textsf{selJMPIZ}(x),$ $\textsf{invOp}(x)$, $\textsf{addr}(x)$, $\textsf{freeIn}(x)$, $\textsf{position}(x)$ and $\textsf{PC}(x)$.
+
 1. While the only constant (preprocessed) polynomial is $\textsf{ROM}(x)$.
