@@ -77,6 +77,9 @@ Taking our main state machine as reference, we extend it to 5 registries and add
 
 ![image](figures/plookup_basic.pdf.png)
 
-$$[arith \cdot A , arith \cdot B , arith \cdot C , arith \cdot D, arith \cdot E] \subset [latch \cdot \mathcal{A} , latch \cdot \mathcal{B} , latch \cdot \mathcal{C} , latch \cdot \mathcal{D} , latch \cdot \mathcal{E}]$$
+$$[arith \cdot A , arith \cdot B , arith \cdot C , arith \cdot D, arith \cdot op] \subset [latch \cdot \mathcal{A} , latch \cdot \mathcal{B} , latch \cdot \mathcal{C} , latch \cdot \mathcal{D} , latch \cdot \mathcal{E}]$$
+
+Notice that we use **op** because it contains the value of 
+the E registry in the current tick.
 
 ![image](figures/microVM-architecture.pdf.png)
