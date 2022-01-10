@@ -82,7 +82,7 @@ $$\begin{aligned}
 &\mathsf{B(x\omega)} = \mathsf{B(x)} + \mathsf{setB(x)} \cdot (\mathsf{inA(x)} \cdot \mathsf{A(x)} + \mathsf{inB(x)} \cdot \mathsf{B(x)} + \mathsf{inFreeIn}(x) \cdot \mathsf{freeIn(x)} + \mathsf{const(x)} - B(x)).
 \end{aligned}$$
 
-The "program" is described by the constant (and public) polynomials **inA(x)**, **inB(x)**, **setA(x)**, **setB(x)**, **inFreeIn(x)** and **cons(x)**.
+The "program" is described by the constant (and public) polynomials **inA(x)**, **inB(x)**, **setA(x)**, **setB(x)**, **inFreeIn(x)** and **const(x)**.
 
 The polynomial **freeIn(x)** can be public or committed and by changing this polynomial, we can proof different executions for different initial conditions for the same "program".
 
