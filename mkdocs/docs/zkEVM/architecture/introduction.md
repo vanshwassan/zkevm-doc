@@ -1,22 +1,27 @@
 ## First Example: The Fibonacci State Machine
 
+Let's consider that we want to validate that a certain 
+number is a number of a [Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_number) given certain 
+initial conditions.
+To do so, we can build a state machine with two registries, $A$ and $B$ as shown in the following picture:
+
 ![Fibonacci Sequence](figures/fibonacci-sequence.pdf.png)
 
-We can build the Fibonacci state machine with two registries, $A$ and $B$. In the Fibonacci sequence, we have the following relations between the states of these registries:
+Notice that the initial conditions for the state machine are $A_1=0$ and $B_1=1$ and that we have the following relations between the states of these registries:
 
 \begin{aligned}
 A_{i+1} &= B_i, \\
 B_{i+1} &= A_i + B_i.
 \end{aligned}
 
-Let's represent the states of these registries as polynomials in $\mathbb{Z}_p[x]$ evaluated on the subgroup $H = \{\omega, \omega^2, \omega^3, \omega^4, \omega^5, \omega^6, \omega^7, \omega^8 = 1\}$:
+Let's represent the states of these registries as polynomials in $\mathbb{Z}_p[x]$ evaluated on the subgroup $H = \{\omega, \omega^2, \omega^3, \omega^4, \omega^5, \omega^6, \omega^7, \omega^8 = 1\}$ of $8$-roots of unity in $\mathbb{Z}_p^*$. Then, we have the following relations:
 
 \begin{aligned}
 A(\omega^i) &= A_i \quad \Longrightarrow \quad A = [0, 1, 1, 2, 3, 5, 8, 13] \\
 B(\omega^i) &= B_i \quad \Longrightarrow \quad B = [1, 1, 2, 3, 5, 8, 13, 21]
 \end{aligned}
 
-The relations between the states of registries are translated into identities in the polynomial setting:
+The relations between the states of registries can be translated into identities in the polynomial setting as follows:
 
 \begin{aligned}
 A(x\omega) &= \bigg\lvert_H  B(x), \\
@@ -32,11 +37,13 @@ However, the previous identities do not correctly and uniquely describe our sequ
     B(\omega^9) &= B(\omega) = 1 \neq  34 = A(\omega^8) + B(\omega^8).
     \end{aligned}
 
-  2.  We can use other initial conditions, for example $(2,4)$, that also fulfills the identities: $(2,4)\to(4,6)\to(6,10)\to(10,16)\to(16,26)\to(26,42)\to(42,68)\to(68,110).$
+  2.  We can use other initial conditions, for example $(2,4)$, that also fulfill the identities: $(2,4)\to(4,6)\to(6,10)\to(10,16)\to(16,26)\to(26,42)\to(42,68)\to(68,110).$
+
+We have to modify a little our solution in order correctly and uniquely describe the Fibonacci sequence with cyclic polynomial identities. To do that, let's add an auxiliary registry $C$:
 
 ![Fibonacci Sequence Aux](figures/fibonacci-sequence-aux.pdf.png)
 
-Let's add an auxiliary registry $C$ to solve these problems. The corresponding polynomial is:
+The corresponding polynomial $C$ is:
 
 \begin{aligned}
 C(\omega^i) &= C_i \quad \Longrightarrow \quad C = [1, 0, 0, 0, 0, 0, 0, 0].
@@ -56,12 +63,14 @@ A(\omega^9) &= A(\omega) = 0 = B(\omega^8)(1 - C(\omega)), \\
 B(\omega^9) &= B(\omega) = 1 = (A(\omega^8) + B(\omega^8))(1 - C(\omega)) + C(\omega).
 \end{aligned}
 
-We can also use other initial conditions $(A_0, B_0)$:
+Observe that we can also use other initial conditions $(A_1, B_1)$ slightly modifying our polynomial identities:
 
 \begin{aligned}
-A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega))+ A_0C(x\omega), \\
-B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_0 C(x\omega).
+A(x\omega) &= \bigg\lvert_H  B(x)(1 - C(x\omega))+ A_1C(x\omega), \\
+B(x\omega) &= \bigg\lvert_H  (A(x) + B(x))(1 - C(x\omega)) + B_1 C(x\omega).
 \end{aligned}
+
+In our previous example $(A_1, B_1) = (0, 1)$.
 
 ## Proving our State Machine (High Level)
 
