@@ -4,8 +4,8 @@ theme:
   name: material
   palette:
     primary: deep purple
-  # logo: assets/logo.png
-  # favicon: images/favicon.png
+  logo: logo-white.svg
+  favicon: logo192.png
   features:
     - navigation.tabs
     - navigation.tabs.sticky
@@ -21,7 +21,7 @@ extra_javascript:
 extra:
   social:
     - icon: fontawesome/brands/telegram
-      link: https://t.me/iden3io
+      link: https://t.me/polygonhermez
     - icon: fontawesome/brands/github
       link: https://github.com/iden3/zkevm
     - icon: octicons/browser-24
