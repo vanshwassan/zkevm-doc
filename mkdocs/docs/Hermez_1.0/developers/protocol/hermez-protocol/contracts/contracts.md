@@ -39,7 +39,7 @@ When a user calls a function that adds an L1UserTx, the following happens:
   - position
   - L1UserTx data (72 bytes)
 
-In the global spec, all [L1 user transactions](developers/protocol/hermez-protocol/protocol?id=l1-user-transactions) are specified
+In the global spec, all [L1 user transactions](../../protocol#l1-user-transactions) are specified
 
 The `L1TxQueue` has a lenght of `MAX_L1_TX`, L1UserTx can fulfill till `MAX_L1_USER_TX`, therefore always are some slots reserved for the L1-coordinator-Tx:
 `MAX_L1_TX - len(L1_USER_TXS)`
@@ -62,7 +62,7 @@ Transaction to get funds back from the smart contract to Ethereum address. This 
 
 The `forgeBatch` functionality depends on a consensus mechanism to decide who can be the coordinator of a given batch. Separate from the rollup smart contract, there is an external smart contract that implements the consensus mechanism and maintains its own state. During a forge call in the rollup smart contract, a call is made to the consensus smart contract to validate if the caller coordinator is allowed to forge and also to allow the consensus smart contract to update its own state and perform consensus actions if necessary.
 
-Then, the coordinator will add his [L1-coordinator-transactions](developers/protocol/hermez-protocol/contracts/contracts?id=l1-coordinator-transactions) and will verify the circuit proof against the verifier smart contract as we can see in the previous [diagram](developers/protocol/hermez-protocol/contracts/contracts?id=hermez-general-goals)
+Then, the coordinator will add his [L1-coordinator-transactions](#l1-coordinator-transactions) and will verify the circuit proof against the verifier smart contract as we can see in the previous [diagram](#hermez-general-goals)
 
 There are 2 kind of `forgeBatch`, a flag in the function will distinguish between them
 
@@ -70,7 +70,7 @@ There are 2 kind of `forgeBatch`, a flag in the function will distinguish betwee
   - Forge L2 and L1 coordinator transactions, L1 User transactions are not mined.
 - L1-L2-batch
   - Forge L1 user, L1 coordinator and L2 transactions. The coordinator must forge all the L1 transactions in the first frozen queue
-  - Optionally coordinator can add [L1-coordinator-transactions](developers/protocol/hermez-protocol/contracts/contracts?id=l1-coordinator-transactions)
+  - Optionally coordinator can add [L1-coordinator-transactions](#l1-coordinator-transactions)
   - Set a new state and exit root
   - Delete the current frozen queue and freeze the next one
 
@@ -80,7 +80,7 @@ In order to force the coordinator to forge the L1 transactions, but also allow h
 
 #### L1 Coordinator Transactions
 
-In the global spec all of the [L1 coordinator transactions](developers/protocol/hermez-protocol/protocol?id=l1-coordinator)  are specified
+In the global spec all of the [L1 coordinator transactions](../../protocol#l1-coordinator)  are specified
 
 #### Data availability
 

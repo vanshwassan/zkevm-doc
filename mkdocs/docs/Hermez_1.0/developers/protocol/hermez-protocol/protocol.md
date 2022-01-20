@@ -588,7 +588,7 @@ It is assumed that this transaction has a recipient `toIdx` > `INITIAL_IDX`
   - sender `fromIdx` has the correct `nonce`
 
 #### Exit
-Transfer tokens from an account to the [exit tree](developers/protocol/hermez-protocol/protocol?id=exit-tree), L2 --> L2
+Transfer tokens from an account to the [exit tree](#exit-tree), L2 --> L2
 
 - Actions:
   - subtract `amountFloat40` from sender `fromIdx`
@@ -647,7 +647,7 @@ Hence, coordinator would select the recipient `idx` to add `amountFloat40` (call
   - sender `fromIdx` has the correct `nonce`
 
 ### HermezWithdraw
-Funds are held on Hermez contract once the user has perform an [exit transaction](developers/protocol/hermez-protocol/protocol?id=exit).
+Funds are held on Hermez contract once the user has perform an [exit transaction](#exit).
 The withdrawal data will contain unique data (nullifier) which identifies the withdrawal. Hence, the smart contract will store that data to avoid performing withdrawals multiple times.
 
 Each withdrawal could be identified uniquely by:
@@ -774,7 +774,7 @@ L1L2TxsData = L1TxData[0] || L1TxData[1] || ... || L1TxData[len(L1Txs) - 1] || L
 ```
 
 ### Fee Tx
-All indexes that will receive the fees accumulated. Further information can be found in [this section](developers/protocol/hermez-protocol/protocol?id=coordinator).
+All indexes that will receive the fees accumulated. Further information can be found in [this section](#coordinator).
 
 `feeTxsData` is all the indexes that will receive the fees concatenated:
 ```
@@ -834,12 +834,12 @@ $TotalTxCost = amount + Fee_{amount}$
 
 Since there are 8 reserved bits for this field, there will be 256 different fee
 percentages that the user could choose to perform its transaction.
-See the [table showing the 256 values for each fee index](developers/protocol/hermez-protocol/fee-table?id=transaction-fee-table)
+See the [table showing the 256 values for each fee index](../fee-table#transaction-fee-table)
 
 #### Compute Fees
 Procedure to compute fees must remain equal across protocol implementations. The following procedure has been adopted:
 
-- given `feeUser` bits selects [feeFactor shifted](developers/protocol/hermez-protocol/fee-table?id=feefactor-left-shifted) large integer
+- given `feeUser` bits selects [feeFactor shifted](../fee-table#feefactor-left-shifted) large integer
   - 60 bits has been chosen in order to optimize precision at the time to compute fees. 60 bits is the minimum bits to achieve enough precision among all fee factor values
   - $\text{bitsShiftPrecision} = 60$
 
@@ -885,5 +885,5 @@ This logic is implemented in a smart contract: `WithdrawalDelayer`. This contrac
 
 The purpose of this smart contract is to delay the withdraw. Hence, tokens will be held by the smart contract for a period of `D` and only afterwards tokens could be really withdrawn.
 
-- [Hermez emergency mechanism](developers/protocol/hermez-protocol/contracts/contracts?id=emergency-mechanism)
-- [Withdrawal delayer mechanism](developers/protocol/withdrawal-delayer/withdrawal-delayer?id=withdrawal-delayer-protocol)
+- [Hermez emergency mechanism](#emergency-mechanism)
+- [Withdrawal delayer mechanism](../../withdrawal-delayer/withdrawal-delayer#mechanism)

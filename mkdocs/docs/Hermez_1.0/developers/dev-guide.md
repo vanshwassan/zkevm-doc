@@ -1,24 +1,24 @@
 # Developer Guide
 
-This document is an overview of the Hermez Protocol. Its objective is to provide an introduction to developers on the Hermez Protocol so that the use of the tools which interact with Hermez Network, such as [`HermezJS`](../developers/sdk?id=sdk) (javascript SDK) and the [`REST API`](../developers/api?id=api), become simpler.  This document assumes you are familiar with the Ethereum ecosystem and L2 Rollups (in particular ZK-Rollups). 
+This document is an overview of the Hermez Protocol. Its objective is to provide an introduction to developers on the Hermez Protocol so that the use of the tools which interact with Hermez Network, such as [`HermezJS`](../sdk#dk) (javascript SDK) and the [`REST API`](../api#api), become simpler.  This document assumes you are familiar with the Ethereum ecosystem and L2 Rollups (in particular ZK-Rollups). 
 
-For a more in depth analysis, read the [`protocol`](../developers/protocol/README?id=protocol) section.
+For a more in depth analysis, read the [`protocol`](../protocol/hermez-protocol/protocol) section.
 
 Hermez smart contracts can be downloaded from [`here`](https://github.com/hermeznetwork/contracts).
 
 ## Overview
-Hermez is a [`zk-rollup`](../developers/glossary?id=zk-rollup) solution that allows scaling payments and token transfers on top of the Ethereum public blockchain. It uses Ethereum for data storage but not for computation. In addition, by using zero-knowledge proofs, it is easy to verify on-chain that computations have been carried out correctly.
+Hermez is a [`zk-rollup`](../glossary#zk-rollup) solution that allows scaling payments and token transfers on top of the Ethereum public blockchain. It uses Ethereum for data storage but not for computation. In addition, by using zero-knowledge proofs, it is easy to verify on-chain that computations have been carried out correctly.
 
-All accounts and balances in Hermez Network are stored off-chain in a [`state tree`](../developers/glossary?id=state-tree). Incoming user [`transactions`](../developers/glossary?id=transactions) are [`batched`](../developers/glossary?id=batch) together, and through a [`zk-SNARK`](../developers/glossary?id=zk-snark) that proves that those transactions meet certain rules specified in a smart contract, the state tree transitions to a new verifiable valid state.
+All accounts and balances in Hermez Network are stored off-chain in a [`state tree`](../glossary#state-tree). Incoming user [`transactions`](../glossary#transactions) are [`batched`](../glossary#batch) together, and through a [`zk-SNARK`](../glossary#zk-snark) that proves that those transactions meet certain rules specified in a smart contract, the state tree transitions to a new verifiable valid state.
 
-The [`coordinator`](../developers/glossary?id=coordinator) is the entity that collects and codifies these transactions, calculates the ZK-SNARK proof and submits the result to the smart contract that validates the transition. Transactions are made public to provide [`data availability`](../developers/glossary?id=data-availability) to the protocol so that anyone can rebuild the state tree from on-chain data.
+The [`coordinator`](../glossary#coordinator) is the entity that collects and codifies these transactions, calculates the ZK-SNARK proof and submits the result to the smart contract that validates the transition. Transactions are made public to provide [`data availability`](../glossary#data-availability) to the protocol so that anyone can rebuild the state tree from on-chain data.
 
 Users typically send transactions to Hermez via a wallet. The purpose of this tool is to improve the experience of using Hermez by hiding the internal interactions between the different Hermez components and simplifying the usage. 
 
-The [`governance`](../developers/glossary?id=governance) is the  entity that oversees the sustainability and evolution of the network. Some functions delegated to the governance include the upgrade of smart contracts, the modification of [`system parameters`](../developers/glossary?id=system-parameters), or the execution of the [`withdrawal delay`](../developers/dev-guide?id=withdrawal) mechanism among others.
+The [`governance`](../glossary#governance) is the  entity that oversees the sustainability and evolution of the network. Some functions delegated to the governance include the upgrade of smart contracts, the modification of [`system parameters`](../glossary#system-parameters), or the execution of the [`withdrawal delay`](#withdrawal) mechanism among others.
 
 Hermez deploys three main smart contracts:
-1. **Hermez smart contract**: Manages the [`forging`](../developers/glossary?id=forging) stage by checking the zk-proofs provided by the selected coordinator, and updates the state and exit trees. It also interacts with users by collecting L1 transactions and adding them to the transaction queue.
+1. **Hermez smart contract**: Manages the [`forging`](../glossary#forging) stage by checking the zk-proofs provided by the selected coordinator, and updates the state and exit trees. It also interacts with users by collecting L1 transactions and adding them to the transaction queue.
 2. **Consensus smart contract**: Manages the selection of a coordinator node via an auction process.
 3. **WithdrawalDelayer smart contract**: Manages a withdrawal protection mechanism embedded into the system.
 
@@ -33,7 +33,7 @@ At the time of processing a batch, the coordinator takes the pending L1 transact
 Hermez functionalities can be summarized in 4 major groups:
 1. Handling L1-user and L2-user transactions
 2. Forging batches
-3. Reaching [`consensus`](../developers/glossary?id=auction) to select a coordinator
+3. Reaching [`consensus`](../glossary#auction) to select a coordinator
 4. Withdrawal of funds.
 
 
@@ -43,7 +43,7 @@ Hermez functionalities can be summarized in 4 major groups:
 Hermez stores accounts as leaves in the Hermez state tree. Each account stores a single type of token. A user may own multiple rollup accounts.
 
 There are two types of accounts to operate in Hermez Network:
-1. **Regular**: Regular accounts can be used in both L1 and L2 transactions. Regular accounts include an Ethereum and a [`babyjubjub`](../developers/glossary?id=BabyJubJub) public key. An Ethereum key is used to authorize L1 transactions and the Baby Jubjub key is used to authorize L2 transactions. An Ethereum address may authorize the creation of a Regular account containing that same Ethereum address plus a Baby Jubjub public key. Typically, this is done via a UI.
+1. **Regular**: Regular accounts can be used in both L1 and L2 transactions. Regular accounts include an Ethereum and a [`babyjubjub`](../glossary#BabyJubJub) public key. An Ethereum key is used to authorize L1 transactions and the Baby Jubjub key is used to authorize L2 transactions. An Ethereum address may authorize the creation of a Regular account containing that same Ethereum address plus a Baby Jubjub public key. Typically, this is done via a UI.
 
 2. **Internal**: Internal accounts only have a Baby Jubjub key, and thus may only be used in L2 transactions. Since there is no Ethereum address, the account creation does not require an authorization and will only require a Baby Jubjub key.
 
@@ -60,16 +60,16 @@ L1 transactions can be divided in two groups depending the originator of the tra
 - **L1 Coordinator Transactions**: originate from the coordinator.
 
 #### L1 User Transactions
-L1 user transactions (L1UserTxs) are received by the smart contract. These transactions are concatenated and added in queues to [`force the coordinator`](../developers/dev-guide?id=L1L2-Batches) to process them as part of the batch. The queue that will be forged in the next L1L2-batch is always frozen, and the L1 Transactions will be added in the following queues. In case a transaction is invalid (e.g. attempts to send an amount greater than the account balance) it will be processed by the circuit but will be nullified.
+L1 user transactions (L1UserTxs) are received by the smart contract. These transactions are concatenated and added in queues to [`force the coordinator`](#L1L2-Batches) to process them as part of the batch. The queue that will be forged in the next L1L2-batch is always frozen, and the L1 Transactions will be added in the following queues. In case a transaction is invalid (e.g. attempts to send an amount greater than the account balance) it will be processed by the circuit but will be nullified.
 
 This system allows the L1 transactions to be uncensorable
 
 Examples of L1 User transactions include `CreateAccountDeposit`, `Deposit`, `DepositTransfer`... All the transactions details are handled by the UI.
 #### L1 Coordinator Transactions
-L1 Coordinator Transactions (L1CoordinatorTxs) allow the coordinator to create regular or internal [`accounts`](../developers/dev-guide?id=accounts) when forging a batch so that a user can transfer funds to another user that doesn't own an account yet.
+L1 Coordinator Transactions (L1CoordinatorTxs) allow the coordinator to create regular or internal [`accounts`](#accounts) when forging a batch so that a user can transfer funds to another user that doesn't own an account yet.
 
 ### L2 Transactions
-L2 transactions (L2Txs) are executed exclusively on L2. Examples of L2 transactions include `Transfer` of funds between rollup accounts or `Exit` to transfer funds to the exit tree. All L2 transactions are initiated by the user, who sends the transactions directly to the coordinator via a [`REST API`](../developers/api?id=api). Depending on the UI capabilities, the user may be able to select among a number of coordinators (the one currently forging, the ones that have already won the right to forge in upcoming slots,...).
+L2 transactions (L2Txs) are executed exclusively on L2. Examples of L2 transactions include `Transfer` of funds between rollup accounts or `Exit` to transfer funds to the exit tree. All L2 transactions are initiated by the user, who sends the transactions directly to the coordinator via a [`REST API`](../api#api). Depending on the UI capabilities, the user may be able to select among a number of coordinators (the one currently forging, the ones that have already won the right to forge in upcoming slots,...).
 
 Fees are payed on L2 transactions in the same token used in the transaction. The coordinator collects these fees from up to 64 different tokens per batch. If more than 64 tokens are used in the same batch, no fees will be collected for the excess number of tokens. 
 
@@ -113,7 +113,7 @@ Hermez reaches a consensus on who will play the role of coordinator by running a
 
 The coordinator node is allowed to forge batches during the awarded slot, which is the mechanism by which an authorized coordinator processes a batch of transactions, produces a ZK-SNARK attesting to the correctness of the operation and is able to reclaim the processing fees.
 
-Auction bids are placed only in [`HEZ`](../developers/glossary?id=hez). The auction of future slots opens up to **S1** slots in advance. Auction closes **S2** slots before the beginning the slot. Tentative **S1** and **S2** values are 1 month and 2 slots respectively. Additionally, these parameters can be changed by governance at any time.
+Auction bids are placed only in [`HEZ`](../glossary#hez). The auction of future slots opens up to **S1** slots in advance. Auction closes **S2** slots before the beginning the slot. Tentative **S1** and **S2** values are 1 month and 2 slots respectively. Additionally, these parameters can be changed by governance at any time.
 
 Bids placed during the auction should be at least greater than the minimal bidding price if it's the first bid in a slot, or a premium bid factor **P** % higher than the previous bid. Both the minimum bidding price and the premium bid factor(**P**) can be modified by the network governance. Tentative values for minimum bid and premium factor are 10 HEZ and 10% respectively. Bids not meeting these conditions will not be valid and bidders will receive their HEZ when the slot is forged.
 
