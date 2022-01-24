@@ -40,7 +40,7 @@ make
 The executable can be found in `dist/heznode`
 
 
-3. Deploy PostgreSQL database and Geth node containers. For this step we provide a docker-compose file example. Copy [file](developers/coord-files/docker-compose.sandbox.md) to `docker-compose.sandbox.yaml`.
+3. Deploy PostgreSQL database and Geth node containers. For this step we provide a docker-compose file example. Copy [file](/coord-files/docker-compose.sandbox.md) to `docker-compose.sandbox.yaml`.
 
   Login to AWS public ECR to be able to download the Geth docker image:
 ```shell
@@ -82,7 +82,7 @@ The relevant information about the contract deployment can be found below
 ```
 
 
-4. Customize Hermez Node configuration file. For this example, we can use [this configuration file](developers/coord-files/cfg.sandbox.boot-coordinator.md). Just copy this file to `cmd/heznode/cfg.sandbox.boot.coordinator.toml`
+4. Customize Hermez Node configuration file. For this example, we can use [this configuration file](/coord-files/cfg.sandbox.boot-coordinator.md). Just copy this file to `cmd/heznode/cfg.sandbox.boot.coordinator.toml`
 
   For more information on the parameters in the configuration file, read the [configuration parameters description](https://github.com/hermeznetwork/hermez-node/blob/master/config/config.go#L57).
 
@@ -322,7 +322,7 @@ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET
 "Rollup":"0x679b11e0229959c1d3d27c9d20529e4c5df7997c"
 ```
 
-5. Copy configuration [file](developers/coord-files/cfg.testnet.coord.md) to `hermez-node/cmd/heznode/cfg.testnet.sync.toml`. You will need to edit the following sections:
+5. Copy configuration [file](/coord-files/cfg.testnet.coord.md) to `hermez-node/cmd/heznode/cfg.testnet.sync.toml`. You will need to edit the following sections:
 - **PostgreSQL** Values provided are valid for docker postgreSQL container. You will need to supply the actual values for your database.  
 - **Web3** URL of your Rinkeby Ethereum node
 - **SmartContracts** Double check that the address provided in the configuration file corresponds to the current Hermez Network contract deployed in Rinkeby
@@ -378,7 +378,7 @@ This script will generate a similar output:
 ```
 The Baby JubJub address is `publicKeyCompressedHex`. In this case, `0x0c83f81f4fce3e2ccc78530099830e29bf69713fa11c546ad152bf5226cfc774`.
 
-6. Copy configuration [file](developers/coord-files/cfg.testnet.coord.md) to `hermez-node/cmd/heznode/cfg.testnet.coord.toml`. You will need to edit the following sections:
+6. Copy configuration [file](/coord-files/cfg.testnet.coord.md) to `hermez-node/cmd/heznode/cfg.testnet.coord.toml`. You will need to edit the following sections:
 - **PostgreSQL** Values provided are valid for docker postgreSQL container. You will need to supply the actual values for your database.  
 - **Web3** URL of your Rinkeby Ethereum node
 - **SmartContracts** Double check that the address provided in the configuration file corresponds to the current Hermez Network contract deployed in Rinkeby
