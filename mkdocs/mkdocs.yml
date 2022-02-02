@@ -1,5 +1,5 @@
-site_name: Polygon Hermez Documentation
-site_url: https://hermez.io/
+site_name: ZKEVM docs - work in progress
+site_url: http://165.22.26.3/zkevmdoc/mkdocs/site/
 theme:
   name: material
   palette:

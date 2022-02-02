@@ -25,15 +25,17 @@
 
 # Polygon Hermez Docs
 
-Polygon Hermez is Ethereum Layer 2 solution based on succinct validity proofs (aka zero-knowledge proofs) that get periodically submitted and verified on Ethereum.
+Welcome to the documentation site of the Polygon Hermez project.
 
-Polygon Hermez 2.0 is built upon the foundations laid by Hermez.  The main development goal is to launch a zero-knowledge Ethereum Virtual Machine, or zkEVM. This is a revolutionary approach that will recreate all the EVM opcodes using zero-knowledge technology, enabling smart contracts to be deployed on the ZK-Rollup.
+Polygon Hermez is a decentralized Ethereum Layer 2 scalability solution based on cryptographic zero-knowledge proofs to provide validation and fast finality to off-chain transactions computation, a zk-rollup.
 
-Getting the best of two ZK technologies to combine efficiency and speed. While STARK technology will be used for main state validation in the future zkEVM, they are expensive proofs to validate on chain. The solution is to create a Groth16 or PLONK SNARK circuit using circom libraries that will validate the STARK proof.
+After the launch of Hermez 1.0 in March 2021 designed to support Ethereum token transfers, the team is currently working on the development of Hermez 2.0, the zkEVM or Ethereum complete emulation in a zero-knowledge virtual machine. This is a challenging design decision but the objective is to minimize the user friction to use this scalability solution and boost the utility of the Ethereum network.
 
-<br /><br />
-# <div align="center"><b>Start [here](zkEVM/architecture/introduction.md) for Polygon Hermez 2.0 docs.</b></div>
-<br /><br />
+The team is designing and implementing a revolutionary approach that will recreate all the EVM opcodes for transparent deployment of existing Ethereum smart contracts. For this purpose a new set of technologies and tools are being created and engineered.
+
+#### <b>Start [here](zkEVM/architecture/introduction.md) for Hermez 2.0 documentation</b>
+
+#### <b>Start [here](Hermez_1.0/about/scalability.md) for Hermez 1.0 documentation</b>
 
 <!-- # Polygon Hermez 2.0 (zk Ethereum Virtual Machine
 
