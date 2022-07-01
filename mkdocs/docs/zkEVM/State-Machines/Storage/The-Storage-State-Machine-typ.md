@@ -55,10 +55,8 @@ A generic state machine is characterised by; sets of states (as inputs) stored i
 A state machine can be monolithic, where it is a prototype of one particular computation, while others may specialise with certain types of computations. Depending on the computational algorithm, a state machine may have to run through a number of state transitions before producing the desired output. Iterations of the same sequence of operations may be required, to the extend that most common state machines are cyclic by nature.
 
 
-
-<p align="center"><img src="fig0-gen-state-mchn.png" width="600" /></p>
+![Figure 1: A Generic State Machine](fig0-gen-state-mchn.png)
 <div align="center"><b> Figure 1: A Generic State Machine </b></div>
-
 
 
 The Storage SM performs computations on the key-value data stored in special Merkle Trees, called **Sparse Merkle Trees** (SMTs). The basic operations it executes are; CREATE, READ, UPDATE and DELETE.
@@ -93,33 +91,42 @@ The task therefore, is to update the value and all the node values along the pat
 
 Here's how the Storage SM does this,
 
-1. Computes the hash of the new value, $V_{\mathbf{01..7}} = \big( V_{\mathbf{0}}, V_{\mathbf{1}}, V_{\mathbf{2}}, V_{\mathbf{3}}, V_{\mathbf{4}}, V_{\mathbf{5}}, V_{\mathbf{6}}, V_{\mathbf{7}} \big)$, call it the *Committed Value*; resulting in the hashed value,
-   $$
+*Step 1.* Computes the hash of the new value, 
+$V_{\mathbf{01..7}} = \big( V_{\mathbf{0}}, V_{\mathbf{1}}, V_{\mathbf{2}}, V_{\mathbf{3}}, V_{\mathbf{4}}, V_{\mathbf{5}}, V_{\mathbf{6}}, V_{\mathbf{7}} \big)$
+ call it the *Committed Value*; resulting in the hashed value,
+    
+\begin{aligned}
    \text{HV}_{\mathbf{0123}} = \big( \text{HV}_{\mathbf{0}}, \text{HV}_{\mathbf{1}}, \text{HV}_{\mathbf{2}}, \text{HV}_{\mathbf{3}} \big) = \text{Hash}\big( 0000\|V_{\mathbf{01..7}} \big).
-   $$
+\end{aligned} 
 
-2. Form the leaf by computing the hash of the concatenation of the remaining key $\text{RK}_{\mathbf{0123}} = \big( \text{RK}_{\mathbf{0}}, \text{RK}_{\mathbf{1}}, \text{RK}_{\mathbf{2}}, \text{RK}_{\mathbf{3}} \big)$ and the hashed value $\text{HV}_{\mathbf{0123}}$; yielding the leaf,
-   $$
+*Step 2.* Form the leaf by computing the hash of the concatenation of the remaining key $\text{RK}_{\mathbf{0123}} = \big( \text{RK}_{\mathbf{0}}, \text{RK}_{\mathbf{1}}, \text{RK}_{\mathbf{2}}, \text{RK}_{\mathbf{3}} \big)$ and the hashed value $\text{HV}_{\mathbf{0123}}$; yielding the leaf,
+    
+\begin{aligned}
    \text{LV}_{\mathbf{0123}} = \big( \text{LV}_{\mathbf{0}}, \text{LV}_{\mathbf{1}}, \text{LV}_{\mathbf{2}}, \text{LV}_{\mathbf{3}} \big) = \text{Hash}\big( 1000\| \text{RK}_{\mathbf{0123}} \| \text{HV}_{\mathbf{0123}} \big).
-   $$
+\end{aligned}
 
-3. Next, use the given sibling, say $ \text{SB}_{\mathbf{0123}}  = \big( \text{SB}_{\mathbf{0}}, \text{SB}_{\mathbf{1}}, \text{SB}_{\mathbf{2}}, \text{SB}_{\mathbf{3}} \big)$, to compute the branch value, 
-   $$
+*Step 3.* Next, use the given sibling, say 
+$\text{SB}_{\mathbf{0123}}  = \big( \text{SB}_{\mathbf{0}}, \text{SB}_{\mathbf{1}}, \text{SB}_{\mathbf{2}}, \text{SB}_{\mathbf{3}} \big)$
+ to compute the branch value,
+    
+\begin{aligned}
    \text{BR}_{\mathbf{0123}} = \big( \text{BR}_{\mathbf{0}}, \text{BR}_{\mathbf{1}}, \text{BR}_{\mathbf{2}}, \text{BR}_{\mathbf{3}} \big) = \text{Hash}\big( 0000\| \text{SB}_{\mathbf{0123}} \| \text{LV}_{\mathbf{0123}} \big).
-   $$
+\end{aligned}
 
-4. Again, use the next given sibling, say $ \text{SB}_{\mathbf{4567}}  = \big( \text{SB}_{\mathbf{4}}, \text{SB}_{\mathbf{5}}, \text{SB}_{\mathbf{6}}, \text{SB}_{\mathbf{7}} \big)$ to compute the next branch. If this sibling is the last one, then the resultant is the new root,
-   $$
+*Step 4.* Again, use the next given sibling, say
+$\text{SB}_{\mathbf{4567}}  = \big( \text{SB}_{\mathbf{4}}, \text{SB}_{\mathbf{5}}, \text{SB}_{\mathbf{6}}, \text{SB}_{\mathbf{7}} \big)$
+    to compute the next branch. If this sibling is the last one, then the resultant is the new root,
+    
+\begin{aligned}
    \text{ROOT}_{\mathbf{0123}} = \big( \text{RT}_{\mathbf{0}}, \text{RT}_{\mathbf{1}}, \text{RT}_{\mathbf{2}}, \text{RT}_{\mathbf{3}} \big) = \text{Hash}\big( 0000\| \text{SB}_{\mathbf{4567}} \| \text{BR}_{\mathbf{0123}} \big).
-   $$
+\end{aligned}
 
 See Figure 2 below, for an illustration of this UPDATE operation, using the $\text{POSEIDON}$ Hash. 
 
 
 
-<p align="center"><img src="fig0-updt-mkl-tree.png" width="900" /></p>
+![Figure 2: Value UPDATE Example](fig0-updt-mkl-tree.png)
 <div align="center"><b> Figure 2: Value UPDATE Example </b></div>
-
 
 
 The above example captures in summary the following aspects about the Storage SM; 
@@ -155,15 +162,21 @@ What follows is an explanation of how the zkProver storage, as a database, is de
 
 A typical Merkle tree has ***leaves***, ***branches*** and a ***root***. A leaf is a node with no child-nodes, while a branch is a node with child-nodes. A root is therefore a node with no parent-node.
 
-See Figure 1 below, for an example of how a hash function $\mathbf{H}$ is used to create a Merkle tree to record eight (8) values; $ \text{V}_{\mathbf{a}}, \text{V}_{\mathbf{b}}, \text{V}_{\mathbf{c}}, \text{V}_{\mathbf{d}}, \text{V}_{\mathbf{e}}, \text{V}_{\mathbf{f}}, \text{V}_{\mathbf{g}}, \text{V}_{\mathbf{h}}$;
+See Figure 3 below, for an example of how a hash function 
+$\mathbf{H}$
+ is used to create a Merkle tree to record eight (8) values; 
+ $\text{V}_{\mathbf{a}}, \text{V}_{\mathbf{b}}, \text{V}_{\mathbf{c}}, \text{V}_{\mathbf{d}}, \text{V}_{\mathbf{e}}, \text{V}_{\mathbf{f}}, \text{V}_{\mathbf{g}}, \text{V}_{\mathbf{h}}$;
 
-1. Each leaf is but the hash $\mathbf{H}(\text{V}_{\mathbf{i}})$ of a particular value  $\text{V}_{\mathbf{i}}$, where  $\mathbf{ i} \in \{ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}, \mathbf{e}, \mathbf{f}, \mathbf{g}, \mathbf{h} \}$.
-2. The branches;  $\mathbf{B}_{\mathbf{ab}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{a}})\| \mathbf{H}(\text{V}_{\mathbf{b}}) \big)$,  $\mathbf{B}_{\mathbf{cd}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{c}})\| \mathbf{H}(\text{V}_{\mathbf{d}}) \big)$, $\mathbf{B}_{\mathbf{ef}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\| \mathbf{H}(\text{V}_{\mathbf{f}}) \big) $,  $\mathbf{B}_{\mathbf{gh}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{g}})\| \mathbf{H}(\text{V}_{\mathbf{h}}) \big)$, $\mathbf{B}_{\mathbf{abcd}} = \mathbf{H} \big(\mathbf{B}_{\mathbf{ab}}\| \mathbf{B}_{\mathbf{cd}} \big)$  and  $\mathbf{B}_{\mathbf{efgh}} = \mathbf{H} \big( \mathbf{B}_{\mathbf{ef}}\| \mathbf{B}_{\mathbf{gh}} \big)$.
+1. Each leaf is but the hash $\mathbf{H}(\text{V}_{\mathbf{i}})$ of a particular value $\text{V}_{\mathbf{i}}$, where   
+    $\mathbf{ i} \in \{ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}, \mathbf{e}, \mathbf{f}, \mathbf{g}, \mathbf{h} \}$.
+2. The branches;  $\mathbf{B}_{\mathbf{ab}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{a}})\| \mathbf{H}(\text{V}_{\mathbf{b}}) \big)$,  
+    $\mathbf{B}_{\mathbf{cd}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{c}})\| \mathbf{H}(\text{V}_{\mathbf{d}}) \big)$, 
+    $\mathbf{B}_{\mathbf{ef}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\| \mathbf{H}(\text{V}_{\mathbf{f}}) \big)$,  
+    $\mathbf{B}_{\mathbf{gh}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{g}})\| \mathbf{H}(\text{V}_{\mathbf{h}}) \big)$, $\mathbf{B}_{\mathbf{abcd}} = \mathbf{H} \big(\mathbf{B}_{\mathbf{ab}}\| \mathbf{B}_{\mathbf{cd}} \big)$  and  $\mathbf{B}_{\mathbf{efgh}} = \mathbf{H} \big( \mathbf{B}_{\mathbf{ef}}\| \mathbf{B}_{\mathbf{gh}} \big)$.
 3. The root is  $\mathbf{root}_{\mathbf{a..h}} = \mathbf{H} \big(\mathbf{B}_{\mathbf{abcd}}\| \mathbf{B}_{\mathbf{efgh}} \big)$.
 
 
-
-<p align="center"><img src="fig1-mkl-tree-gen1.png" width="800" /></p>
+![Figure 3: A Merkle Tree Example](fig1-mkl-tree-gen1.png)
 <div align="center"><b> Figure 3: A Merkle Tree Example </b></div>
 
 
@@ -221,7 +234,7 @@ Here's an example that follows the (key,value)-pair approach used in the zkProve
 
 Consider the Merkle Tree shown in [Figure 3]() above. 
 
-If the prover has committed to a value $\text{V}_{\mathbf{f}}$ by appending a new leaf $\mathbf{H}(\text{V}_{\mathbf{f}})$ to the Merkle Tree as in [Figure 1](), he must then avail the following information, to enable verification of his claim; 
+If the prover has committed to a value $\text{V}_{\mathbf{f}}$ by appending a new leaf $\mathbf{H}(\text{V}_{\mathbf{f}})$ to the Merkle Tree as in [Figure 3](), he must then avail the following information, to enable verification of his claim; 
 
 1. The Merkle root $\mathbf{root}_{\mathbf{a..h}}$,
 2. The value $\text{V}_{\mathbf{f}}$,
@@ -233,15 +246,15 @@ The verifier then checks the prover's claim by computing the Merkle root as foll
 
 ​	(a)	He computes  $\mathbf{H}(\text{V}_{\mathbf{f}})$, which is the hash of the value $\text{V}_{\mathbf{f}}$.
 
-​	(b)	Then uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}}) $  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be the same as the branch node $ \mathbf{B}_{\mathbf{ef}} $. 
+​	(b)	Then uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}})$  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be the same as the branch node $ \mathbf{B}_{\mathbf{ef}} $. 
 
 (**Note.** The symbol, `tilde` " $\tilde{ }$ ", is used throughout the document to indicate that the computed value, $\tilde{\Box}$, still needs to be checked, or tested to be true.)
 
-​	(c)	Next, he computes  $\mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{ef}}\|\mathbf{B}_{\mathbf{gh}} \big) =: \tilde{ \mathbf{B}}_{\mathbf{efgh}} $, corresponding to the branch node $\mathbf{B}_{\mathbf{efgh}}$.
+​	(c)	Next, he computes  $\mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{ef}}\|\mathbf{B}_{\mathbf{gh}} \big) =: \tilde{ \mathbf{B}}_{\mathbf{efgh}}$, corresponding to the branch node $\mathbf{B}_{\mathbf{efgh}}$.
 
 ​	(d)	Now, uses $\mathbf{H} \big( \mathbf{B}_{\mathbf{abcd}}\| \tilde{ \mathbf{B}}_{\mathbf{efgh}} \big) =: \tilde{ \mathbf{root}}_{\mathbf{a..h}}$.
 
-The Merkle proof is concluded by checking whether $ \tilde{ \mathbf{root}}_{\mathbf{a\dots h}}$ equals to the publicly known root $\mathbf{root}_{\mathbf{a..h}}$.
+The Merkle proof is concluded by checking whether $\tilde{ \mathbf{root}}_{\mathbf{a\dots h}}$ equals to the publicly known root $\mathbf{root}_{\mathbf{a..h}}$.
 
 
 
@@ -277,10 +290,8 @@ Suppose that the key, $K_{\mathbf{a}} = 11010110$. In order to build a binary SM
 See, Figure 4 below, for the SMT representing the single key-value pair $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$, where  $K_{\mathbf{a}} = 11010110$.
 
 
-
-<p align="center"><img src="fig3-sngl-kv-eg.png" width="250" /></p>
+![Figure 4: A Single key-value pair SMT](fig3-sngl-kv-eg.png)
 <div align="center"><b> Figure 4: A Single key-value pair SMT </b></div>
-
 
 
 Note that the last nodes in binary SMT branches are generally either leaves or zero-nodes. 
@@ -320,8 +331,7 @@ To build a binary SMT with this two key-values, $(K_{\mathbf{a}}, \text{V}_{\mat
 See, Figure 5(a) below, for the SMT representing the two key-value pairs $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$ and $(K_{\mathbf{b}}, \text{V}_{\mathbf{b}})$, where  $K_{\mathbf{a}} = 11010110$ and $K_{\mathbf{b}} = 11010101$.
 
 
-
-<p align="center"><img src="fig4a-mpt-2kv-eg.png" width="250" /></p>
+![Figure 5(a): Two key-value pairs SMT - Case 1](fig4a-mpt-2kv-eg.png)
 <div align="center"><b> Figure 5(a): Two key-value pairs SMT - Case 1 </b></div>
 
 
@@ -349,8 +359,7 @@ To build a binary SMT with this two key-values, $(K_{\mathbf{a}}, \text{V}_{\mat
 See, Figure 5(b) below, depicting the SMT representing the two key-value pairs $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$ and $(K_{\mathbf{b}}, \text{V}_{\mathbf{b}})$, where  $K_{\mathbf{a}} = 11010100$ and $K_{\mathbf{b}} = 11010110$. 
 
 
-
-<p align="center"><img src="fig4b-mpt-2kv-eg.png" width="350" /></p>
+![Figure 5(b): Two key-value pairs SMT - Case 2](fig4b-mpt-2kv-eg.png)
 <div align="center"><b> Figure 5(b): Two key-value pairs SMT - Case 2 </b></div>
 
 
@@ -383,7 +392,7 @@ See, Figure 5(c) below, depicting the SMT representing the two key-value pairs $
 
 
 
-<p align="center"><img src="fig4c-mpt-2kv-eg.png" width="400" /></p>
+![Figure 5(c): Two key-value pairs SMT - Case 3](fig4c-mpt-2kv-eg.png)
 <div align="center"><b> Figure 5(c): Two key-value pairs SMT - Case 3 </b></div>
 
 
@@ -411,18 +420,33 @@ The **level of a leaf**, $\mathbf{L}_{\mathbf{x}}$, in a binary SMT is defined a
 #### Example 1. *Leaf Levels* 
 
 Consider Figure 6 below, for an SMT storing seven (7) key-value pairs, built by following the principles explained in the foregoing subsection;
-$$
-(\mathbf{K}_{\mathbf{a}} , V_{\mathbf{a}}),\ \ (\mathbf{K}_{\mathbf{b}} , V_{\mathbf{b}}),\ \ (\mathbf{K}_{\mathbf{c}} , V_{\mathbf{c}}),\ \ (\mathbf{K}_{\mathbf{c}}, V_{\mathbf{c}}),\ \ (\mathbf{K}_{\mathbf{d}}, V_{\mathbf{d}}),\ \ (\mathbf{K}_{\mathbf{e}}, V_{\mathbf{e}}),\ \ (\mathbf{K}_{\mathbf{f}}, V_{\mathbf{f}})\ \ {\text{and}}\ \ (\mathbf{K}_{\mathbf{g}} , V_{\mathbf{g}} )
-$$
+
+\begin{aligned}
+(\mathbf{K}_{\mathbf{a}} , V_{\mathbf{a}}),\ \ (\mathbf{K}_{\mathbf{b}} , V_{\mathbf{b}}),\ \ 
+(\mathbf{K}_{\mathbf{c}} , V_{\mathbf{c}}),\ \ (\mathbf{K}_{\mathbf{c}}, V_{\mathbf{c}}),\\ 
+(\mathbf{K}_{\mathbf{d}}, V_{\mathbf{d}}),\ \ 
+(\mathbf{K}_{\mathbf{e}}, V_{\mathbf{e}}),\ \ 
+(\mathbf{K}_{\mathbf{f}}, V_{\mathbf{f}})\ \ {\text{and}}\ \ (\mathbf{K}_{\mathbf{g}} , V_{\mathbf{g}})
+\end{aligned}
+
 where the keys are,
-$$
+
+\begin{aligned}
 K_{\mathbf{a}} = 10101100, K_{\mathbf{b}} = 10010010, K_{\mathbf{c}} = 10001010, &K_{\mathbf{d}} = 11100110,\\ K_{\mathbf{e}} = 11110101, K_{\mathbf{f}} = 10001011, K_{\mathbf{g}} = 00011111.
-$$
-The leaf levels are as follows; $\text{lvl}(\mathbf{L}_{\mathbf{a}}) = 2$ ,  $\text{lvl}(\mathbf{L}_{\mathbf{b}}) = 4$ ,  $\text{lvl}(\mathbf{L}_{\mathbf{c}}) = 4$ ,  $\text{lvl}(\mathbf{L}_{\mathbf{d}}) = 3$ ,  $\text{lvl}(\mathbf{L}_{\mathbf{e}}) = 2$ ,  $\text{lvl}(\mathbf{L}_{\mathbf{f}}) = 3$  and  $\text{lvl}(\mathbf{L}_{\mathbf{g}}) = 3$.
+\end{aligned}
+
+The leaf levels are as follows; 
+$\text{lvl}(\mathbf{L}_{\mathbf{a}}) = 2$ ,  
+$\text{lvl}(\mathbf{L}_{\mathbf{b}}) = 4$ ,  
+$\text{lvl}(\mathbf{L}_{\mathbf{c}}) = 4$ ,  
+$\text{lvl}(\mathbf{L}_{\mathbf{d}}) = 3$ ,  
+$\text{lvl}(\mathbf{L}_{\mathbf{e}}) = 2$ , 
+$\text{lvl}(\mathbf{L}_{\mathbf{f}}) = 3$  and  
+$\text{lvl}(\mathbf{L}_{\mathbf{g}}) = 3$.
 
  
 
-<p align="center"><img src="fig2-mpt-gen-eg.png" width="600" /></p>
+![Figure 6: An SMT of 7 key-value pairs](fig2-mpt-gen-eg.png)
 <div align="center"><b> Figure 6: An SMT of 7 key-value pairs </b></div>
 
 
@@ -493,7 +517,7 @@ Verifier is unaware that $V_{\mathbf{fk}}$ is in fact the concatenated value of 
 
 
 
-<p align="center"><img src="fig6-fake-leaf-eg1.png" width="600" /></p>
+![Figure 7: MPT - Fake Leaf Attack](fig6-fake-leaf-eg1.png)
 <div align="center"><b> Figure 7: MPT - Fake Leaf Attack </b></div>
 
 
@@ -501,13 +525,19 @@ Verifier is unaware that $V_{\mathbf{fk}}$ is in fact the concatenated value of 
 So then, the verifier being unaware that $\mathbf{L_{fk}}$ is not a properly constructed leaf, starts verification as follows; 
 
 1. He uses the key $K_{\mathbf{fk}}$ to navigate the tree until locating the supposed leaf $\mathbf{L_{fk}}$.
-2. He computes $\mathbf{H}(V_{\mathbf{fk}})$ and sets it as $\tilde{\mathbf{L}}_{\mathbf{fk}} := \mathbf{H}(V_{\mathbf{fk}})$. 
-3. Then takes the sibling $\mathbf{{S}_{\mathbf{cd}}}$ and calculates  $\tilde{ \mathbf{B}}_{\mathbf{fkcd}} = \mathbf{H} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)$. 
+2. He computes $\mathbf{H}(V_{\mathbf{fk}})$ and sets it as 
+    $\tilde{\mathbf{L}}_{\mathbf{fk}} := \mathbf{H}(V_{\mathbf{fk}})$. 
+3. Then takes the sibling $\mathbf{{S}_{\mathbf{cd}}}$ and calculates  
+    $\tilde{ \mathbf{B}}_{\mathbf{fkcd}} = \mathbf{H} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)$. 
 4. And then, uses $\tilde{ \mathbf{B}}_{\mathbf{fkcd}}$ to compute the root,  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}} = \mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{fkcd}}\| \mathbf{S}_{\mathbf{ef}} \big)$.
 
 The question is: "Does the fake leaf $\mathbf{L_{fk}}$ pass the verifier's Merkle proof or not?" Or, equivalently: "Is $\tilde{ \mathbf{root}}_{\mathbf{ab..f}}$ equal to $\mathbf{root}_{\mathbf{ab..f}}$?"
 
-Since the actual branch $\mathbf{{B}_{ab}}$ is by construction the hash, $\mathbf{H}(\mathbf{L_{a}} \| \mathbf{L_{b}})$, then $\mathbf{{B}_{ab}} = \tilde{\mathbf{L}}_{\mathbf{fk}}$. The parent branch $ {\mathbf{B}}_{\mathbf{abcd}}$ also, being constructed as the hash, $\mathbf{H} \big( \mathbf{B}_{\mathbf{ab}}\| { \mathbf{S}}_{\mathbf{cd}} \big) $, should be equal to $\mathbf{H} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)  = \tilde{ \mathbf{B}}_{\mathbf{fkcd}}$. As a result, $\mathbf{root}_{\mathbf{ab..f}} = \mathbf{H} \big(  {\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{S}_{\mathbf{ef}} \big) = \mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{fkcd}}\| \mathbf{S}_{\mathbf{ef}} \big) = \tilde{ \mathbf{root}}_{\mathbf{ab..f}}$. 
+Since the actual branch $\mathbf{{B}_{ab}}$ is by construction the hash, 
+$\mathbf{H}(\mathbf{L_{a}} \| \mathbf{L_{b}})$, then 
+$\mathbf{{B}_{ab}} = \tilde{\mathbf{L}}_{\mathbf{fk}}$. 
+The parent branch ${\mathbf{B}}_{\mathbf{abcd}}$ also, being constructed as the hash, 
+$\mathbf{H} \big( \mathbf{B}_{\mathbf{ab}}\| { \mathbf{S}}_{\mathbf{cd}} \big)$, should be equal to $\mathbf{H} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)  = \tilde{ \mathbf{B}}_{\mathbf{fkcd}}$. As a result, $\mathbf{root}_{\mathbf{ab..f}} = \mathbf{H} \big(  {\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{S}_{\mathbf{ef}} \big) = \mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{fkcd}}\| \mathbf{S}_{\mathbf{ef}} \big) = \tilde{ \mathbf{root}}_{\mathbf{ab..f}}$. 
 
 Therefore, the fake leaf $\mathbf{L_{fk}}$ passes the Merkle proof. 
 
@@ -540,11 +570,19 @@ He subsequently starts the Merkle proof by hashing the value $\tilde{V}_{\mathbf
 - And further computes  $\tilde{ \mathbf{B}}_{\mathbf{fkcd}} = \mathbf{H}_{\mathbf{noleaf}} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)$. 
 - Again, calculates the root,  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}} = \mathbf{H}_{\mathbf{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{fkcd}}\| \mathbf{S}_{\mathbf{ef}} \big)$.
 
-But the actual branch $\mathbf{{B}_{ab}}$ was constructed with the no-leaf-hash function, $\mathbf{H}_{\mathbf{noleaf}}$. That is, 
-$$
-\mathbf{{B}_{ab}} = \mathbf{H}_{\mathbf{noleaf}} (\mathbf{L_{a}} \| \mathbf{L_{b}}) \neq \mathbf{H}_{\mathbf{leaf}} \big( \mathbf{L_{a}} \| \mathbf{L_{b}} \big) = \tilde{\mathbf{L}}_{\mathbf{fk}}.
-$$
-The parent branch $ {\mathbf{B}}_{\mathbf{abcd}}$ also, was constructed as, $ {\mathbf{B}}_{\mathbf{abcd}} = \mathbf{H}_{\mathbf{noleaf}} \big( \mathbf{B}_{\mathbf{ab}}\| { \mathbf{S}}_{\mathbf{cd}} \big)$. Since the hash functions used are collision-resistant, $ {\mathbf{B}}_{\mathbf{abcd}}$ cannot be equal to $\mathbf{H}_{\mathbf{noleaf}} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)  = \tilde{ \mathbf{B}}_{\mathbf{fkcd}}$. Consequently, $\mathbf{root}_{\mathbf{ab..f}}  \neq \tilde{ \mathbf{root}}_{\mathbf{ab..f}}$. Therefore, the Merkle Proof fails. 
+But the actual branch $\mathbf{{B}_{ab}}$ was constructed with the no-leaf-hash function, 
+$\mathbf{H}_{\mathbf{noleaf}}$. That is, 
+
+\begin{aligned}
+\mathbf{{B}_{ab}} = \mathbf{H}_{\mathbf{noleaf}} (\mathbf{L_{a}} \| \mathbf{L_{b}}) \neq \mathbf{H}_{\mathbf{leaf}} \big(\mathbf{L_{a}} \| \mathbf{L_{b}} \big) = \tilde{\mathbf{L}}_{\mathbf{fk}}.
+\end{aligned}
+
+The parent branch ${\mathbf{B}}_{\mathbf{abcd}}$ also, was constructed as, ${\mathbf{B}}_{\mathbf{abcd}} = \mathbf{H}_{\mathbf{noleaf}} \big( \mathbf{B}_{\mathbf{ab}}\| { \mathbf{S}}_{\mathbf{cd}} \big)$. 
+Since the hash functions used are collision-resistant, 
+${\mathbf{B}}_{\mathbf{abcd}}$ cannot be equal to 
+$\mathbf{H}_{\mathbf{noleaf}} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)  = \tilde{ \mathbf{B}}_{\mathbf{fkcd}}$. 
+Consequently, $\mathbf{root}_{\mathbf{ab..f}}  \neq \tilde{ \mathbf{root}}_{\mathbf{ab..f}}$.
+Therefore, the Merkle Proof fails. 
 
 
 
@@ -580,7 +618,8 @@ Both computations involve climbing the tree from the located leaf $\mathbf{{L}_{
 
 #### Example 3. (Indistinguishable Leaves)
 
-Suppose a binary SMT contains a key-value pair $(K_{\mathbf{d}}, V_\mathbf{{d}})$ at the leaf $\mathbf{L_{d}}$, where $K_{\mathbf{d}} = 11100110$. That is, $ \mathbf{L_{d}} := \mathbf{H_{leaf}}(V_\mathbf{{d}})$.
+Suppose a binary SMT contains a key-value pair $(K_{\mathbf{d}}, V_\mathbf{{d}})$ at the leaf $\mathbf{L_{d}}$, where $K_{\mathbf{d}} = 11100110$. 
+That is, $\mathbf{L_{d}} := \mathbf{H_{leaf}}(V_\mathbf{{d}})$.
 
 Note that, when building binary SMTs, it is permissible to have another key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$ in the same tree with $V_\mathbf{{x}} = V_\mathbf{{d}}$.
 
@@ -588,16 +627,20 @@ An Attacker can pick the key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$ such 
 
 Consider Figure 8 below. And suppose the Attacker provides the following data;
 
-- The key-value $(K_{\mathbf{x}}, V_\mathbf{{x}})$, where $K_{\mathbf{x}} = 10100110$ and $V_{\mathbf{x}} = V_\mathbf{d}$.
-- The root, $ \mathbf{{root}_{a..x}}$, the number of *levels to root* = 3, and the siblings $\mathbf{{B}_{\mathbf{bc}}}$, $\mathbf{L_{a}}$ and  $\mathbf{{S}_{\mathbf{efg}}}$. 
+- The key-value $(K_{\mathbf{x}}, V_\mathbf{{x}})$, where 
+  $K_{\mathbf{x}} = 10100110$ and $V_{\mathbf{x}} = V_\mathbf{d}$.
+- The root, $ \mathbf{{root}_{a..x}}$, the number of *levels to root* = 3, and the siblings 
+$\mathbf{{B}_{\mathbf{bc}}}$, $\mathbf{L_{a}}$ and  $\mathbf{{S}_{\mathbf{efg}}}$. 
 
 
 
-The verifier uses the least-significant key bits; $\text{kb}_\mathbf{0} = 0$, $ \text{kb}_\mathbf{1} = 0$ and $ \text{kb}_\mathbf{2} = 1$; to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at $\mathbf{L_{d}}$, see Figure 7 below.
+The verifier uses the least-significant key bits; $\text{kb}_\mathbf{0} = 0$, 
+$\text{kb}_\mathbf{1} = 0$ and $ \text{kb}_\mathbf{2} = 1$; 
+to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at $\mathbf{L_{d}}$, see Figure 7 below.
 
 
 
-<p align="center"><img src="fig7-non-binding-eg0.png" width="600" /></p>
+![Figure 8: Non-binding Key-Value Pairs](fig7-non-binding-eg0.png)
 <div align="center"><b> Figure 8: Non-binding Key-Value Pairs</b></div>
 
 
@@ -751,7 +794,7 @@ Consider an SMT where the keys are 8-bit long, and the prover commits to the key
 
 
 
-<p align="center"><img src="fig8-zk-mkl-prf.png" width="700" /></p>
+![Figure 9 : ZK Merkle Proof Example](fig8-zk-mkl-prf.png)
 <div align="center"><b> Figure 9 : ZK Merkle Proof Example </b></div>
 
 
@@ -834,8 +877,9 @@ He then checks if  $\mathbf{{\tilde{root}}_{ab0}} = \mathbf{{root}_{ab0}}$. If t
 
 
 
-<p align="center"><img src="fig9-key-not-set-eg.png" width="550" /></p>
+![Figure 10: Key Not Set Example](fig9-key-not-set-eg.png)
 <div align="center"><b> Figure 10: Key Not Set Example </b></div>
+
 
 
 
@@ -941,7 +985,7 @@ Consider the SMT given in Figure 11 below.
 
 
 
-<p align="center"><img src="fig10-val-update-eg.png" width="700" /></p>
+![Figure 11: Value UPDATE Example](fig10-val-update-eg.png)
 <div align="center"><b> Figure 11: Value UPDATE Example </b></div>
 
 
@@ -1016,7 +1060,8 @@ At this stage the verifier checks if this is indeed a zero node;
 
 
 
-<p align="center"><img src="fig11-crt-zero-node.png" width="800" /></p>
+
+![Figure 12: CREATE Operation - Zero Node](fig11-crt-zero-node.png)
 <div align="center"><b> Figure 12: CREATE Operation - Zero Node </b></div>
 
 
@@ -1101,7 +1146,7 @@ Therefore, no further extension is necessary. And the CREATE Operation is comple
 
 
 
-<p align="center"><img src="fig12a-crt-nzleaf-1ext.png" width="800" /></p>
+![Figure 13(a): CREATE Operation - Non-zero Leaf Node](fig12a-crt-nzleaf-1ext.png)
 <div align="center"><b> Figure 13(a): CREATE Operation - Non-zero Leaf Node </b></div>
 
 
@@ -1162,7 +1207,7 @@ The leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ are now made child-nodes of t
 
 
 
-<p align="center"><img src="fig12b-crt-nzleaf-3xt.png" width="900" /></p>
+![Figure 13(b): CREATE Operation - Three Branch Extensions](fig12b-crt-nzleaf-3xt.png)
 <div align="center"><b> Figure 13(b): CREATE Operation - Three Branch Extensions </b></div>
 
 
@@ -1244,7 +1289,8 @@ Since the sibling $\mathbf{L_a}$ is not a zero node, the hashed value $\text{HV}
 
 See the above DELETE Operation illustrated in Figure 13(a) below, and notice how the SMT maintains its original shape. 
 
-<p align="center"><img src="fig13a-dlt-nz-sib.png" width="800" /></p>
+
+![Figure 14(a): DELETE Operation - Non-Zero Sibling](fig13a-dlt-nz-sib.png)
 <div align="center"><b> Figure 14(a): DELETE Operation - Non-Zero Sibling </b></div>
 
 
@@ -1273,7 +1319,7 @@ Notice that, in this example, the DELETE Operation alters the topology of the SM
 
 
 
-<p align="center"><img src="fig13b-dlt-z-sib.png" width="900" /></p>
+![Figure 14(b): DELETE Operation - Zero Sibling](fig13b-dlt-z-sib.png)
 <div align="center"><b> Figure 14(b): DELETE Operation - Zero Sibling </b></div>
 
 
@@ -1355,7 +1401,7 @@ That is, the Navigation Path to the leaf corresponding to $\text{Key}_{\mathbf{0
 
 
 
-<p align="center"><img src="fig14-path-frm-key.png" width="900" /></p>
+![Figure 15 : Navigation Path Derivation](fig14-path-frm-key.png)
 <div align="center"><b> Figure 15 : Navigation Path Derivation </b></div>
 
 
@@ -1494,7 +1540,8 @@ $\text{POSEIDON}^{\pi}$ runs 30 rounds, 3 times. Adding up to a total of 90 roun
 
 
 
-<p align="center"><img src="fig15-posdn-eg.png" width="600" /></p>
+
+![Figure 16 : POSEIDON HASH0 ](fig15-posdn-eg.png)
 <div align="center"><b> Figure 16 : POSEIDON HASH0 </b></div>
 
 

@@ -26,13 +26,14 @@ The main purpose of the Arithmetic SM is carry out elliptic curve arithmetic ope
 
 Consider an elliptic curve $E$ defined by $y^2 = x^3 + ax + b$ over the finite field $\mathbb{F} = \mathbb{Z}_p$, where $p$ is the prime,
 
-$$
+\begin{aligned}
 p = 2^{256} - 2^{32} - 2^9 - 2^8 - 2^7 -2^6 - 2^4 - 1.
-$$
+\end{aligned}
+
 Set the coefficients $a = 0$ and $b = 7$, so that $E$ reduces to
-$$
+\begin{aligned}
 y^2 = x^3 + 7.
-$$
+\end{aligned}
 
 
 
@@ -54,16 +55,17 @@ Note that,
 #### Elliptic Curve Point Addition 
 
 Given two points, $P = (x_1,y_1)$ and  $Q = (x_2,y_2)$, on the curve $E$ with $x_1 \neq x_2$, the point $P+Q = (x_3,y_3)$  is computed as follows,
-$$
+
+
 \begin{aligned}
-x_3 &= s^2 - x_1 - x_2, \\
+x_3 &= s^2 - x_1 - x_2,\\
 y_3 &= s (x_1 - x_3) - y_1
 \end{aligned}
-$$
+
 where
-$$
+\begin{aligned}
 s = \dfrac{y_2 - y_1}{x_2 - x_1}.
-$$
+\end{aligned}
 
 
 
@@ -71,20 +73,21 @@ $$
 
 Given a point $P = (x_1,y_1)$ on the curve $E$ such that $P \neq \mathcal{O}$, the point $P+P = 2P =
 (x_3,y_3)$ is computed as follows,
-$$
+
 \begin{aligned}
-x_3 &= s^2 - 2x_1, \\
+x_3 &= s^2 - 2x_1,\\
 y_3 &= s (x_1 - x_3) - y_1,
 \end{aligned}
-$$
+
 where
-$$
+\begin{aligned}
 s = \dfrac{3x_1^2}{2y_1}.
-$$
+\end{aligned}
+
 
 ***Remark***:
 Since the above Elliptic Curve operations are implemented in the PIL language, it is more convenient to express them in terms of the constraints they must satisfy. These constraints are:
-$$
+
 \begin{aligned}
 \text{EQ}_0 \colon \quad &x_1 \cdot y_1 + x_2 - y_2 \cdot 2^{256} - y_3
 = 0, \\
@@ -96,7 +99,7 @@ q_0 \cdot p = 0, \\
 \text{EQ}_4 \colon \quad & s \cdot x_1 - s \cdot x_3 - y_1 - y_3 + q_2
 \cdot p = 0,
 \end{aligned}
-$$
+
 where $q_0,q_1,q_2 \in \mathbb{Z}$, implying that these equations hold true over the integers. 
 
 This approach is taken in order avoid having to compute divisions by $p$.
@@ -113,15 +116,14 @@ Since at most, one of $\text{EQ}_1$ and $\text{EQ}_2$ are activated in any scena
 
 
 Motivated by the implemented operations, the Arithmetic SM is composed of 6 registers 
-$$
+\begin{aligned}
 x_1,\ y_1,\ x_2,\ y_2,\ x_3,\ y_3.
-$$
+\end{aligned}
+
 Each of these registers is composed of $16$ sub-registers of $16$-bit ($2$ byte) capacity, adding up to
 a total of $256$ bits per register. 
 
 There is also a need to provide $s$ and $q_0,q_1,q_2$, which are also $256$-bit field elements. 
-
-
 
 
 
@@ -138,10 +140,12 @@ Then, $(x_1[0] \cdot y_1[1]) + (x_1[1] \cdot y_1[0])$ is computed in the second 
 As depicted in [Figure 1](\ref{eq:school}), this process is completely analogous to the schoolbook multiplication. However, it is performed at $2$-byte level, instead of at decimal level.
 
 
+![School Multiplication Example](fig1-sch-mlt-eg.png)
+<div align="center"><b> School Multiplication Example </b></div>
 
-<p align="center"><img src="fig1-sch-mlt-eg.png" width="800" /></p>
+<!-- <p align="center"><img src="fig1-sch-mlt-eg.png" width="800" /></p>
 <div align="center"><b> Figure 1: School Multiplication Example</b></div>
-
+ -->
 
 
 Use the following notation;
