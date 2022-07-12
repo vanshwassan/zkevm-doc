@@ -38,9 +38,9 @@ This document therefore entails;
 - Explanations of each of the [Basic Operations](#basic-operations-storage-actions) the Storage SM routinely performs.
 - Specific parameters the Storage SM uses, such as, how keys and paths are created, and the two $\text{POSEIDON}$ Hashes used in the SMTs.
 - As well as, the three main source-codes the Storage SM needs to function effectively. That is, 
-  - the Storage Assembly code, 
-  - the Storage Executor (both in C and JavaScript), and 
-  - the PIL code, for all the polynomial constraints and proving correctness of execution.
+    - the Storage Assembly code, 
+    - the Storage Executor (both in C and JavaScript), and 
+    - the PIL code, for all the polynomial constraints and proving correctness of execution.
 
 
 
@@ -77,7 +77,7 @@ Suppose the Main SM instructs the Storage SM to UPDATE a value $V_{\mathbf{old}}
 
 The Main SM must then provide, with its request, all data the Storage SM needs in order to correctly update the value $V_{\mathbf{old}}$. That is; the root of the SMT, the key-bits for navigation to the leaf, the Remaining Key, the leaf level, the old value and the new value, and all relevant siblings.
 
-Typically, the Storage SM Executor has to first navigate the tree to the leaf storing the value $V_{\mathbf{old}}$. Once the value is located, the Storage SM Executor will then do following three things, simultaneously; 
+Typically, the Main SM will have navigated the tree to the leaf storing the value $V_{\mathbf{old}}$ and done the computations, but now requires the Storage SM to repeat the same computations in a verifiable manner. The Storage SM Executor will then do the following three things, simultaneously; 
 
 1. Reconstructs the corresponding key, $K_{\mathbf{0123}}$, from both the remaining key found at the leaf and key-bits used to navigate to the leaf.
 2. Ascertains that indeed the old value, $V_{\mathbf{old}}$, was included in the old root,
@@ -125,6 +125,7 @@ See Figure 2 below, for an illustration of this UPDATE operation, using the $\te
 
 
 
+
 ![Figure 2: Value UPDATE Example](fig0-updt-mkl-tree.png)
 <div align="center"><b> Figure 2: Value UPDATE Example </b></div>
 
@@ -148,7 +149,7 @@ A much more slower pace is henceforth adopted. Experienced developers can use th
 
 
 
-Storage in the zkProver is designed in such a way that aggregators and verifiers can easily and efficiently interact with stored data. This is data that needed for providing zero-knowledge proofs, or verifying state.
+Storage in the zkProver is designed in such a way that aggregators and verifiers can easily and efficiently interact with stored data. This is data needed for providing zero-knowledge proofs, or verifying state.
 
 Data is stored in the form of a special Sparse Merkle Tree (SMT), which is a tree that combines the concept of a Merkle Tree and that of a Patricia tree.
 
@@ -246,7 +247,7 @@ The verifier then checks the prover's claim by computing the Merkle root as foll
 
 ​	(a)	He computes  $\mathbf{H}(\text{V}_{\mathbf{f}})$, which is the hash of the value $\text{V}_{\mathbf{f}}$.
 
-​	(b)	Then uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}})$  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be the same as the branch node $ \mathbf{B}_{\mathbf{ef}} $. 
+​	(b)	Then uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}})$  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be the same as the branch node $\mathbf{B}_{\mathbf{ef}}$.
 
 (**Note.** The symbol, `tilde` " $\tilde{ }$ ", is used throughout the document to indicate that the computed value, $\tilde{\Box}$, still needs to be checked, or tested to be true.)
 
@@ -435,14 +436,10 @@ where the keys are,
 K_{\mathbf{a}} = 10101100, K_{\mathbf{b}} = 10010010, K_{\mathbf{c}} = 10001010, &K_{\mathbf{d}} = 11100110,\\ K_{\mathbf{e}} = 11110101, K_{\mathbf{f}} = 10001011, K_{\mathbf{g}} = 00011111.
 \end{aligned}
 
-The leaf levels are as follows; 
-$\text{lvl}(\mathbf{L}_{\mathbf{a}}) = 2$ ,  
-$\text{lvl}(\mathbf{L}_{\mathbf{b}}) = 4$ ,  
-$\text{lvl}(\mathbf{L}_{\mathbf{c}}) = 4$ ,  
-$\text{lvl}(\mathbf{L}_{\mathbf{d}}) = 3$ ,  
-$\text{lvl}(\mathbf{L}_{\mathbf{e}}) = 2$ , 
-$\text{lvl}(\mathbf{L}_{\mathbf{f}}) = 3$  and  
-$\text{lvl}(\mathbf{L}_{\mathbf{g}}) = 3$.
+The leaf levels are as follows;
+
+$\text{lvl}(\mathbf{L}_{\mathbf{a}}) = 2$, $\text{lvl}(\mathbf{L}_{\mathbf{b}}) = 4$, $\text{lvl}(\mathbf{L}_{\mathbf{c}}) = 4$, $\text{lvl}(\mathbf{L}_{\mathbf{d}}) = 3$,
+$\text{lvl}(\mathbf{L}_{\mathbf{e}}) = 2$, $\text{lvl}(\mathbf{L}_{\mathbf{f}}) = 3$ and $\text{lvl}(\mathbf{L}_{\mathbf{g}}) = 3$.
 
  
 
@@ -509,7 +506,7 @@ Consider Figure 7 below, showing a binary SMT with a branch $\mathbf{{B}_{ab}}$ 
 That is, suppose the verifier is provided with the following information;
 
 - The key-value $(K_{\mathbf{fk}}, V_\mathbf{{fk}})$, where $K_{\mathbf{fk}} = 11010100$ and $V_{\mathbf{fk}} = \mathbf{L_{a}} \| \mathbf{L_{b}}$.
-- The root  $ \mathbf{{root}_{ab..f}}$ , the number of levels to root, and the siblings $\mathbf{{S}_{\mathbf{cd}}}$ and $\mathbf{{S}_{\mathbf{ef}}}$.
+- The root  $\mathbf{{root}_{ab..f}}$ , the number of levels to root, and the siblings $\mathbf{{S}_{\mathbf{cd}}}$ and $\mathbf{{S}_{\mathbf{ef}}}$.
 
 That is, the Attacker claims that some $V_{\mathbf{fk}}$ is stored at $\mathbf{L_{fk}} := \mathbf{{B}_{ab}}$.
 
@@ -600,15 +597,17 @@ Both computations involve climbing the tree from the located leaf $\mathbf{{L}_{
 
    That is, verifier takes the Remaining Key, $\text{RK}_{\mathbf{x}}$, and reconstructs the key $K_{\mathbf{x}}$ by concatenating the key bits used to navigate to $\mathbf{{L}_{x}}$ from $\mathbf{{root}_{a..x}}$, in the reverse order.
 
-   Suppose the *number of levels to root* is 3, and the least-significant bits used for navigation are $ \text{kb}_\mathbf{2}$, $ \text{kb}_\mathbf{1}$ and $\text{kb}_\mathbf{0}$. 
+   Suppose the *number of levels to root* is 3, and the least-significant bits used for navigation are $\text{kb}_\mathbf{2}$, $\text{kb}_\mathbf{1}$ and $\text{kb}_\mathbf{0}$.
 
-   In order to check key-correctness, verifier the remaining key $\text{RK}$ and, 
+   In order to check key-correctness, verifier the remaining key $\text{RK}$ and,
 
-   (a)	Concatenates $ \text{kb}_\mathbf{2}$ and gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2}$,
-   (b)	Concatenates $ \text{kb}_\mathbf{1}$ then gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2} \|   \text{kb}_\mathbf{1}$,
-   (c)	Concatenates $ \text{kb}_\mathbf{0}$ and gets $\text{ }  \text{RK} \|  \text{kb}_\mathbf{2} \|   \text{kb}_\mathbf{1} \|  \text{kb}_\mathbf{0}$.
+   (a)	Concatenates $\text{kb}_\mathbf{2}$ and gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2}$,
 
-   He then sets $\tilde{K}_{\mathbf{x}} := \text{RK} \|  \text{kb}_\mathbf{2} \|   \text{kb}_\mathbf{1} \|  \text{kb}_\mathbf{0}$ , and checks if $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$. 
+   (b)	Concatenates $\text{kb}_\mathbf{1}$ then gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1}$,
+
+   (c)	Concatenates $\text{kb}_\mathbf{0}$ and gets $\text{ }  \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0}$.
+
+   He then sets $\tilde{K}_{\mathbf{x}} := \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0}$, and checks if $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$. 
 
 2. **The Merkle proof**: That is, checking whether the value stored at the located leaf $\mathbf{{L}_{x}}$ was indeed included in computing the root, $\mathbf{{root}_{a..x}}$. 
 
@@ -629,13 +628,13 @@ Consider Figure 8 below. And suppose the Attacker provides the following data;
 
 - The key-value $(K_{\mathbf{x}}, V_\mathbf{{x}})$, where 
   $K_{\mathbf{x}} = 10100110$ and $V_{\mathbf{x}} = V_\mathbf{d}$.
-- The root, $ \mathbf{{root}_{a..x}}$, the number of *levels to root* = 3, and the siblings 
+- The root, $\mathbf{{root}_{a..x}}$, the number of *levels to root* = 3, and the siblings 
 $\mathbf{{B}_{\mathbf{bc}}}$, $\mathbf{L_{a}}$ and  $\mathbf{{S}_{\mathbf{efg}}}$. 
 
 
 
 The verifier uses the least-significant key bits; $\text{kb}_\mathbf{0} = 0$, 
-$\text{kb}_\mathbf{1} = 0$ and $ \text{kb}_\mathbf{2} = 1$; 
+$\text{kb}_\mathbf{1} = 0$ and $\text{kb}_\mathbf{2} = 1$; 
 to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at $\mathbf{L_{d}}$, see Figure 7 below.
 
 
@@ -647,18 +646,24 @@ to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at
 
 In order to ensure that $\mathbf{L_{x}}$ actually stores the value $V_\mathbf{{x}}$; The verifier first checks key-correctness. He takes the remaining key $\text{RK} = 10100$ and, 
 
-​	(a)	Concatenates $ \text{kb}_\mathbf{2} = 1 $, and gets $\text{ } \text{RK} \| \text{kb}_\mathbf{2} = 10100 \|1$, 
-​	(b)	Concatenates $ \text{kb}_\mathbf{1} = 0$  to get $\text{ } \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} = 10100 \|1\|0$,
-​	(c)	Concatenates $\text{kb}_\mathbf{0} = 0$, yielding $\text{ }  \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0} = 10100 \|1\|0\|0$. 
+​(a)	Concatenates $\text{kb}_\mathbf{2} = 1$, and gets $\text{ } \text{RK} \| \text{kb}_\mathbf{2} = 10100 \|1$,
 
-He sets $\tilde{K}_{\mathbf{x}} := 10100 \|1\|0\|0 = 10100100$. Since $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$, the verifier concludes that the supplied key is correct. 
+​(b)	Concatenates $\text{kb}_\mathbf{1} = 0$  to get $\text{ } \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} = 10100 \|1\|0$,
 
-As the verifier 'climbs' the tree to test key-correctness, he concurrently checks if the value $V_\mathbf{{x}}$ is included in the SMT identified by the given root, $ \mathbf{{root}_{a..x}}$. That is, he executes the following computations;
+​(c)	Concatenates $\text{kb}_\mathbf{0} = 0$, yielding $\text{ }  \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0} = 10100 \|1\|0\|0$. 
+
+He sets $\tilde{K}_{\mathbf{x}} := 10100 \|1\|0\|0 = 10100100$. 
+Since $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$, the verifier concludes that the supplied key is correct.
+
+As the verifier 'climbs' the tree to test key-correctness, he concurrently checks if the value $V_\mathbf{{x}}$ is included in the SMT identified by the given root, $\mathbf{{root}_{a..x}}$. That is, he executes the following computations;
 
 ​	(a)	He computes the hash of $V_\mathbf{{x}}$ and sets it as, $\tilde{\mathbf{L}}_\mathbf{x}:= \mathbf{H_{leaf}}(V_\mathbf{{x}})$.
+
 ​	(b)	Then he uses $\mathbf{{B}_{\mathbf{bc}}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{bcd}} = \mathbf{H_{noleaf}}(\mathbf{{B}_{\mathbf{bc}}} \|\tilde{\mathbf{L}}_\mathbf{x})$.
-​	(c)	He also uses $\mathbf{L_{a}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \tilde{\mathbf{B}}_{\mathbf{bcd}} ) $.
-​	(d)	He further calculates, $\tilde{\mathbf{root}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\tilde{\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}} ) $. 
+
+​	(c)	He also uses $\mathbf{L_{a}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \tilde{\mathbf{B}}_{\mathbf{bcd}})$.
+
+​	(d)	He further calculates, $\tilde{\mathbf{root}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\tilde{\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}})$. 
 
 Next, the verifier checks if $\tilde{\mathbf{root}}_{\mathbf{abcd}}$ equals $\mathbf{root}_{\mathbf{abcd}}$.
 
@@ -666,8 +671,8 @@ Since $V_\mathbf{{x}} = V_\mathbf{{d}}$, it follows that all the corresponding i
 
 - $\mathbf{L_{d}} = \mathbf{H_{leaf}}(V_\mathbf{{d}}) = \mathbf{H_{leaf}}(V_\mathbf{{x}}) = \tilde{\mathbf{L}}_\mathbf{x}$, 
 - $\mathbf{B}_{\mathbf{bcd}} = \mathbf{H_{noleaf}}(\mathbf{{B}_{\mathbf{bc}}} \| \mathbf{L}_\mathbf{d}) = \mathbf{H_{noleaf}}(\mathbf{{B}_{\mathbf{bc}}} \|\tilde{\mathbf{L}}_\mathbf{x}) = \tilde{\mathbf{B}}_{\mathbf{bcd}}$, 
-- $ \mathbf{B}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \mathbf{B}_{\mathbf{bcd}} ) = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \tilde{\mathbf{B}}_{\mathbf{bcd}} ) = \tilde{\mathbf{B}}_{\mathbf{abcd}}$, 
-- $\mathbf{root}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{B}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}} )  = \mathbf{H_{noleaf}}(\tilde{\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}} ) = \tilde{\mathbf{root}}_{\mathbf{abcd}} $.  
+- $\mathbf{B}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \mathbf{B}_{\mathbf{bcd}} ) = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \tilde{\mathbf{B}}_{\mathbf{bcd}} ) = \tilde{\mathbf{B}}_{\mathbf{abcd}}$,
+- $\mathbf{root}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{B}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}} )  = \mathbf{H_{noleaf}}(\tilde{\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}} ) = \tilde{\mathbf{root}}_{\mathbf{abcd}}$.  
 
 The verifier therefore concludes that the key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$ is in the SMT, when it is not.
 
@@ -701,26 +706,31 @@ The naïve solution, which involves the keys, is one option.
 The naïve solution is to simpy include keys in the argument of the hash function, when forming leaves.
 
 That is, when building a binary SMT, one includes a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$ by setting the leaf $\mathbf{L_{x}}$ to be the hash of both the value and the key;
-$$
+
+\begin{aligned}
 \mathbf{L_{x}} = \mathbf{H_{leaf}}(K_{\mathbf{x}} \| V_\mathbf{{x}} )
-$$
+\end{aligned}
 
 **Does this change remedy the non-binding problem?**
 
 Suppose $(K_{\mathbf{x}}, V_\mathbf{{x}})$ and $(K_{\mathbf{z}}, V_\mathbf{{z}})$ are two key-value pairs such that $V_\mathbf{{x}} = V_\mathbf{{z}}$ , while $K_\mathbf{{x}}$ and $K_\mathbf{{z}}$ differ only in one of the most-significant bits.
 
 Since the hash functions used are collision-resistant, it follows that 
-$$
+
+\begin{aligned}
 \mathbf{L_{x}} = \mathbf{H_{leaf}}(K_{\mathbf{x}} \| V_\mathbf{{x}}) \neq \mathbf{H_{leaf}}(K_{\mathbf{z}} \| V_\mathbf{{z}}) = \mathbf{L_{z}}
-$$
+\end{aligned}
+
 Consequently, although the key-value pairs $(K_{\mathbf{x}}, V_\mathbf{{x}})$ and $(K_{\mathbf{z}}, V_\mathbf{{z}})$ might falsely pass the key-correctness check, they will not pass the Merkle proof test. And this is because, collision-resistance also guarantees that the following series of inequalities hold true;
-$$
+
+\begin{aligned}
 \mathbf{L_{x}} = \mathbf{H_{leaf}}(K_{\mathbf{x}} \| V_\mathbf{{x}}) \neq \mathbf{H_{leaf}}(K_{\mathbf{z}} \| V_\mathbf{{z}}) = \mathbf{L_{z}} \\ 
 \\ 
 \mathbf{B_{bx}} = \mathbf{H_{noleaf}}(\mathbf{S}_\mathbf{{b}} \| \mathbf{L}_{\mathbf{x}}) \neq \mathbf{H_{noleaf}}(\mathbf{S}'_\mathbf{{b}} \| \mathbf{L}_{\mathbf{z}}) = \mathbf{B_{bz}} \\ 
 \\ 
 \mathbf{B_{abx}} = \mathbf{H_{noleaf}}(\mathbf{S}_\mathbf{{a}} \| \mathbf{B_{bx}} ) \neq \mathbf{H_{noleaf}}(\mathbf{S}'_\mathbf{{a}} \| \mathbf{B_{bz}}) = \mathbf{B_{abz}}
-$$
+\end{aligned}
+
 
 where; $\mathbf{S}_\mathbf{{b}}$ is a sibling to $\mathbf{L}_{\mathbf{x}}$, and $\mathbf{S}_\mathbf{{a}}$ is a sibling to $\mathbf{B_{bx}}$, making $\mathbf{B_{bx}}$ and $\mathbf{B_{abx}}$ branches traversed while climbing the tree from $\mathbf{L_{x}}$ to root; Similarly,  $\mathbf{S}'_\mathbf{{b}}$ is a sibling to $\mathbf{L}_{\mathbf{z}}$, while $\mathbf{S}'_\mathbf{{a}}$ is a sibling to $\mathbf{B_{bx}}$, also making $\mathbf{B_{bz}}$ and $\mathbf{B_{abz}}$ branches traversed while climbing the tree from $\mathbf{L_{z}}$ to root.
 
@@ -737,9 +747,10 @@ The other solution, which is much more apt than the Naïve option, utilises the 
 Since *levels to root* is related to the *Remaining Key* ($\text{RK}$) notion, a much more apt solution is to rather include the remaining key, $\text{RK}_\mathbf{x}$, as the argument to the hash function, instead of the whole key $K_{\mathbf{x}}$.
 
 That is, for a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, one sets the leaf $\mathbf{L_{x}}$ to be the hash of both the value and the remaining key;
-$$
+
+\begin{aligned}
 \mathbf{L_{x}} = \mathbf{H_{leaf}}( \text{RK}_\mathbf{x}  \| \text{V}_\mathbf{{x}}).
-$$
+\end{aligned}
 
 With this strategy, the verifier needs the remaining key $\text{RK}_\mathbf{{x}}$ , instead of the whole key, in order to carry out a Merkle proof. So he adjusts the Merkle proof by; 
 
@@ -765,14 +776,16 @@ It is often necessary to make sure that a proof-integrity system has the zero-kn
 A leaf therefore is henceforth constructed in two steps;
 
 - Firstly, for a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, compute the hash the value $V_\mathbf{{x}}$, 
-  $$
+  
+\begin{aligned}
   \text{Hashed Value} = \text{HV}_\mathbf{{x}} = \mathbf{H_{noleaf}}(V_\mathbf{{x}})
-  $$
+\end{aligned}
 
 - Secondly, form the leaf containing $V_\mathbf{{x}}$, as follows,
-  $$
+
+\begin{aligned}
   \mathbf{L_{x}} = \mathbf{H_{leaf}}(  \text{RK}_\mathbf{x}  \| \text{HV}_\mathbf{{x}})
-  $$
+\end{aligned}
 
 Since it is infeasible to compute the preimage of the hash functions, $\mathbf{H_{leaf}}$ and $\mathbf{H_{noleaf}}$, computing the hash of the value $V_\mathbf{{x}}$ amounts to 'encrypting'.
 
@@ -799,15 +812,20 @@ Consider an SMT where the keys are 8-bit long, and the prover commits to the key
 
 
 
-Since the levels to root is 3, the prover provides; the least-significant key-bits, $\text{kb}_0 = 0$, $\text{kb}_1 = 0$, $\text{kb}_2 = 1$, the stored hashed-value $\text{HV}_{\mathbf{c}}$, the root  $\mathbf{{root}_{a..f}}$, the Remaining Key $\mathbf{ \text{RK}_{\mathbf{c}}} = 10010$, and the siblings $\mathbf{{S}_{ab}}$, $\mathbf{{L}_{d}} $ and $\mathbf{{S}_{\mathbf{ef}}}$.
+Since the levels to root is 3, the prover provides; the least-significant key-bits, $\text{kb}_0 = 0$, $\text{kb}_1 = 0$, $\text{kb}_2 = 1$, the stored hashed-value $\text{HV}_{\mathbf{c}}$, the root  $\mathbf{{root}_{a..f}}$, the Remaining Key $\mathbf{ \text{RK}_{\mathbf{c}}} = 10010$, and the siblings $\mathbf{{S}_{ab}}$, $\mathbf{{L}_{d}}$ and $\mathbf{{S}_{\mathbf{ef}}}$.
 
 The verifier first uses the least-significant bits of the key $K_{\mathbf{c}} = 10010100$ to navigate the SMT from the root, $\mathbf{{root}_{a..f}}$, to the leaf $\mathbf{L_c}$. Then, he executes the following computations;
 
-1. He computes, $\mathbf{L_c} = \mathbf{H_{leaf}}\big( \mathbf{ \text{RK}_{\mathbf{c}}} \| \text{HV}_{\mathbf{c}} \big) = \mathbf{H_{leaf}}( 10010 \| \text{HV}_{\mathbf{c}})$.
-2. Then, he uses the sibling $\mathbf{{S}_{ab}}$ to compute, $ \tilde{ \mathbf{B}}_{\mathbf{abc}} := \mathbf{H_{noleaf}} \big( \mathbf{{S}_{ab}}\|\mathbf{L}_{\mathbf{c}} \big)$.
-3. Next, he computes, $ \tilde{ \mathbf{B}}_{\mathbf{abcd}} := \mathbf{H_{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{abc}} \| \mathbf{L}_{\mathbf{d}} \big)$.
+1. He computes, $\mathbf{L_c} = \mathbf{H_{leaf}}\big( \mathbf{ \text{RK}_{\mathbf{c}}} \| \text{HV}_{\mathbf{c}} \big) = \mathbf{H_{leaf}}( 10010 \| \text{HV}_{\mathbf{c}})$
+    
+2. Then, he uses the sibling $\mathbf{{S}_{ab}}$ to compute, $\tilde{ \mathbf{B}}_{\mathbf{abc}} := \mathbf{H_{noleaf}} \big( \mathbf{{S}_{ab}}\|\mathbf{L}_{\mathbf{c}} \big)$.
+    
+3. Next, he computes, $\tilde{ \mathbf{B}}_{\mathbf{abcd}} := \mathbf{H_{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{abc}} \| \mathbf{L}_{\mathbf{d}} \big)$.
+    
 4. Now, verifier uses $\tilde{ \mathbf{B}}_{\mathbf{abcd}}$ to compute the *supposed* root,  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}}  := \mathbf{H_{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{abcd}}\| \mathbf{S}_{\mathbf{ef}} \big)$.
-5. Checks if $\tilde{ \mathbf{root}}_{\mathbf{ab..f}} $ equals ${ \mathbf{root}}_{\mathbf{ab..f}}$.
+    
+5. Checks if $\tilde{ \mathbf{root}}_{\mathbf{ab..f}}$ equals ${ \mathbf{root}}_{\mathbf{ab..f}}$.
+
 
 The verifier accepts that the key-value pair $( K_{\mathbf{c}} , V_{\mathbf{c}} )$ is in the SMT only if  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}} = { \mathbf{root}}_{\mathbf{ab..f}}$. And he does this without any clue about the exact value $V_{\mathbf{c}}$ which is hidden as $\text{HV}_{\mathbf{c}}$. 
 
@@ -863,7 +881,7 @@ Suppose the verifier needs to prove that the keys, $K_{\mathbf{x}} = 11010101$ a
 
 ##### Case 1: When the key leads to a zero-node
 
-The verifier receives the key $K_{\mathbf{x}}$, the remaining key $\text{RK}_\mathbf{x} = 1101010$, the least-significant key-bit $ \text{kb}_0 = 1$, and the sibling  $\mathbf{{S}_{1}} = \mathbf{{B}_{\mathbf{ab}}}$.
+The verifier receives the key $K_{\mathbf{x}}$, the remaining key $\text{RK}_\mathbf{x} = 1101010$, the least-significant key-bit $\text{kb}_0 = 1$, and the sibling $\mathbf{{S}_{1}} = \mathbf{{B}_{\mathbf{ab}}}$.
 
 Since the least-significant key-bit of the given key, $\text{kb}_0 = 1$, navigation from the root leads to the right-side, to the zero-node. See the node circled in a green colour, in Figure 9 below.
 
@@ -909,11 +927,11 @@ In proving that $\mathbf{L}_{\mathbf{b}}$ is indeed in the tree, the verifier do
 
 (a)	Computes the hash of the hashed-value, $\mathbf{ \tilde{L} }_{\mathbf{b}} = \mathbf{H_{leaf}} ( \text{RK}_{\mathbf{b}} \| \text{HV}_{\mathbf{b}} )$, 
 
-(b)	Uses the first sibling to compute, $ \mathbf{{\tilde{B}}_{\mathbf{ab}}} = \mathbf{H_{noleaf}} \big( \mathbf{L}_{\mathbf{a}} \| \mathbf{ \tilde{L}}_{\mathbf{b}} \big)$, 
+(b)	Uses the first sibling to compute, $\mathbf{{\tilde{B}}_{\mathbf{ab}}} = \mathbf{H_{noleaf}} \big( \mathbf{L}_{\mathbf{a}} \| \mathbf{ \tilde{L}}_{\mathbf{b}} \big)$, 
 
 (c)	Then, uses the second sibling to compute the root, $\mathbf{\tilde{root}}_{ab0} = \mathbf{H_{noleaf}} \big( \mathbf{{\tilde{B}}_{\mathbf{ab}}} \| \mathbf{0} \big)$. 
 
-(d)	Completes the root-check by testing equality, $ \mathbf{\tilde{root}}_{ab0} = \mathbf{{root}}_{ab0}$.  
+(d)	Completes the root-check by testing equality, $\mathbf{\tilde{root}}_{ab0} = \mathbf{{root}}_{ab0}$.  
 
 Simultaneously,
 
@@ -996,20 +1014,16 @@ The required **Step 2** of the UPDATE operation involves,
 
 (b)	Forming the new leaf by again hashing the hashed value $\text{HV}_{\mathbf{new}}$ as;  $\mathbf{ \tilde{L} }_{\mathbf{new}} = \mathbf{H_{leaf}}( \text{RK}_{\mathbf{new}} \| \text{HV}_{\mathbf{new}} )$, 
 
-(c)	Using the first sibling  $\mathbf{{S}_{1}} = \mathbf{{S}_{\mathbf{ab}}}$  to compute,  $ \mathbf{{\bar{B}}_{abc}} = \mathbf{H_{noleaf}} \big( \mathbf{{S}_{\mathbf{ab}}} \| \mathbf{ \tilde{L}}_{\mathbf{new}} \big)$, 
+(c)	Using the first sibling  $\mathbf{{S}_{1}} = \mathbf{{S}_{\mathbf{ab}}}$  to compute,  $\mathbf{{\bar{B}}_{abc}} = \mathbf{H_{noleaf}} \big( \mathbf{{S}_{\mathbf{ab}}} \| \mathbf{ \tilde{L}}_{\mathbf{new}} \big)$, 
 
-(d)	Again, using the second sibling  $\mathbf{{S}_{2}} = \mathbf{{L}_{d}}$  to compute,  $ \mathbf{{\bar{B}}_{\mathbf{abcd}}} = \mathbf{H_{noleaf}} \big( \mathbf{{\bar{B}}_{abc}} \| \mathbf{{L}_{d}} \big)$, 
+(d)	Again, using the second sibling $\mathbf{{S}_{2}} = \mathbf{{L}_{d}}$ to compute, $\mathbf{{\bar{B}}_{\mathbf{abcd}}} = \mathbf{H_{noleaf}} \big( \mathbf{{\bar{B}}_{abc}} \| \mathbf{{L}_{d}} \big)$, 
 
-(e)	Then, uses the third sibling  $\mathbf{{S}_{3}} = \mathbf{{S}_{\mathbf{ef}}}$  to compute the root,  $\mathbf{{{root}}_{\mathbf{new}}} = \mathbf{H_{noleaf}} \big( \mathbf{{\bar{B}}_{\mathbf{abcd}}} \| \mathbf{{S}_{\mathbf{ef}}} \big)$. 
+(e)	Then, uses the third sibling $\mathbf{{S}_{3}} = \mathbf{{S}_{\mathbf{ef}}}$ to compute the root, $\mathbf{{{root}}_{\mathbf{new}}} = \mathbf{H_{noleaf}} \big( \mathbf{{\bar{B}}_{\mathbf{abcd}}} \| \mathbf{{S}_{\mathbf{ef}}}\big)$.
 
-Note that the key-bits are not changed. Therefore, replacing the following old values in the SMT,
-$$
-\text{HV}_\mathbf{c},\ \ \mathbf{{B}_{abc}},\ \ \mathbf{{B}_{abcb}},\ \ \mathbf{{root}_{ab..f } },
-$$
+Note that the key-bits are not changed. Therefore, replacing the following old values in the SMT, 
+$\text{HV}_\mathbf{c}, \mathbf{{B}_{abc}}, \mathbf{{B}_{abcb}}, \mathbf{{root}_{ab..f } }$,
 with the new ones,
-$$
-\text{HV}_\mathbf{new},\ \ \mathbf{{\bar{B}}_{abc}},\ \ \mathbf{{\bar{B}}_{abcb}},\ \ \mathbf{{root}_{new } },
-$$
+$\text{HV}_\mathbf{new}, \mathbf{{\bar{B}}_{abc}}, \mathbf{{\bar{B}}_{abcb}}, \mathbf{{root}_{new } }$,
 respectively, completes the UPDATE operation.
 
 
@@ -1020,7 +1034,7 @@ respectively, completes the UPDATE operation.
 
 
 
-The CREATE Operation adds a new leaf $\mathbf{L_{\mathbf{new}}}$ to the SMT in order to insert and store a new key-value pair $( \mathbf{{K_{new}}} , \mathbf{V_{\mathbf{new}}} )$ at $\mathbf{L_{\mathbf{new}}}$, where the key $\mathbf{K_{new}} $ was never used in the SMT and thus is uniquely associated with the leaf $\mathbf{L_{new}}$.
+The CREATE Operation adds a new leaf $\mathbf{L_{\mathbf{new}}}$ to the SMT in order to insert and store a new key-value pair $( \mathbf{{K_{new}}} , \mathbf{V_{\mathbf{new}}} )$ at $\mathbf{L_{\mathbf{new}}}$, where the key $\mathbf{K_{new}}$ was never used in the SMT and thus is uniquely associated with the leaf $\mathbf{L_{new}}$.
 
 When navigating from the root, the new key $\mathbf{K_{new}}$ can lead to either a zero node or an existing leaf. This results in two scenarios.
 
@@ -1052,11 +1066,11 @@ As illustrated in Figure 12 below, the two least-significant key-bits $\text{kb}
 
 ​	(b)	Whilst the second lsb, $\text{kb}_{1} = 1$  leads to a zero node. 
 
-At this stage the verifier checks if this is indeed a zero node; 
+At this stage the verifier checks if this is indeed a zero node;
 
-1. First he computes  $ \mathbf{{\tilde{B}}_{ab0}} = \mathbf{H_{noleaf}} \big( \mathbf{{S}_{\mathbf{ab}}} \| \mathbf{0} \big) $. 
-2. Then he computes  $\mathbf{{\tilde{root}}_{ab0c}} = \mathbf{H_{noleaf}} \big( \mathbf{{\tilde{B}}_{ab0}} \| \mathbf{L_{c}} \big) $. 
-3. And, checks if  $\mathbf{{\tilde{root}}_{ab0c}}$  equals  $ \mathbf{{root}_{ab0c}} $. 
+1. First he computes  $\mathbf{{\tilde{B}}_{ab0}} = \mathbf{H_{noleaf}} \big( \mathbf{{S}_{\mathbf{ab}}} \| \mathbf{0} \big)$. 
+2. Then he computes  $\mathbf{{\tilde{root}}_{ab0c}} = \mathbf{H_{noleaf}} \big( \mathbf{{\tilde{B}}_{ab0}} \| \mathbf{L_{c}} \big)$. 
+3. And, checks if  $\mathbf{{\tilde{root}}_{ab0c}}$  equals  $\mathbf{{root}_{ab0c}}$. 
 
 
 
@@ -1124,7 +1138,7 @@ The CREATE Operation is actually only complete once all the values on the naviga
 
 ##### Example 8. CREATE Operation with a Single Branch Extension
 
-Suppose a leaf needs to be created to store a new key-value pair $\big( {K_{\mathbf{new}}\ } , V_\mathbf{{new}} \big) $, where $K_{\mathbf{new}} = 11010110$. 
+Suppose a leaf needs to be created to store a new key-value pair $\big({K_{\mathbf{new}}\ } , V_\mathbf{{new}}\big)$, where $K_{\mathbf{new}} = 11010110$. 
 
 Consider the SMT shown in Figure 13(a) below.
 
@@ -1185,15 +1199,14 @@ Once $V_\mathbf{\mathbf{c}}$ passes the value-inclusion check, the CREATE Operat
 
 **New Leaf Insertion**
 
-Note that the first and second least-significant key-bits for both $K_\mathbf{new}$ and $K_\mathbf{c}$ are the same. That is, 
-$$
-\text{kb}_\mathbf{0new} = 0 = \text{kb}_\mathbf{0c}  \text{\quad and \quad } \text{kb}_\mathbf{1new} = 1 = \text{kb}_\mathbf{1c}.
-$$
+Note that the first and second least-significant key-bits for both $K_\mathbf{new}$ and $K_\mathbf{c}$ are the same. 
+That is, $\text{kb}_\mathbf{0new} = 0 = \text{kb}_\mathbf{0c}$ and $\text{kb}_\mathbf{1new} = 1 = \text{kb}_\mathbf{1c}$.
+
 As a result, the new leaf $\mathbf{L_{new}}$ cannot be inserted at the key-address `01`, where $\mathbf{L_{\mathbf{c}}}$ is positioned. An extension branch $\mathbf{{B}_{ext1}}$ is formed at the tree-address `01`. 
 
 But, can the leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ be child-nodes to $\mathbf{{B}_{ext1}}$?
 
-Since the third least-significant key-bits of $K_\mathbf{new}$ and $K_\mathbf{c}$ are the same; i.e., $\text{kb}_\mathbf{2new} = 1 = \text{kb}_\mathbf{2c}$; leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ cannot be child-nodes to $\mathbf{{B}_{ext1}}$.
+Since the third least-significant key-bits of $K_\mathbf{new}$ and $K_\mathbf{c}$ are the same; that is, $\text{kb}_\mathbf{2new} = 1 = \text{kb}_\mathbf{2c}$; leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ cannot be child-nodes to $\mathbf{{B}_{ext1}}$.
 
 Another extension branch $\mathbf{{B}_{ext2}}$ is formed at the tree-address `011`.
 
@@ -1212,7 +1225,7 @@ The leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ are now made child-nodes of t
 
 
 
-Once unique addresses for the key-value pairs $\big( K_{\mathbf{c}} , V_\mathbf{c} \big) $ and $\big( K_\mathbf{{new}} , V_{\mathbf{new}}\big)$  are reached, and the leaf $\mathbf{L_{new}}$ is inserted, all the nodes along the navigation path from the new leaf $\mathbf{L_{new}}$ to the root are updated as follows. 
+Once unique addresses for the key-value pairs $\big( K_{\mathbf{c}} , V_\mathbf{c} \big)$ and $\big( K_\mathbf{{new}} , V_{\mathbf{new}}\big)$  are reached, and the leaf $\mathbf{L_{new}}$ is inserted, all the nodes along the navigation path from the new leaf $\mathbf{L_{new}}$ to the root are updated as follows. 
 
 The verifier computes,
 
@@ -1274,17 +1287,17 @@ With reference to Figure 14(a) below, navigation leads to the leaf $\mathbf{L_b}
 
 Next, perform a Merkle proof to check if the hashed value $\text{HV}_\mathbf{b}$ at $\mathbf{L_b}$ is included in the given root;
 
-- Compute $\tilde{\mathbf{L}}_\mathbf{b} = \mathbf{H_{leaf}} ( \text{RK}_{\mathbf{b}} \| \text{HV}_\mathbf{b} ) $ 
-- Then $ \tilde{\mathbf{B}}_\mathbf{ab} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \tilde{\mathbf{L}}_\mathbf{b})$
+- Compute $\tilde{\mathbf{L}}_\mathbf{b} = \mathbf{H_{leaf}} ( \text{RK}_{\mathbf{b}} \| \text{HV}_\mathbf{b} )$ 
+- Then $\tilde{\mathbf{B}}_\mathbf{ab} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \tilde{\mathbf{L}}_\mathbf{b})$
 - And,  $\tilde{\mathbf{root}}_\mathbf{abc} = \mathbf{H_{noleaf}} ( \tilde{\mathbf{B}}_\mathbf{ab}  \| \mathbf{L_c} )$
-- Check if $\tilde{\mathbf{root}}_\mathbf{abc} $ equals $\mathbf{{root}_{abc}}$.
+- Check if $\tilde{\mathbf{root}}_\mathbf{abc}$ equals $\mathbf{{root}_{abc}}$.
 
-Simultaneously, check if $\tilde{K}_{\mathbf{b}}$ equals $\text{K}_{\mathbf{b}}$, where  $\tilde{K}_{\mathbf{b}} =  \tilde{\text{RK}}_{\mathbf{b}} \| \text{kb}_1 \| \text{kb}_0$  and  $\text{K}_{\mathbf{b}} =   \text{RK}_{\mathbf{b}} \| \text{kb}_1 \| \text{kb}_0 $  are keys reconstructed while climbing the tree.
+Simultaneously, check if $\tilde{K}_{\mathbf{b}}$ equals $\text{K}_{\mathbf{b}}$, where $\tilde{K}_{\mathbf{b}} =  \tilde{\text{RK}}_{\mathbf{b}} \| \text{kb}_1 \| \text{kb}_0$  and  $\text{K}_{\mathbf{b}} =   \text{RK}_{\mathbf{b}} \| \text{kb}_1 \| \text{kb}_0$  are keys reconstructed while climbing the tree.
 
 Since the sibling $\mathbf{L_a}$ is not a zero node, the hashed value $\text{HV}_\mathbf{b}$ found at the leaf $\mathbf{L_b}$ is updated to a zero. And the values along the navigation path are also updated accordingly. That is,
 
 - The leaf $\mathbf{L_b}$ is set to "$\mathbf{0}$", a zero node.
-- The parent-node is now, $ \mathbf{B_{a0}} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \mathbf{0}  )$.
+- The parent-node is now, $\mathbf{B_{a0}} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \mathbf{0} )$.
 - And, the new root, $\mathbf{{root}_{abc}} =   \mathbf{H_{noleaf}}(\mathbf{B_{a0}} \| \mathbf{L_a})$. 
 
 See the above DELETE Operation illustrated in Figure 13(a) below, and notice how the SMT maintains its original shape. 
@@ -1312,7 +1325,7 @@ The UPDATE step depends on the sibling of $\mathbf{L_c}$. Since the sibling is "
 That is, the UPDATE step of this DELETE Operation concludes as follows;
 
 - The original branch $\mathbf{B_{0c}}$ is now "$\mathbf{0}$", a zero node.
-- The parent-node is now, $ \mathbf{B_{a0}} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \mathbf{0}  )$.
+- The parent-node is now, $\mathbf{B_{a0}} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \mathbf{0}  )$.
 - And, the new root, $\mathbf{{root}_{a0d}} =   \mathbf{H_{noleaf}}(\mathbf{B_{a0}} \| \mathbf{L_d})$. 
 
 Notice that, in this example, the DELETE Operation alters the topology of the SMT, as seen in Figure 13(b) below.
@@ -1383,16 +1396,21 @@ A path refers to the edges traversed from the root to a leaf. Since the SMTs are
 Paths are therefore strings of bits, and are derived from keys in a very specific way.
 
 First of all, every key can be thought of as a quadruple, $\text{Key}_{\mathbf{0123}} = \big( \text{Key}_{\mathbf{0}} , \text{Key}_{\mathbf{1}} , \text{Key}_{\mathbf{2}} , \text{Key}_{\mathbf{3}} \big) \in \mathbb{F}_{p}^4$. Denote each key part $\text{Key}_{\mathbf{i}}$ bit-wise as, 
-$$
+
+\begin{aligned}
 \text{Key}_{\mathbf{0}} = k_{\mathbf{0,63}\ } k_{\mathbf{0,62}\ } \dots k_{\mathbf{0,2}\ } k_{\mathbf{0,1}\ } k_{\mathbf{0,0} },\ \ \text{Key}_{\mathbf{1}} = k_{\mathbf{1,63}\ } k_{\mathbf{1,62}\ } \dots k_{\mathbf{1,2}\ } k_{\mathbf{1,1}\ } k_{\mathbf{1,0} }, \\\text{Key}_{\mathbf{2}} = k_{\mathbf{2,63}\ } k_{\mathbf{2,62}\ } \dots k_{\mathbf{2,2}\ } k_{\mathbf{2,1}\ } k_{\mathbf{2,0} },\ \ \text{Key}_{\mathbf{3}} = k_{\mathbf{3,63}\ } k_{\mathbf{3,62}\ } \dots k_{\mathbf{3,2}\ } k_{\mathbf{3,1}\ } k_{\mathbf{3,0} },
-$$
+\end{aligned}
+
 where the most-significant bit $\text{MSB}(\text{Key}_{\mathbf{i}}) = k_{\mathbf{i,63}\ }$ and the least-significant bit $\text{LSB}(\text{Key}_{\mathbf{i}}) = k_{\mathbf{i,0}}$, for each  $\mathbf{i} \in \{ \mathbf{0}, \mathbf{1}, \mathbf{2}, \mathbf{3} \}$.
 
 The **Navigation Path** to the leaf corresponding to the key $\text{Key}_{\mathbf{0123}}$ is defined as the following string of shuffled key-bits;
-$$
-k_{\mathbf{0,0}\ } k_{\mathbf{1,0}\ } k_{\mathbf{2,0}\ } k_{\mathbf{3,0}\ } k_{\mathbf{0,1}\ } k_{\mathbf{1,1}\ } k_{\mathbf{2,1}\ } k_{\mathbf{3,1}\ } k_{\mathbf{0,2}\ } k_{\mathbf{1,2}\ } k_{\mathbf{2,2}\ } k_{\mathbf{3,2}\ }  \dots k_{\mathbf{0,62}\ }  k_{\mathbf{1,62}\ } k_{\mathbf{2,62}\ }  k_{\mathbf{3,62}\ }  k_{\mathbf{0,63}\ } k_{\mathbf{1,63}\ } k_{\mathbf{2,63}\ } k_{\mathbf{3,63} }.
-$$
-That is, the Navigation Path to the leaf corresponding to $\text{Key}_{\mathbf{0123}} $ is the string of bits composed of;
+
+\begin{aligned}
+k_{\mathbf{0,0}\ } k_{\mathbf{1,0}\ } k_{\mathbf{2,0}\ } k_{\mathbf{3,0}\ } k_{\mathbf{0,1}\ } k_{\mathbf{1,1}\ } k_{\mathbf{2,1}\ } k_{\mathbf{3,1}\ } k_{\mathbf{0,2}\ } k_{\mathbf{1,2}\ } k_{\mathbf{2,2}\ } k_{\mathbf{3,2}\ }\\
+  \dots k_{\mathbf{0,62}\ }  k_{\mathbf{1,62}\ } k_{\mathbf{2,62}\ }  k_{\mathbf{3,62}\ }  k_{\mathbf{0,63}\ } k_{\mathbf{1,63}\ } k_{\mathbf{2,63}\ } k_{\mathbf{3,63} }.
+\end{aligned}
+
+That is, the Navigation Path to the leaf corresponding to $\text{Key}_{\mathbf{0123}}$ is the string of bits composed of;
 
 - The least-significant bits of the four key parts, $\text{Key}_{\mathbf{0}} , \text{Key}_{\mathbf{1}} , \text{Key}_{\mathbf{2}} , \text{Key}_{\mathbf{3}}$, appearing in the order of the key parts as: $k_{\mathbf{0,0}\ } k_{\mathbf{1,0}\ } k_{\mathbf{2,0}\ } k_{\mathbf{3,0}}$.
 - Followed by the second least-significant bits of the four key parts, $\text{Key}_{\mathbf{0}} , \text{Key}_{\mathbf{1}} , \text{Key}_{\mathbf{2}} , \text{Key}_{\mathbf{3}}$, appearing in the order of the key parts as: $k_{\mathbf{0,1}\ } k_{\mathbf{1,1}\ } k_{\mathbf{2,1}\ } k_{\mathbf{3,1}}$. 
@@ -1417,7 +1435,8 @@ Note that, this construction ensures that in every quadruplet of consecutive pat
 
 When executing a basic operation such as an UPDATE of a value at a leaf, one has to reconstruct the key from the remaining key found at the leaf and the path-bits spent in navigating to the leaf.
 
-Denote the remaining key as a quadruple,  $\text{RKey}_{\mathbf{0123}} = \big( \text{RKey}_{\mathbf{0}} , \text{RKey}_{\mathbf{1}} , \text{RKey}_{\mathbf{2}} , \text{RKey}_{\mathbf{3}} \big) $
+Denote the remaining key as a quadruple, 
+$\text{RKey}_{\mathbf{0123}} = \big( \text{RKey}_{\mathbf{0}} , \text{RKey}_{\mathbf{1}} , \text{RKey}_{\mathbf{2}} , \text{RKey}_{\mathbf{3}} \big)$
 
 Since the Path was constructed by shuffling key-bits from the four parts, $\text{Key}_{\mathbf{0}}$, $\text{Key}_{\mathbf{1}}$, $\text{Key}_{\mathbf{2}}$, $\text{Key}_{\mathbf{3}}$, one would expect the reverse-process (going from the Path-bits to the original key) to work just as easily. 
 
@@ -1453,9 +1472,11 @@ The next climb is to the root. The navigation path-bits have been exhausted, and
 It is clear, from the above example, that there is a one-to-one correspondence between the integers *modulo* 4 (i.e., Elements of the group $\mathbb{Z}_4 = \{ 0, 1, 2, 3 \}$) and remaining key parts $\text{RKey}_{\mathbf{0}} , \text{RKey}_{\mathbf{1}} , \text{RKey}_{\mathbf{2}} , \text{RKey}_{\mathbf{3}}$. 
 
 That is, there is a mapping;
-$$
+
+\begin{aligned}
 1 \mapsto \text{RKey}_{\mathbf{0}},\ \ 2 \mapsto \text{RKey}_{\mathbf{1}},\ \  3 \mapsto \text{RKey}_{\mathbf{2}} \text{ and }\ 0 \mapsto \text{RKey}_{\mathbf{3}}.
-$$
+\end{aligned}
+
 The quadruple structure of the path bits and the level of leaves therefore have a homomorphic relationship that can be described in terms of the cyclic group of integers modulo 4,  $\mathbb{Z}_4 = \{ 0, 1, 2, 3 \}$.
 
 Since *addition modulo n* is an expensive computation in the state machine context, it is important to find a more efficient algorithm to achieve the same result.
@@ -1464,26 +1485,34 @@ Since *addition modulo n* is an expensive computation in the state machine conte
 
 ##### Alternate Cyclic Group Of Order 4
 
-In order to explore cyclic groups of order 4, take the vector  $\mathbf{x} = $ $(1,0,0,0)$ , and rotate the components of $\mathbf{x}$ one position to the left.
+In order to explore cyclic groups of order 4, take the vector  $\mathbf{x} = (1,0,0,0)$ , and rotate the components of $\mathbf{x}$ one position to the left.
 
-Note that, rotating   $\mathbf{x} = $ $(1,0,0,0)$  
+Note that, rotating   $\mathbf{x} = (1,0,0,0)$
 
 - once, yields $(0,0,0,1)$   
 - twice, one obtains $(0,0,1,0)$
 - thrice, one gets $(0,1,0,0)$   
-- four times, and the result is  $\mathbf{x} = $ $(1,0,0,0)$ 
+- four times, and the result is  $\mathbf{x} = (1,0,0,0)$ 
 
-Continuously rotating  $\mathbf{x} = $ $(1,0,0,0)$  will not result in any other vector but the four vectors 
+Continuously rotating  $\mathbf{x} = (1,0,0,0)$  will not result in any other vector but the four vectors 
+
 $$
 \mathbf{G_4} = \{ (1,0,0,0),\ (0,0,0,1),\ (0,0,1,0),\ (0,1,0,0) \}.
 $$
+
 This set of four vectors $\mathbf{G_4}$ together with the described *rotation*, form an algebraic group. 
 
-In fact, $\mathbf{G_4}$ is isomorphic (or homomorphically equivalent) to $\mathbb{Z}_4$ under "addition modulo 4". That is, there is a natural one-to-one correspondence between the elements of $\mathbb{Z}_4$ and those of $\mathbf{G_4}$, as follows;
+In fact, $\mathbf{G_4}$ is isomorphic (or homomorphically equivalent) to $\mathbb{Z}_4$ under "addition modulo 4". 
+That is, there is a natural one-to-one correspondence between the elements of $\mathbb{Z}_4$ and those of $\mathbf{G_4}$, as follows;
 $$
 0 \mapsto (1,0,0,0),\ \ 1 \mapsto (0,1,0,0),\ \ 2 \mapsto (0,0,1,0)\  \text{ and }\ 3 \mapsto (0,0,0,1).
 $$
 
+Note that the four numbers $0$, $1$, $2$ and $3$ can be expressed in their **binary form** with just two bits, and the same one-to-one correspondence holds as;
+
+$$
+\text{00} \mapsto (1,0,0,0),\ \ \text{01} \mapsto (0,1,0,0),\ \ \text{10} \mapsto (0,0,1,0)\  \text{ and }\ \text{11} \mapsto (0,0,0,1).
+$$
 
 ##### A Special Cyclic Register For Leaf Levels
 
@@ -1491,34 +1520,44 @@ Define a register called `LEVEL` which is vector of four bits, three "0" bits an
 
 If `LEVEL` is initialised as $(1,0,0,0)$, observe that applying `ROTATE_LEVEL` four times brings `LEVEL` back to $(1,0,0,0)$. That is, 
 $$
-(1,0,0,0) \to (0,0,0,1) \to (0,1,0,0) \to (0,0,1,0)
+(1,0,0,0) \to (0,0,0,1)  \to (0,0,1,0) \to (0,1,0,0) \to (1,0,0,0)
 $$
 Therefore, `LEVEL` is cyclic under `ROTATE_LEVEL`, and is in fact algebraically the same as the cyclic group $\mathbf{G_4}$ described above.
 
 **How is the `LEVEL` register used in key reconstruction?**
 
 First note that, when navigating the tree, the leaf level can be indicated by one of the four possible states of the `LEVEL` register. And this works for all possible leaf levels because, for any positive integer $j$;
-$$
-\begin{aligned}
-{\text{LEVEL}} = (1,0,0,0)\ \ \text{indicates that the leaf level is one of the following};\ 0, 4, 8, \dots , 0 + 4j.\ \\
-{\text{LEVEL}} = (0,1,0,0)\ \ \text{indicates that the leaf level is one of the following};\ 1, 5, 9, \dots , 1 + 4j.\ \\
-{ \text{LEVEL}} = (0,0,1,0)\ \ \text{indicates that the leaf level is one of the following};\ 2, 6, 10, \dots , 2 + 4j. \\ 
-{ \text{LEVEL}} = (0,0,0,1)\ \ \text{indicates that the leaf level is one of the following};\ 3, 7, 11, \dots , 3 + 4j.
-\end{aligned}
-$$
-Second, the position of the bit "1" in `LEVEL` tallies precisely with the part of the remaining key, $\text{RKey}_{\mathbf{i}}$, to which the last used path-bit came from.
 
-So then, when reconstructing the key, one needs only check where the bit "1" is in the `LEVEL`, because
-$$
+\begin{aligned}
+{\text{LEVEL}} = (1,0,0,0)\ \text{indicates that the leaf level is one of the following};\ 0, 4, 8, \dots , 0 + 4j. \ \\
+{\text{LEVEL}} = (0,1,0,0)\ \text{indicates that the leaf level is one of the following};\ 1, 5, 9, \dots , 1 + 4j. \ \\
+{\text{LEVEL}} = (0,0,1,0)\ \text{indicates that the leaf level is one of the following};\ 2, 6, 10, \dots, 2 + 4j. \\
+{\text{LEVEL}} = (0,0,0,1)\ \text{indicates that the leaf level is one of the following};\ 3, 7, 11, \dots, 3 + 4j.
+\end{aligned}
+
+Second, the two least-significant bits of each of these number, when written in **binary**, are as follows; 
+
+\begin{aligned}
+\text{Each of these numbers};\ 0, 4, 8, \dots , 0 + 4j;\ \text{ends with } 00.\ \ \\
+\text{Each of these numbers};\ 1, 5, 9, \dots , 1 + 4j;\ \text{ends with } 01.\ \ \\
+\text{Each of these numbers};\ 2, 6, 10, \dots , 2 + 4j; \text{ends with } 10.\ \\
+\text{Each of these numbers};\ 3, 7, 11, \dots , 3 + 4j;\ \text{ends with } 11.
+\end{aligned}
+
+It suffices therefore to only read the two least-significant bits of the leaf level in order to determine the position of the bit "1" in the `LEVEL` register.
+
+Third, the position of the bit "1" in the `LEVEL` register tallies precisely with the part of the remaining key, $\text{RKey}_{\mathbf{i}}$, to which the last used path-bit came from.
+
+So then, when reconstructing the key, one needs only check where the bit "1" is in the `LEVEL` register, because
+
 \begin{aligned}
 {\text{LEVEL}} = (1,0,0,0)\ \ \text{means, the last used path bit must be appended to } \mathbf{RKey_0}.\\
 {\text{LEVEL}} = (0,1,0,0)\ \ \text{means, the last used path bit must be appended to } \mathbf{RKey_1}.\\
 { \text{LEVEL}} = (0,0,1,0)\ \ \text{means, the last used path bit must be appended to } \mathbf{RKey_2}.\\
 {\text{LEVEL}} = (0,0,0,1)\ \ \text{means, the last used path bit must be appended to } \mathbf{RKey_3}.
 \end{aligned}
-$$
-Since things are rather mechanical in state machines, one or two more functions are needed. For instance, one for initialising the `LEVEL` register, and another for reading the position of the bit "1".
 
+Since things are rather mechanical in state machines, one or two more functions are needed. For instance, one for initialising the `LEVEL` register, and another for reading the position of the bit "1".
 
 
 
@@ -1550,4 +1589,4 @@ In the case of the zkProver storage, two slightly different $\text{POSEIDON}$ ha
 
 
 
-Since POSEIDON Hashes outputs $4 * \lfloor(63.99)\rfloor \text{ bits} = 252$, and one bit is needed to encode each direction, the tree can have a maximum of 252 levels.
+Since POSEIDON Hashes outputs $4 * \lfloor(63.99)\rfloor \text{ bits} = 252$, and one bit is needed to encode each direction, the tree can therefore have a maximum of 252 levels.
