@@ -1,4 +1,4 @@
-site_name: ZKEVM docs - work in progress
+site_name: Polygon zkEVM docs - work in progress
 site_url: http://165.22.26.3/zkevmdoc/mkdocs/site/
 theme:
   name: material
@@ -28,7 +28,7 @@ extra:
       link: https://hermez.io/
 
 nav:
-  - Hermez 2.0 (zkEVM):
+  - Polygon zkEVM:
     - Architecture:
       - Introduction: "zkEVM/Architecture/introduction.md"
       - Simple State Machine: "zkEVM/Architecture/simple-state-machine.md"  
