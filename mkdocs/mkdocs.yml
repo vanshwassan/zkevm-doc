@@ -30,12 +30,11 @@ extra:
 nav:
   - Hermez 2.0 (zkEVM):
     - Architecture:
-      - Introduction: "zkEVM/architecture/introduction.md"
-      - Simple State Machine: "zkEVM/architecture/simple-state-machine.md"  
-      - Modular Design: "zkEVM/architecture/modular-design.md"  
+      - Introduction: "zkEVM/Architecture/introduction.md"
+      - Simple State Machine: "zkEVM/Architecture/simple-state-machine.md"  
+      - Modular Design: "zkEVM/Architecture/modular-design.md"  
     - PIL:
-      - Tutorial: "zkEVM/PIL/tutorial.md"
-      - State Machines: "zkEVM/PIL/state-machines.md"
+      - Polynomial Identity Language: "zkEVM/PIL/Polynomial-Identity-Language-typ.md"
     - State Machines:
       - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
       - Storage: "zkEVM/State-Machines/Storage/The-Storage-State-Machine-typ.md"
