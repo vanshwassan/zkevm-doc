@@ -68,7 +68,7 @@ The mechanics of the Storage SM and its basic operations are described in detail
 
 
  
-
+<!-- 
 ### Example. An UPDATE Operation
 
 
@@ -140,7 +140,7 @@ The above example captures in summary the following aspects about the Storage SM
 Nonetheless, given that we are dealing with a state machine here, there is a lot more detail needed on what is actually involved in the background. What is commonly a trivial computation when using a high-level programming language, requires a bit more machinery to be put in place in low-level programming.
 
 A much more slower pace is henceforth adopted. Experienced developers can use the Table of Contents to jump to sections of interest.
-
+ -->
 
 
 
@@ -168,7 +168,7 @@ $\mathbf{H}$
  is used to create a Merkle tree to record eight (8) values; 
  $\text{V}_{\mathbf{a}}, \text{V}_{\mathbf{b}}, \text{V}_{\mathbf{c}}, \text{V}_{\mathbf{d}}, \text{V}_{\mathbf{e}}, \text{V}_{\mathbf{f}}, \text{V}_{\mathbf{g}}, \text{V}_{\mathbf{h}}$;
 
-1. Each leaf is but the hash $\mathbf{H}(\text{V}_{\mathbf{i}})$ of a particular value $\text{V}_{\mathbf{i}}$, where   
+1. Each leaf is nothing but the hash $\mathbf{H}(\text{V}_{\mathbf{i}})$ of a particular value $\text{V}_{\mathbf{i}}$, where   
     $\mathbf{ i} \in \{ \mathbf{a}, \mathbf{b}, \mathbf{c}, \mathbf{d}, \mathbf{e}, \mathbf{f}, \mathbf{g}, \mathbf{h} \}$.
 2. The branches;  $\mathbf{B}_{\mathbf{ab}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{a}})\| \mathbf{H}(\text{V}_{\mathbf{b}}) \big)$,  
     $\mathbf{B}_{\mathbf{cd}} = \mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{c}})\| \mathbf{H}(\text{V}_{\mathbf{d}}) \big)$, 
@@ -1361,7 +1361,7 @@ What's left is specifying parameters such as the actual key-length used in the S
 
 
 
-In the Storage Storage, the keys and values are strings of 256 bits.
+In the Storage SM, the keys and values are strings of 256 bits.
 
 Keys will henceforth be represented as 256-bit unsigned integers, which are quadruples of 64-bit field elements; e.g., $\text{Key}_{\mathbf{0123}} = \big( \text{Key}_{\mathbf{0}} , \text{Key}_{\mathbf{1}} , \text{Key}_{\mathbf{2}} , \text{Key}_{\mathbf{3}} \big)$, where each $\text{Key}_{\mathbf{i}} \in \mathbb{F}_p$, where  $p = 2^{64} - 2^{32} + 1$. 
 
@@ -1500,7 +1500,7 @@ $$
 \mathbf{G_4} = \{ (1,0,0,0),\ (0,0,0,1),\ (0,0,1,0),\ (0,1,0,0) \}.
 $$
 
-This set of four vectors $\mathbf{G_4}$ together with the described *rotation*, form an algebraic group. 
+This set of four vectors $\mathbf{G_4}$ together with the described *rotation*, form an group. 
 
 In fact, $\mathbf{G_4}$ is isomorphic (or homomorphically equivalent) to $\mathbb{Z}_4$ under "addition modulo 4". 
 That is, there is a natural one-to-one correspondence between the elements of $\mathbb{Z}_4$ and those of $\mathbf{G_4}$, as follows;
