@@ -1590,3 +1590,326 @@ In the case of the zkProver storage, two slightly different $\text{POSEIDON}$ ha
 
 
 Since POSEIDON Hashes outputs $4 * \lfloor(63.99)\rfloor \text{ bits} = 252$, and one bit is needed to encode each direction, the tree can therefore have a maximum of 252 levels.
+
+
+
+
+## The Storage State Machine's Design and Mechanism 
+
+
+
+The Storage SM is practically dual in that it is both a State Machine and a Storage, a database. So, instead of the Main SM having to query the Storage as a database itself (i.e., the Main SM itself carrying out the CRUD operations), the Storage has instead been automised to execute these queries (by turning it into a state machine).
+
+Since the design of the Storage part has been extensively described in the foregoing sections (in terms of SMTs), the design of the automation now follows. What follows next is the description of,
+
+- how the State Machine part is designed, and
+- how it works (i.e., explaining the internal mechanism of the Storage SM). 
+
+
+
+The Storage SM is composed of three parts; Storage Assembly code, Storage Executor code, and the Storage PIL code. 
+
+
+
+
+
+### The Storage Assembly
+
+
+
+The Storage Assembly is the interpreter between the Main State Machine and its own Executor. It receives instructions from the Main SM and generates a JSON-file containing the corresponding rules and logic, which are stored in a special ROM for the Storage SM.
+
+The Storage SM has **a primary Storage Assembly code**, [storage_sm.zkasm](https://github.com/hermeznetwork/zkasmstorage/blob/main/zkasm/storage_sm.zkasm), that maps each instruction of the Main SM (i.e., each Storage Action) to the secondary Assembly code of the corresponding basic operation. These basic operations are mainly the CREATE, READ, UPDATE and DELETE, as discussed in previous sections.
+
+Considering some special cases, there are all-in-all eight (8) **secondary Storage Assembly codes**, each for a distinct basic operation; READ or Get, UPDATE, CREATE new value at a zero node, CREATE new value at found leaf, DELETE leaf with zero sibling, DELETE last non-zero node, DELETE leaf with non-zero sibling, and SET a zero node to zero. See Table 1, below, for the specific names of the secondary codes.
+
+ 
+
+<div align="center"><b> Table 1: SMT Actions And Secondary zkASM Codes </b></div>
+
+| Storage Actions                   | File Names         | Code Names | Action Selectors In Primary zkASM Code |
+| --------------------------------- | ------------------ | ---------- | -------------------------------------- |
+| READ                              | Get                | Get        | isGet()                                |
+| UPDATE                            | Set_Update         | SU         | isSetUpdate()                          |
+| CREATE new value at a found leaf  | Set_InsertFound    | SIF        | isSetInsertFound()                     |
+| CREATE new value at a zero node   | Set_InsertNotFound | SINF       | isSetInsertNotFound()                  |
+| DELETE last non-zero node         | Set_DeleteLast     | SDL        | isSetDeleteLast()                      |
+| DELETE leaf with non-zero sibling | Set_DeleteFound    | SDF        | isSetDeleteFound()                     |
+| DELETE leaf with zero sibling     | Set_DeleteNotFound | SDNF       | isSetDeleteNotFound()                  |
+| SET a zero node to zero           | Set_ZeroToZero     | SZTZ       | isSetZeroToZero()                      |
+
+
+
+Input and ouput states of the Storage SM are literally SMTs, given in the form of; the Merkle roots, the relevant siblings, as well as the key-value pairs.
+
+Note that state machines use registers in the place of variables. All values needed, for carrying out the basic operations, are stored by the primary Assembly code in the following registers; 
+
+`HASH_LEFT`, `HASH_RIGHT`, `OLD_ROOT`, `NEW_ROOT`, `VALUE_LOW`, `VALUE_HIGH`, `SIBLING_VALUE_HASH`, `RKEY`, `SIBLING_RKEY`, `RKEY_BIT`, `LEVEL`.
+
+The `SIBLING_VALUE_HASH` and `SIBLING_RKEY` registers are only used by the `Set_InsertFound` and the `Set_DeleteFound` secondary Assembly codes. The rest of the registers are used in all the secondary Assembly codes. 
+
+
+
+#### SMT Action Selectors In The Primary Assembly Code
+
+How does the primary Assembly code map the Main SM instructions to the relevant Storage Actions?  
+
+It uses selectors. Like switches can either be ON or OFF, selectors can either be 1 or 0, where 1 means the action is selected for execution, while 0 means the instruction does not tally with the required action so a "jump if zero" `JMPZ` is applied.
+
+The primary Assembly code uses selectors by following the sequence in which these Storage Actions are listed in Table 1 above. That is,
+
+- It first checks if the required action is a `Get`. If it is so, the [storage_sm_get.zkasm](https://github.com/hermeznetwork/zkasmstorage/blob/main/zkasm/storage_sm_get.zkasm) code is fetched for execution.
+- If not, it checks if the required action is `Set_Update`. If it is so, the [storage_sm_set_update.zkasm](https://github.com/hermeznetwork/zkasmstorage/blob/main/zkasm/storage_sm_set_update.zkasm) code is fetched for execution.
+- If not, it continues to check if the required action is `Set_InsertFound`. If it is so, the [storage_sm_set_insert_found.zkasm](https://github.com/hermeznetwork/zkasmstorage/blob/main/zkasm/storage_sm_set_insert_found.zkasm) code is fetched for execution.
+- If not, it continues in the same way until the correct action is selected, in which case the corresponding code is fetched for execution.   
+
+That's all the primary Storage Assembly code does, the details of how each if the SMT Actions are stipulated in the individual secondary Assembly codes.
+
+The primary and secondary Storage Assembly files are stored as JSON-files in the Storage ROM, ready to be fetched as "function calls" by the Storage Executor.
+
+
+
+
+
+#### The UPDATE zkASM Code
+
+
+
+Take as an example the Set_UPDATE zkASM code. The primary Storage Assembly code uses the selector `isSetUpdate()` for Set_UPDATE. 
+
+
+
+Note that an UPDATE action involves,
+
+1. Reconstructs the corresponding key, from both the remaining key found at the leaf and key-bits used to navigate to the leaf.
+2. Ascertains that indeed the old value was included in the old root,
+3. Carries out the UPDATE of the old value with the new value, as well as updating all nodes along the path from the leaf to the root. 
+
+There is only one Set_UPDATE Assembly code, [storage_sm_set_update.zkasm](https://github.com/hermeznetwork/zkasmstorage/blob/main/zkasm/storage_sm_set_update.zkasm), for all the above three computations.
+
+
+
+##### Key Reconstruction In zkASM
+
+Key Reconstruction is achieved in two steps; Positioning of the bit "1" in the `LEVEL` register, and using the `LEVEL` register to "climb the RKey". That is, append the path bit last used in navigation to the correct RKey part.
+
+
+
+Step 1. **Positioning the bit "1" in the `LEVEL` register**
+
+The Set_UPDATE zkASM code, first initialises the `LEVEL` register to `(1,0,0,0)`. 
+
+Then uses the `GetLevelBit()` function to read the two least-significant bits of the leaf level, which happens in two cases, each with its own two subcases;
+
+-  ***Case 1***. If the least-significant bit of leaf level is `0`, then the `GetLevelBit()` function is used again to read the second least-significant bit of the leaf level.
+
+  - ***Subcase 1.1***: If the second least-significant bit of the leaf level is `0`, it means the leaf level is a multiple of 4, which is equivalent to 0 because leaf level works in `modulo` 4. So, the `LEVEL` register must remain as `(1,0,0,0)`.
+  - ***Subcase 1.2***:  If the second least-significant bit of the leaf level is `1`, it means the leaf level in its binary form ends with a `10`. Hence, leaf level is a number of the form `2 + 4k`, for some positive integer `k`. As a result, the `LEVEL` register must be rotated to the position, `(0,0,1,0)`. The code therefore applies `ROTATE_LEVEL` twice to `LEVEL = (1,0,0,0)` in order to bring it to `(0,0,1,0)`.    
+
+-  ***Case 2***. If the least-significant bit of leaf level is `1`, then;
+
+  The `LEVEL` register is rotated three times to the left, using ROTATE_LEVEL, and bringing the `LEVEL` register to `(0,1,0,0)`. 
+
+  Next, the `GetLevelBit()` function is used again to read the second least-significant bit of the leaf level. 
+
+  - ***Subcase 2.1***: If the second least-significant bit of the leaf level is `0`, it means the leaf level in its binary form ends with a `01`. That is, leaf level is a number of the form `1 + 4k`, for some positive integer `k`. And thus, the `LEVEL` register must remain in its current position, `(0,1,0,0)`. So it does not need to be rotated.
+  - ***Subcase 2.2***: Otherwise, the second least-significant bit of the leaf level is `1`, which means the leaf level in its binary form ends with a `11`. Hence, leaf level is a number of the form `3 + 4k`, for some positive integer `k`. Consequently, the `LEVEL` register needs to be rotated from the current position `(0,1,0,0)` to the position `(0,0,0,1)`.
+
+
+
+Step 2. **Using `LEVEL` to "climb the RKey"**
+
+The Remaining Key is fetched using the `GetRKey()` function and stored in the `RKEY` register.
+
+When climbing the tree, there are two functions that are used in the code; the CLIMB_RKEY and the ROTATE_LEVEL. 
+
+- First, the `LEVEL` register is used to pinpoint the correct part of the Remaining Key to which the path-bit last used in the navigation must be appended. (See the previous subsection on "[A Special Cyclic Register For Leaf Levels](#a-special-cyclic-register-for-leaf-levels)" for a one-to-one correspondence between the positions of "1" in `LEVEL` and the Rkey parts.)
+- Second, the ROTATE_LEVEL is used to rotate the `LEVEL` register once.  
+- The CLIMB_RKEY is used; Firstly, to shift the value of the pinpointed RKey part one position to the left. Secondly, to insert the last used path bit to the least-significant position of the shifted-value of the pinpointed RKey part.
+
+The above two steps are repeated until all the path bits used in navigation have been appended. In which case, equality between the reconstructed key and the original key is checked. 
+
+
+
+##### Checking Inclusion Of Old Value In Old Root
+
+The above key reconstruction, together with checking inclusion of the old value in the old root and updating the old value to the new value, are carried out simultaneously.
+
+Since checking inclusion of the old value in the old root follows the same steps as the update of the old value to the new value, the corresponding lines in the Assembly code are similar. It suffices therefore to explain only one of these two computations.
+
+Next is the discussion of the update of the old value to the new value.
+
+
+
+##### The Update Part Of Set_UPDATE
+
+
+
+All values, $\text{V}_{0123}=\big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3},\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$ are 256-bit long and expressed as lower half and higher half as, `VALUE_LOW` $=\big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ and `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7} \big)$.
+
+
+
+Step 1. **Computing the new leaf value**
+
+(a)	The functions `GetValueLow()` and `GetValueHigh()` are used to fetch `VALUE_LOW` $=\big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ and `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$, respectively.
+
+(b)	The `VALUE_LOW` $= \big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ is stored in a register called `HASH_LEFT`, whilst `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$ is stored in another register called `HASH_RIGHT`.
+
+(c)	The hashed value of $\text{V}_{0123}$ is computed using `HASH0` as, $\text{HASH0}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. Note that this is in fact, $\text{POSEIDON}\big(0\|0\|0\|0\|\text{VALUE\_LOW}\|\text{VALUE\_HIGH}\big)$. The hashed value is then stored in `HASH_RIGHT`.
+
+(This means the `HASH_RIGHT` and the `HASH_LOW` are 'make-shift' registers. Whenever a value is stored in it, the old value that was previously stored therein is simply pushed out. They hold values only for the next computation.)
+
+(d)	Next the Rkey is copied into the `HASH_LEFT` register. And the leaf value is computed by using `HASH1` as, $\text{HASH1}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. i.e., The value of the leaf is, $\text{HASH1}\big( \text{RKey}\|\text{HashedValue}\big)$. The leaf value is then copied into another register called `NEW_ROOT`. 
+
+
+
+Step 2. **Climbing the SMT**
+
+Check if the path bit that led to the leaf is 0 or 1, by using the `GetNextKeyBit()` function.
+
+**Case 1**: If the path bit (called 'key bit' in the code) is 0, then the corresponding sibling is on the right. Therefore, using 'jump if zero' `JMPZ`,  the code jumps to the `SU_SiblingIsRight` routine. 
+
+(a)	The leaf value in `NEW_ROOT` is pushed into the `HASH_LEFT` register. 
+
+(b)	The hash value of the sibling node is fetched, using the `GetSiblingHash()` function. And it is pushed into the `HASH_RIGHT` register.
+
+(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. 
+
+i.e., The parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{LeafValue}\|\text{SiblingHash}\big)$.
+
+**Case 2**: If the path bit is 1, then the corresponding sibling is on the left. The routine `SU_SiblingIsRight` is then executed. 
+
+(a)	The leaf value in `NEW_ROOT` is pushed into the `HASH_RIGHT` register. 
+
+(b)	The hash value of the sibling node is fetched, using the `GetSiblingHash()` function. And it is pushed into the `HASH_LEFT` register.
+
+(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. 
+
+i.e., The parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{SiblingHash}\|\text{LeafValue}\big)$. 
+
+
+
+Step 3. **Check if tree top has been reached**
+
+The code uses the function `GetTopTree()` to check is the top of the tree has been reached.
+
+**Case 1**. If  `GetTopTree()`  returns 1, then Step 2 is repeated. But this time using the hash value of the corresponding sibling at the next level (i.e., at `leaf level - 1`). 
+
+**Case 2**.  If  `GetTopTree()`  returns 0, then the code jumps to the `SU_Latch` routine. 
+
+
+
+The `SU_Latch` is an overall routine for the entire Set_UPDATE Assembly code. It is here where, 
+
+(a)	Equality between the reconstructed key and the original key is checked.
+
+(b)	Equality between the computed old root value and the original old root is checked.
+
+Once consistency is established both between the keys and the old roots, then all new values; the new root, the new hash value, and the new leaf value; are set using `LATCH_SET`. 
+
+
+
+
+
+#### The Rest Of The Secondary Assembly Codes
+
+
+
+The Assembly codes for the other seven SMT Actions to a certain extent, follow a similar pattern except for a few cases where especially adjusted routines are used.
+
+Actions such as; 
+
+1. The `Set_InsertFound` (or `SIF`) may involve a change in the topology of the SMT by extending a branch once or several times. 
+
+   In cases where a branch has been extended, the SIF Assembly code, when computing the new root, uses another routine called `SIF_ClimbBranch` just for updating values along the newly extended branch. This is done in addition to the `SIF_ClimbTree`, which is the exact same routine as the aforementioned `SU_ClimbTree` of the `Set_UPDATE` case.
+
+   It is for the same reason, SIF Assembly utilises special registers; the `SIBLING_VALUE_HASH` and `SIBLING_RKEY`. 
+
+2. The opposite SMT Action, the `Set_DeleteFound` or `SDF`, may entail a previously extended branch being reserved. 
+
+   As in the SIF case, if a branch had been extended but now the extension needs to be reversed due to a deleted leaf value, a special routine called `SDF_ClimbBranch` is used when updating values of nodes along the newly shortened branch. This `SDF_ClimbBranch` routine is the exact same routine as the`SIF_ClimbBranch`. Similarly, the SDF Assembly code uses the `SDF_ClimbTree` as in the Set_UPDATE Assembly.
+
+Note also that there is only one `Get` Assembly code, for the READ SMT Action, and the rest of the secondary Assembly codes are `Set_` Assembly codes differing according to their respective SMT Actions. So `Get` uses `LATCH_GET` at the end of a run, while the `Set_` codes use `LATCH_SET`.
+
+
+
+
+
+
+
+### The Storage Executor
+
+
+
+The Storage Executor like a slave-worker to the master, the Storage Assembly code, carries out all SMT Actions in accordance with rules and logic that the Assembly code has set out.
+
+As per instruction of the Main SM, the Storage Executor makes function calls to the Storage ROM for a specific secondary Assembly code stored as a JSON-file, by using the same aforementioned *selectors* of secondary Assembly codes. 
+
+For example, if the Main SM requires a new leaf to be created at a found non-zero leaf, the Storage Executor uses `isSetInsertFound` as a function call for the `Set_InsertFound` (or `SIF`) SMT Action. The Storage Executor then proceeds to build commited polynomials and executes the `SIF` SMT Action.
+
+As previously observed, in our very first UPDATE example in this document, all values are expressed as quadruplets of unsigned integers. For example, the Remaining Key looks like this,
+$$
+\text{RKey} = \big( \text{RKey}_0, \text{RKey}_1, \text{RKey}_2, \text{RKey}_3 \big)
+$$
+The Executor therefore uses an internal 4-element register called `op = [_,_,_,_]`, for handling values from the Storage ROM, which are needed in the internal step-by-step evaluations of the SMT Action being executed. It is thus reset to 0 after every evaluation.
+
+All the function calls seen in the Assembly code; 
+
+`GetSibling()`, `GetValueLow()`, `GetValueHigh()`, `GetRKey()`, `GetSiblingRKey()`, `GetSiblingHash()`, `GetSiblingValueLow()`, `GetSiblingValueHigh()`, `GetOldValueLow()`, `GetOldValueHigh()`, `GetLevelBit()`, `GetTopTree()`, `GetTopBranch()` and `GetNextKeyBit()`; 
+
+are actually performed by the Storage Executor. The values being fetched are carried with the `op` register. For instance, if the function call is `GetRKey()` then the Storage Executor gets the RKey from the rom.line file, carries it with `op` as; 
+
+`op[0] = ctx.rkey[0];` 
+
+`op[1] = ctx.rkey[1];`
+
+`op[2] = ctx.rkey[2];`
+
+`op[3] = ctx.rkey[3];`
+
+where `ctx` signifies an SMT Action. 
+
+
+
+Also, since all SMT Actions require some hashing, the Storage SM delegates all hashing Actions to the $\text{POSEIDON}$ SM. However, from within the Storage SM, it is best to treat the $\text{POSEIDON}$ SM as a blackbox. The Storage Executor simply specifies the sets of twelve values to be digested. And the $\text{POSEIDON}$ SM then returns the required digests of the values.   
+
+
+
+
+
+
+
+### The Storage PIL
+
+
+
+All computations executed in the Storage SM must be verifiable. A special Polynomial Identity Language (PIL) code is therefore used to set up all the polynomial constraints the verifier needs to validate correctness of execution.
+
+The preparation for these polynomial constraints actually starts in the Storage Executor. In order to accomplish this, the Storage Executor uses; selectors, setters and instructions; which are in fact Boolean polynomials. See the list of these Boolean committed polynomials in Table 2, below.
+
+
+
+<div align="center"><b> Table 2: Boolean Polynomials For Execution Tracing </b></div>
+
+| Selectors              | Setters                | Instructions      |
+| :--------------------- | :--------------------- | :---------------- |
+| selFree[i]             | setHashLeft[i]         | iHash             |
+| selSiblingValueHash[i] | setHashRight[i]        | iHashType         |
+| selOldRoot[i]          | setOldRoot[i]          | iLatchSet         |
+| selNewRoot[i]          | setNewRoot[i]          | iLatchGet         |
+| selValueLow[i]         | setValueLow[i]         | iClimbRkey        |
+| selValueHigh[i]        | setValueHigh[i]        | iClimbSiblingRkey |
+| selRkeyBit[i]          | setSiblingValueLow[i]  | iClimbSiblngRkeyN |
+| selSiblingRkey[i]      | setSiblingValueHigh[i] | iRotateLevel      |
+| selRkey[i]             | setRkey[i]             | iJmpz             |
+|                        | setSiblingRkey[i]      | iConst0           |
+|                        | setRkeyBit[i]          | iConst1           |
+|                        | setLevel[i]            | iConst2           |
+|                        |                        | iConst3           |
+|                        |                        | iAddress          |
+
+  
+
+Everytime each of these Boolean polynomials are utilised or performed, a record of a "1" is kept in its register. This is called an **execution trace**. 
+
+Therefore, instead of performing some expensive computations in order to verify correctness of execution (at times repeating the same computations being verified), the trace of execution is tested. The verifier takes the execution trace, and tests if it satisfies the polynomial constraints (or identities) in the PIL code. This technique helps the zkProver to achieve succintness as a zero-knowledge proof/verification system.
