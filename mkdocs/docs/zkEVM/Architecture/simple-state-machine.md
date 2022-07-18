@@ -1,44 +1,49 @@
 ## A Simple State Machine
 
-Let us build an state machine that transitionates from one state to the following one using the rules of a certain instruction. This machine can be represented as follows:
+Next we show the arithmetization process of a more complex but yet simple state machine. Our simple state machine transitionates from one state to the following one using the rules of a certain instruction. This machine can be represented as follows:
 
 ![image](figures/simple-state-machine-overview.pdf.png)
 
-The following assembly program describes a state machine with two registries $A$ and $B$ that accepts a free input:
+The following program describes a state machine with two registries $A$ and $B$ that accepts an input:
 
 $$\begin{array}{|l|}
 \hline
 \mathbf{Instruction} \\ \hline
-\mathbf{FREELOAD}~A \\ \hline
-\mathbf{MOV}~B~3 \\ \hline
-\mathbf{ADD}~A~B \\ \hline
-\mathbf{STOP} \\ \hline
+$\{getInput()\} => A \\ \hline
+3 => B \\ \hline
+:ADD \\ \hline
+0 => A,B \\ \hline
 \end{array}$$
 
-where:
+The previous program written in an assembly language that is
+read by a program called "the executor".
+The executior generates an execution trace according to each instruction of 
+the assembly program.
+In the previous program, the assembly instructions mean the following:
 
-a)  $\mathbf{FREELOAD}~X$: Take an input and saves its value into register X.
+-  $\{getInput()\} => A. It is an instruction that asks for a free input value and saves it into register A.
 
-b)  $\mathbf{MOV}~X~a$: Move a constant $a$ into register $X$. 
+-  3 => B. Moves the value 3 into register B. 
 
-c)  $\mathbf{ADD}~A~B$: Sum the values of the registers $A$ and $B$ and saves the output into register $A$. 
+-  :ADD. Sums the values of the registers $A$ and $B$ and saves the output into register $A$. 
 
-For example, the execution trace on input $7$ is the following:
+- 0 => A,B. Moves the value 0 into registers $A$ and $B$. 
+
+
+For example, the execution trace that the executor must generate with free input $7$ is the following:
 
 $$\begin{array}{|l|c|c|c|c|c|}
 \hline
-\mathbf{Instruction} & \mathbf{freeIn} & \mathbf{A} & \mathbf{A^{+1}} & \mathbf{B} & \mathbf{B^{+1}} \\ \hline
-\mathbf{FREELOAD}~~A & 7 & 0 & 7 & 0 & 0 \\ \hline
-\mathbf{MOV}~~B~3 & 0 & 7 & 7 & 0 & 3 \\ \hline
-\mathbf{ADD}~~A~B & 0 & 7 & 10 & 3 & 3 \\ \hline
-\mathbf{STOP} & 0 & 10 & 0 & 3 & 0 \\ \hline
+\mathbf{Instruction} & \mathbf{free} & \mathbf{A} & \mathbf{A'} & \mathbf{B} & \mathbf{B'} \\ \hline
+$\{getInput()\} => A & 7 & 0 & 7 & 0 & 0 \\ \hline
+3 => B & 0 & 7 & 7 & 0 & 3 \\ \hline
+:ADD & 0 & 7 & 10 & 3 & 3 \\ \hline
+0 => A,B & 0 & 10 & 0 & 3 & 0 \\ \hline
 \end{array}$$
 
-At each instruction, we denote as $X^{+1}$ as the next state of the register $X \in \{A,B\}$. 
+We denote as $X'$ as the next state of the register $X$, where $X \in \{A,B\}$. 
 
-Notice that the **STOP** instruction resets the states' values and "glues" the last instruction with the first one, achieving a cycle.
-
-We want to traduce our instructions so that the next state of the machine is deduced from a certain set of values. To achieve this, we add auxiliary states and selectors to express the relations between the next values of registries $A$ and $B$ as a linear combination of the previous ones
+Now we need to create a proper set of arithmetic constraints to prove the correctness of the execution trace. To achieve this, we add auxiliary states and selectors to express the relations between the next values of registries $A$ and $B$ as a linear combination of the previous ones
 and these auxiliary states and selectors.
 This is shown in the following figure:
 
@@ -108,6 +113,8 @@ Observe that the program is completely described by the constant (and public) po
 The polynomial **freeIn(x)** can be public or committed and by changing this polynomial, we can proof different executions for different initial conditions for the same "program".
 
 In our previous program, we can provide a result of the execution by giving $A(\omega^4)$.
+
+Notice that the last instruction resets the states' values and "glues" the last instruction with the first one, achieving a cycle.
 
 
 ## Programs with Conditional Jumps

@@ -31,6 +31,7 @@ nav:
   - Polygon zkEVM:
     - Architecture:
       - Introduction: "zkEVM/Architecture/introduction.md"
+      - "First Example: Fibonacci": "zkEVM/Architecture/fibonacci.md"
       - Simple State Machine: "zkEVM/Architecture/simple-state-machine.md"  
       - Modular Design: "zkEVM/Architecture/modular-design.md"  
     - PIL:
