@@ -44,8 +44,7 @@ Arithmetic circuits arise naturally in the context of succinct interactive proto
 Arithmetic circuits are covered by developer tools generally in two ways, either in the vanilla PlonK Style or the PlonKish Style. See Figure 1 for a high-level description of these two styles and how they differ.
 
 
-
-<p align="center"><img src="fig1-plnk-plnkish.png" width="800" /></p>
+![Vanilla Plonk vs PlonKish Circuit Representation Style](fig1-plnk-plnkish.png)
 <div align="center"><b> Figure 1: Vanilla PlonK vs PlonKish Circuit Representation Style </b></div>
 
 
@@ -56,7 +55,7 @@ Figure 2 below, provides a high-level description of a state machine architectur
 
 
 
-<p align="center"><img src="fig2-alu-3states.png" width="400" /></p>
+![Architectural view of a State Machine](fig2-alu-3states.png)
 <div align="center"><b> Figure 2: Architectural view of a State Machine </b></div>
 
 
@@ -65,7 +64,7 @@ Figure 3 and 4 show the comparison between the design of circuits and state mach
 
 
 
-<p align="center"><img src="fig3-crct-sm.png" width="400" /></p>
+![Circuit and state machine comparison in a loop-based computation](fig3-crct-sm.png)
 <div align="center"><b> Figure 3: Circuit and state machine comparison in a loop-based computation </b></div>
 
 
@@ -74,7 +73,7 @@ Figure 3 and 4 show the comparison between the design of circuits and state mach
 
 
 
-<p align="center"><img src="fig4-arth-crct-sm.png" width="600" /></p>
+![Circuit and State Machine comparison in a branch-based computation](fig4-arth-crct-sm.png)
 <div align="center"><b> Figure 4: Circuit and State Machine comparison in a branch-based computation </b></div>
 
 
@@ -105,7 +104,7 @@ As it can be observed, the input to this computation is fed into the two *free i
 
 
 
-<p align="center"><img src="fig5-tbl-mltpl-sm.png" width="400" /></p>
+![Computational Trace for the Multiplier State Machine](fig5-tbl-mltpl-sm.png)
 <div align="center"><b> Table 5: Computational Trace for the Multiplier State Machine </b></div>
 
 
@@ -121,7 +120,7 @@ Figure 6 below provides a diagram of this division.
 
 
 
-<p align="center"><img src="fig6-dstnct-pols-mltpl-sm.png" width="600" /></p>
+![Multiplier State Machine with the distinct polynomials](fig6-dstnct-pols-mltpl-sm.png)
 <div align="center"><b> Figure 6: Multiplier State Machine with the distinct polynomials </b></div>
 
 
@@ -134,7 +133,7 @@ In PIL, all the components (polynomials and identities) of this state machine ar
 
 
 
-<p align="center"><img src="fig7-cd-exrpt-1.png" width="900" /></p>
+![Components of PIL](fig7-cd-exrpt-1.png)
 <div align="center"><b> Code Excerpt 1: Components of PIL </b></div>
 
 
@@ -145,7 +144,7 @@ Reduction of the number of free input polynomials can be achieved by introducing
 
 
 
-<p align="center"><img src="fig8-cnstnt-pols-mltpl-sm.png" width="600" /></p>
+![Multiplier State Machine with the Constant Polynomials](fig8-cnstnt-pols-mltpl-sm.png)
 <div align="center"><b> Figure 6: Multiplier State Machine with the Constant Polynomials </b></div>
 
 
@@ -156,7 +155,7 @@ Table 8 shows the computational trace for the optimized Multiplier state machine
 
 
 
-<p align="center"><img src="fig8-tbl-stp-mltpl-sm.png" width="500" /></p>
+![State Machine with the Constant Polynomials](fig8-tbl-stp-mltpl-sm.png)
 <div align="center"><b> Table 6: State Machine with the Constant Polynomials </b></div>
 
 
@@ -181,7 +180,7 @@ In PIL, the optimized Multiplier is implemented as follows,
 
 
 
-<p align="center"><img src="fig8cd-optmsd-mltpl-sm.png" width="800" /></p>
+![Optimised Multiplier State Machine](fig8cd-optmsd-mltpl-sm.png)
 <div align="center"><b> Code Excerpt 2: Optimised Multiplier State Machine </b></div>
 
 
@@ -198,7 +197,7 @@ Table 9 shows the computational trace for a Byte4 state machine.
 
 
 
-<p align="center"><img src="fig9-cmpt-trc-byte-sm.png" width="600" /></p>
+![Computational Trace for the Byte4 State Machine](fig9-cmpt-trc-byte-sm.png)
 <div align="center"><b> Table 9: Computational Trace for the Byte4 State Machine </b></div>
 
 
@@ -207,7 +206,7 @@ For the purpose of displaying PIL's new features, the Byte4 state machine is bui
 
 First, deploy the configuration file, called config.pil, which is typically used to include some configuration-related components, shared among various state machines. In the example below, this configuration file will include the definition of a constant $N$ representing the upper bound for the number of rows to be used across various state machines.
 
-<p align="center"><img src="fig10cd-pil-config-byte-sm.png" width="800" /></p>
+![PIL Configuration File for the Byte4 State Machine](fig10cd-pil-config-byte-sm.png)
 <div align="center"><b> Code Excerpt 3: PIL Configuration File for the Byte4 State Machine </b></div>
 
 
@@ -216,7 +215,7 @@ Second, use the Global state machine. This state machine is used to store variou
 
 
 
-<p align="center"><img src="fig11-pil-glbl-byte-sm.png" width="800" /></p>
+![PIL Global File for the Byte4 State Machine](fig11-pil-glbl-byte-sm.png)
 <div align="center"><b> Code Excerpt 4: PIL Global File for the Byte4 State Machine </b></div>
 
 
@@ -231,7 +230,7 @@ Note how the product $2^{16} \cdot \texttt{out}$ forces the state machine to all
 
 This state machine is implemented in PIL as follows:
 
-<p align="center"><img src="fig12-pil-code-byte-sm.png" width="800" /></p>
+![The Byte4 State Machine PIL File](fig12-pil-code-byte-sm.png)
 <div align="center"><b> Code Excerpt 5: The Byte4 State Machine PIL File </b></div>
 
 
@@ -250,7 +249,7 @@ The aim with this section is to explain most of the PIL components in-depth.
 
 ### Namespaces
 
-<p align="center"><img src="fig13-pil-nmspc-prmtrs.png" width="800" /></p>
+![PIL Namespace File](fig13-pil-nmspc-prmtrs.png)
 <div align="center"><b> Code Excerpt 6: PIL Namespace File </b></div>
 
 
@@ -265,7 +264,7 @@ So, for instance the following two examples are not allowed,
 
 
 
-<p align="center"><img src="fig14-pil-nmspc-unique.png" width="800" /></p>
+![PIL No Common Names](fig14-pil-nmspc-unique.png)
 <div align="center"><b> Code Excerpt 7: PIL No Common Names </b></div>
 
 
@@ -276,7 +275,7 @@ So, for instance the following two examples are not allowed,
 
 
 
-<p align="center"><img src="fig15-pil-cnst-pols.png" width="800" /></p>
+![PIL Constant and Committed Polynomials](fig15-pil-cnst-pols.png)
 <div align="center"><b> Code Excerpt 8: PIL Constant and Committed Polynomials </b></div>
 
 
@@ -291,7 +290,7 @@ Every polynomial is prefixed with the keyword $\texttt{pol}$ and needs to be exp
 
 
 
-<p align="center"><img src="fig16-pil-a-cnst.png" width="800" /></p>
+![A Constant in PIL](fig16-pil-a-cnst.png)
 <div align="center"><b> Code Excerpt 9: A Constant in PIL </b></div>
 
 
@@ -306,7 +305,7 @@ A typical use of these polynomials is in the inclusion of selectors, latches and
 
 
 
-<p align="center"><img src="fig16-pil-a-cnst.png" width="800" /></p>
+![A Constant in PIL](fig16-pil-a-cnst.png)
 <div align="center"><b> Code Excerpt 9: A Constant in PIL </b></div>
 
 
@@ -339,7 +338,7 @@ State variables depend on the input and the constant polynomials. They are also 
 
 
 
-<p align="center"><img src="fig17-pol-elmt-types.png" width="800" /></p>
+![Types of Polynomial Element](fig17-pol-elmt-types.png)
 <div align="center"><b> Code Excerpt 10: Types of Polynomial Element </b></div>
 
 
@@ -360,14 +359,14 @@ The set of *constraints* is one of the most important part of a PIL code. The co
 
 
 
-<p align="center"><img src="fig18-pol-constrnts-PIL.png" width="800" /></p>
+![Polynomial Constraints](fig18-pol-constrnts-PIL.png)
 <div align="center"><b> Code Excerpt 11: Polynomial Constraints </b></div>
 
 
 
 Constraints can generally be of the following types (to be changed),
 
-<p align="center"><img src="fig19-pol-constrnts-four.png" width="800" /></p>
+![The Main Polynomial Constraints](fig19-pol-constrnts-four.png)
 <div align="center"><b> Code Excerpt 12: The Main Polynomial Constraints </b></div>
 
 
@@ -388,7 +387,7 @@ This means the description (in terms of constraints) of a state machine is not c
 
 
 
-<p align="center"><img src="fig10-cycl-ntr-sms.png" width="600" /></p>
+![Cyclic Nature of State Machines](fig10-cycl-ntr-sms.png)
 <div align="center"><b> Figure 10: Cyclic Nature of State Machines </b></div>
 
 
@@ -399,7 +398,7 @@ For example, consider the following state machine with its respective computatio
 
 
 
-<p align="center"><img src="fig11-sm-eg-cmpt-trc.png" width="700" /></p>
+![State Machine Example](fig11-sm-eg-cmpt-trc.png)
 <div align="center"><b> Code Excerpt 13: State Machine Example </b></div>
 
 
@@ -410,7 +409,7 @@ This can be solved by appending two extra rows. Figure 11 shows how this can be 
 
 
 
-<p align="center"><img src="fig11-indc-cycl-ntr.png" width="500"/></p>
+![Inducing a Cyclic Nature](fig11-indc-cycl-ntr.png)
 <div align="center"><b> Figure 11: Inducing a Cyclic Nature </b></div>
 
 
@@ -419,7 +418,7 @@ Another option would be the introduction of a selector:
 
 
 
-<p align="center"><img src="fig12-sel-eg-cyclc-sm.png" width="700" /></p>
+![State Machine Example](fig12-sel-eg-cyclc-sm.png)
 <div align="center"><b> Code Excerpt 14: State Machine Example </b></div>
 
 
@@ -460,7 +459,7 @@ Figure 12 depicts a connection between the polynomials $[a,b,c]$ and $[d,e,f]$.
 
 
 
-<p align="center"><img src="fig12-pol-cnnct-sms.png" width="500"/></p>
+![Polynomial Connections Across State Machines](fig12-pol-cnnct-sms.png)
 <div align="center"><b> Figure 12: Polynomial Connections Across State Machines </b></div>
 
 
@@ -494,7 +493,7 @@ Notice the following,
 
 
 
-<p align="center"><img src="fig13-arth-sm-arch.png" width="700" \label{fig:diagram-arithmetic}/></p>
+![Architecture of the Arithmetic State Machine](fig13-arth-sm-arch.png)
 <div align="center"><b> Figure 13: Architecture of the Arithmetic State Machine </b></div>
 
 
@@ -503,7 +502,7 @@ Figure 13 shows how the Arithmetic State Machine is designed. And, Tableb14 disp
 
 
 
-<p align="center"><img src="fig14-arth-sm-arch.png" width="800" /></p>
+![Computational Trace of the Arithmetic State Machine](fig14-arth-sm-arch.png)
 <div align="center"><b> Table 14: Computational Trace of the Arithmetic State Machine </b></div>
 
 
@@ -515,21 +514,13 @@ The polynomial identities that define the Arithmetic State Machine are as follow
 
 $$
 \begin{aligned}
-
 &\texttt{freeIn} \subset [0,2^{16} - 1], \\
-
 \texttt{a}' &= \texttt{SET}[A]\cdot(\texttt{freeIn} - \texttt{a}) + \texttt{a}, \\
-
 \texttt{b}' &= \texttt{SET}[B]\cdot(\texttt{freeIn} - \texttt{b}) + \texttt{b}, \\
-
 \texttt{c}' &= \texttt{SET}[C]\cdot(\texttt{freeIn} - \texttt{c}) + \texttt{c}, \\
-
 \texttt{d}' &= \texttt{SET}[D]\cdot(\texttt{freeIn} - \texttt{d}) + \texttt{d}, \\
-
 \texttt{e}' &= \texttt{SET}[E]\cdot(\texttt{freeIn} - \texttt{e}) + \texttt{e}, \\
-
 0 &= [ \texttt{a} \cdot \texttt{b} + \texttt{c} - (2^{16} \cdot \texttt{d} + \texttt{e}) ] \cdot \texttt{LATCH}.
-
 \end{aligned}
 $$
 
@@ -538,7 +529,7 @@ These are included in PIL as shown in the code excerpt below.
 
 
 
-<p align="center"><img src="fig13-pil-eg-arth-sm.png" width="800" /></p>
+![PIL Example](fig13-pil-eg-arth-sm.png)
 <div align="center"><b> Code Excerpt 15: PIL Example </b></div>
 
 
@@ -555,7 +546,7 @@ The *Main State Machine* is in charge of some (major) tasks, but will specifical
 
 
 
-<p align="center"><img src="fig15-main-sm-arch.png" width="700" /></p>
+![The Main State Machine Architecture](fig15-main-sm-arch.png)
 <div align="center"><b> Figure 15: The Main State Machine Architecture </b></div>
 
 
@@ -564,16 +555,15 @@ Hence, the first task in PIL is to introduce the various polynomials. It looks a
 
 
 
-<p align="center"><img src="fig15-pil-eg-main-sm.png" width="800" /></p>
+![Arithmetic State Machine PIL Example](fig15-pil-eg-main-sm.png)
 <div align="center"><b> Code Excerpt 15: Arithmetic State Machine PIL Example </b></div>
 
 
-
-Next, proceed with the input verification. That is, check whether all the input polynomials (whenever necessary) are of the correct form. So, for instance, if some polynomial is intended to be boolean, then a constraint that reflects so must be added.
-
+![xt, proceed with the]( That is, check whether all the input polynomials (whenever necessary) are of the )if some polynomial is intended to be boolean, then a constraint that reflects so must be added.
 
 
-<p align="center"><img src="fig16-pil-eg-addd-cnstrnt.png" width="800" /></p>
+
+![PIL Example with Added Constraint](fig16-pil-eg-addd-cnstrnt.png)
 <div align="center"><b> Code Excerpt 16: PIL Example with Added Constraint </b></div>
 
 
@@ -582,7 +572,7 @@ Now, add various constraints regarding the evolution of the "main" state variabl
 
 
 
-<p align="center"><img src="fig16-main-sm-bool-pols.png" width="700" /></p>
+![Boolean Polynommials in the Main State Machine](fig16-main-sm-bool-pols.png)
 <div align="center"><b> Figure 16: Boolean Polynommials in the Main State Machine </b></div>
 
 
@@ -591,7 +581,7 @@ In PIL, it translates to the following:
 
 
 
-<p align="center"><img src="fig17-pil-vrfctn-reg-op.png" width="800" /></p>
+![Verification of Basic Registry Operations](fig17-pil-vrfctn-reg-op.png)
 <div align="center"><b> Code Excerpt 17: Verification of Basic Registry Operations </b></div>
 
 
@@ -600,7 +590,7 @@ Finally, the constraints reflecting the relationship between the Main and the Ar
 
 
 
-<p align="center"><img src="fig18-pil-eg-cnnct-main-arth.png" width="800" /></p>
+![PIL Example Connect Main and Arithmetic SMs](fig18-pil-eg-cnnct-main-arth.png)
 <div align="center"><b> Code Excerpt 18: PIL Example Connect Main and Arithmetic SMs </b></div>
 
 
@@ -609,19 +599,17 @@ The connections can be depicted in terms of tables, as Figure 17 below,
 
 
 
-<p align="center"><img src="fig18-main-cnnct-Arth-Main.png" width="800" /></p>
+![Connecting Arithmetic and Main State Machines](fig18-main-cnnct-Arth-Main.png)
 <div align="center"><b> Figure 17: Connecting Arithmetic and Main State Machines </b></div>
 
 
 
 On the one side, the $\texttt{arith}$ selector is used in the Main SM to point to this state machine when an arithmetic lookup have to be performed. On the other side, the $\texttt{LATCH}$ selector, which also works as a selector for which rows should be added in the lookup argument is used. And, as illustrated in Figure 17 above, this proves that,
-$$
+
 \begin{array}{c}
-
 \texttt{Main.arith} \cdot [\texttt{Main.a} , \texttt{Main.b} , \texttt{Main.c} , \texttt{Main.d}, \texttt{Main.e}] \\ \subset \\ \texttt{Arith.LATCH} \cdot [\texttt{Arith.a}, \texttt{Arith.b}, \texttt{Arith.c}, \texttt{Arith.d}, \texttt{Arith.e}].
-
 \end{array}
-$$
+
 
 
 
@@ -644,7 +632,7 @@ Public inputs are values of a polynomial that are known prior to the execution o
 
 
 
-<p align="center"><img src="fig19-pil-eg-pub-inpts.png" width="800" /></p>
+![Public Inputs PIL Example](fig19-pil-eg-pub-inpts.png)
 <div align="center"><b> Code Excerpt 19: Public Inputs PIL Example </b></div>
 
 
@@ -667,7 +655,7 @@ In this example we use the $\texttt{is}$ keyword to denote that the vectors $[\t
 
 
 
-<p align="center"><img src="fig20-pil-eg-prm-chck.png" width="800" /></p>
+![Permutation Check PIL Example](fig20-pil-eg-prm-chck.png)
 <div align="center"><b> Code Excerpt 20: Permutation Check PIL Example </b></div>
 
 
@@ -681,23 +669,13 @@ This constraint becomes useful to connect distinct state machines, since it is f
 
 
 Here are some vectors for which the $\texttt{in}$ and $\texttt{is}$ functionalities are designed for:
-$$
+
 \begin{array}{ccc}
-
-%(1,2,3,1,3,2) & \text{connect} & (1,2,4,3,5,6) \\
-
-%(3,9,3,1,12,6,9) & \text{connect} & (3,7,1,4,5,6,2) \\
-
-(3,2) & \text{in} & (1,2,3,4) \\
-
-(1,5,5,5,8,1,1,2) & \text{in} & (1,2,4,5,8) \\
-
-(3,2,3,1) & \text{is} & (1,2,3,3) \\
-
+(3,2) & \text{in} & (1,2,3,4)\\
+(1,5,5,5,8,1,1,2) & \text{in} & (1,2,4,5,8)\\
+(3,2,3,1) & \text{is} & (1,2,3,3)\\
 (5,5,6,9,0) & \text{is} & (6,5,9,0,5).
-
 \end{array}
-$$
 
 
 
@@ -710,7 +688,7 @@ The $\texttt{connect}$ keyword is introduced to denote that the copy constraint 
 
 
 
-<p align="center"><img src="fig21-pil-eg-cnnct-kwrds.png" width="800" /></p>
+![Connect Keywords PIL Example](fig21-pil-eg-cnnct-kwrds.png)
 <div align="center"><b> Code Excerpt 21: Connect Keywords PIL Example </b></div>
 
 
@@ -719,7 +697,7 @@ Naturally, the previous feature can be used to describe the correctness of an en
 
 
 
-<p align="center"><img src="fig22-pil-eg-plnk-crct.png" width="800" /></p>
+![Plonk Circuit in PIL](fig22-pil-eg-plnk-crct.png)
 <div align="center"><b> Code Excerpt 22: Plonk Circuit in PIL </b></div>
 
 
@@ -736,7 +714,7 @@ PIL introduces this possibility by the introducing selectors that choose the sub
 
 
 
-<p align="center"><img src="fig23-pil-eg-prm-argmnt.png" width="800" /></p>
+![Permutation Argument in PIL](fig23-pil-eg-prm-argmnt.png)
 <div align="center"><b> Code Excerpt 23: Permutation Argument in PIL </b></div>
 
 
@@ -751,6 +729,6 @@ $$
 $$
 
 
-<p align="center"><img src="fig18-prm-mlt-dom-prtcl.png" width="800" /></p>
+![Permutation Multi-Domain Protocol](fig18-prm-mlt-dom-prtcl.png)
 <div align="center"><b> Figure 18: Permutation Multi-Domain Protocol </b></div>
 
