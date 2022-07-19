@@ -38,7 +38,8 @@ nav:
       - Polynomial Identity Language: "zkEVM/PIL/Polynomial-Identity-Language-typ.md"
     - State Machines:
       - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
-      - Storage: "zkEVM/State-Machines/Storage/The-Storage-State-Machine-typ.md"
+      - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
+      - Hashing: "zkEVM/State-Machines/Hashing/Hashing-State-Machine-typ.md"
     - Tools & Optimizations:
       - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
     - References: "zkEVM/references.md"
