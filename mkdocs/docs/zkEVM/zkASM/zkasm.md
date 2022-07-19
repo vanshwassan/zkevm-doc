@@ -1,5 +1,36 @@
 # zkASM: Zero-Knowledge Assembly Language
 
+<!-- TODO: I assume that a knowledge about registers and the basic stuff has been explained in another document has been done
+
+Suppose we are giving a state machine with a set of registers 
+\[
+\{\text{A}, \text{B}, \dots \},
+\]
+a set of defined ROM instructions between them
+\[
+\{\text{INS1}, \text{INS2}, \text{INS3}, \dots, \mathbf{FREE} \},
+\]
+and a set of methods implemented in the executor, to be load into the registers as free inputs
+\[
+\{\text{ExecutorMethod()}, \dots \}.
+\]
+Recall that registers are, in fact, composed of $4$ columns. Hence, for instance, $A$ can be decomposed as four columns $A_0, A_1, A_2, A_3$, where $A_0$ represents the less significative bits of $A$ and similarly, represents $A_3$ the most significative bits of $A$. 
+
+
+  Hence, it consists on two rows of the resulting table.
+
+  \begin{figure}[H]
+      \centering
+      \begin{tabular}{| c | c | c | c | c | c | c | c |}
+          \hline
+          \textbf{FREE0} & \textbf{FREE1} & \textbf{FREE2} & \textbf{FREE3} & $A_0$ & $A_1$ & $A_2$ & $A_3$ \\
+          \hline
+          0000           & 0000           & 0101           & 0111           & 0000  & 0000  & 0000  & 0000  \\
+          0000           & 0000           & 0101           & 0111           & 0000  & 0000  & 0101  & 0111  \\
+          \hline
+      \end{tabular}
+  \end{figure} -->
+
 ## Introduction
 
 Ethereum is a state machine that transition from an old state to a new state by reading a series of transactions. It is a natural choice, in order to interpret the set of EVM opcodes, to design another state machine as for the interpreter. One should think of it as building a state machine inside another state machine, or more concretely, building an Ethereum inside the Ethereum itself. The distinction here is that the former contains a virtual machine, the zkEVM, that is zero-knowledge friendly.
@@ -31,7 +62,7 @@ It is important to remark that each instruction of the zkASM is executed sequent
 
 ### Comments and Modules
 
-Comments are made with the semicolon ``$;$'' symbol.
+Comments are made with the semicolon "$;$" symbol.
 
 ```
 ; This a totally useful comment
@@ -91,7 +122,7 @@ Notice that the method `ExecutorMethod` does not necessarily depends on the regi
 ${ExecutorMethod(params)}
 ```
 
-6. Apart from executor methods, one can also use inline functions. This functions, which are also instantiated by the executor, are simply ``short'' and non-reused executor methods.
+6. Apart from executor methods, one can also use inline functions. This functions, which are also instantiated by the executor, are simply "short" and non-reused executor methods.
 
 ```
 ${A >> 2} => B
@@ -114,7 +145,7 @@ A clear example of such situation is when using the memory load opcode:
 $ => A,B    :MLOAD(param)
 ```
 
-When a registers appear at the side of an opcode, it is typically used to indicate that the value of the register \texttt{A} is the input of the memory store opcode:
+When a registers appear at the side of an opcode, it is typically used to indicate that the value of the register `A` is the input of the memory store opcode:
 
 ```
 A   :MSTORE(param)

@@ -35,7 +35,12 @@ nav:
       - Simple State Machine: "zkEVM/Architecture/simple-state-machine.md"  
       - Modular Design: "zkEVM/Architecture/modular-design.md"  
     - PIL:
-      - Polynomial Identity Language: "zkEVM/PIL/Polynomial-Identity-Language-typ.md"
+      - Introduction: "zkEVM/PIL/introduction.md"
+      - Hello Word Examples: "zkEVM/PIL/hello-world-examples.md"
+      - Components: "zkEVM/PIL/components.md"
+      - Cyclical Nature: "zkEVM/PIL/cyclical-nature.md"
+      - Modularity: "zkEVM/PIL/modularity.md"
+      - Advanced Features: "zkEVM/PIL/advanced-features.md"
     - zkASM:
       - Zero-Knowledge Assembly Language: "zkEVM/zkASM/zkasm.md"
     - State Machines:
