@@ -1,4 +1,4 @@
-## First Example: The Fibonacci State Machine
+## Fibonacci State Machine
 
 Let's consider that we want to validate that a certain 
 number is a number of a [Fibonacci sequence](https://en.wikipedia.org/wiki/Fibonacci_number) given certain 
