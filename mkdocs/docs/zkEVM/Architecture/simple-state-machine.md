@@ -394,7 +394,7 @@ The resulting $\mathtt{ROM}$ of our program is the following:
 $$
 \begin{array}{|c|c|}
 \hline
-\textbf{Position} & \mathbf{Instruction} \\ \hline
+\texttt{position} & \mathbf{Instruction} \\ \hline
 0 & \mathtt{\$\{getInput()\} => A} \\ \hline
 1 & \mathtt{-3 => B} \\ \hline
 2 & \mathtt{:ADD} \\ \hline
@@ -405,7 +405,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|}
 \hline
-\textbf{ROM} \\ \hline
+\texttt{ROM} \\ \hline
 0111.0000.001100 \\ \hline
 0100.0000.010000 \\ \hline
 0111.0000.001011\\ \hline
@@ -421,7 +421,7 @@ $$
 \scriptsize
 \begin{array}{|c|c|c|c|c|c|}
 \hline
-\mathbf{PC} \\ \hline
+\mathtt{PC} \\ \hline
 0 \\ \hline
 1 \\ \hline
 2 \\ \hline
@@ -432,7 +432,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|}
 \hline
-\mathbf{Instruction} \\ \hline
+\mathtt{position} & \mathbf{Instruction} \\ \hline
 0 & \mathtt{\$\{getInput()\} => A} \\ \hline
 1 & \mathtt{-3 => B} \\ \hline
 2 & \mathtt{:ADD} \\ \hline
@@ -454,7 +454,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|}
 \hline
-\mathbf{insTrace} \\ \hline
+\mathtt{insTrace} \\ \hline
 0000.0111.0000.001100 \\ \hline
 0001.0100.0000.010000 \\ \hline
 0010.0111.0000.001011\\ \hline
@@ -468,7 +468,7 @@ $$
 \scriptsize
 \begin{array}{|c|c|c|c|c|c|}
 \hline
-\mathbf{PC} \\ \hline
+\mathtt{PC} \\ \hline
 0 \\ \hline
 1 \\ \hline
 2 \\ \hline
@@ -478,7 +478,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|}
 \hline
-\mathbf{Instruction} \\ \hline
+\mathtt{position} & \mathbf{Instruction} \\ \hline
 0 & \mathtt{\$\{getInput()\} => A} \\ \hline
 1 & \mathtt{-3 => B} \\ \hline
 2 & \mathtt{:ADD} \\ \hline
@@ -498,7 +498,7 @@ $$
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|}
 \hline
-\mathbf{insTrace} \\ \hline
+\mathtt{insTrace} \\ \hline
 0000.0111.0000.001100 \\ \hline
 0001.0100.0000.010000 \\ \hline
 0010.0111.0000.001011\\ \hline
@@ -544,10 +544,10 @@ $$\begin{aligned}
 With the following definitions:
 
 $$\begin{aligned}
-&\textsf{instruction}(x) := 2^{13}\cdot(\textsf{const}(x) + 7) + 2^9\cdot \textsf{addr}(x) + 2^5\cdot \textsf{jmpz}(x) + 2^4 \cdot \textsf{setB}(x) + \\ 
+&\textsf{instruction}(x) := 2^{10}\cdot(\textsf{const}(x) + 7) + 2^6\cdot \textsf{addr}(x) + 2^5\cdot \textsf{jmpz}(x) + 2^4 \cdot \textsf{setB}(x) + \\ 
 &\qquad \qquad \qquad \quad~~2^3 \cdot \textsf{setA}(x) + 2^2 \cdot \textsf{inFree}(x) + 2 \cdot \textsf{selB}(x) + \textsf{selA}(x),\\
-&\textsf{ROM}(x) := 2^{17}  \cdot \textsf{position}(x) + \textsf{instruction}(x), \\
-&\textsf{insTrace}(x) := 2^{17}  \cdot \textsf{PC}(x) + \textsf{instruction}(x).
+&\textsf{ROM}(x) := 2^{14}  \cdot \textsf{position}(x) + \textsf{instruction}(x), \\
+&\textsf{insTrace}(x) := 2^{14}  \cdot \textsf{PC}(x) + \textsf{instruction}(x).
 \end{aligned}$$
 
 Finally, it should be checked that the whole set of selectors are, in fact, binary:
