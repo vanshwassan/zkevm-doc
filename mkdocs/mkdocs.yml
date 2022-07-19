@@ -42,7 +42,9 @@ nav:
       - Modularity: "zkEVM/PIL/modularity.md"
       - Advanced Features: "zkEVM/PIL/advanced-features.md"
     - zkASM:
-      - Zero-Knowledge Assembly Language: "zkEVM/zkASM/zkasm.md"
+      - Introduction: "zkEVM/zkASM/introduction.md"
+      - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
+      - Some Examples: "zkEVM/zkASM/some-examples.md"
     - State Machines:
       - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
       - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
