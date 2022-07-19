@@ -50,6 +50,8 @@ nav:
       - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
       - Hashing: "zkEVM/State-Machines/Hashing/Hashing-State-Machine-typ.md"
       - Binary: "zkEVM/State-Machines/Binary/Binary-State-Machine-typ.md"
+      - Memory: "zkEVM/State-Machines/Memory/memory-state-machine.md"
+      - Memory Align: "zkEVM/State-Machines/Memory-Align/memory-align-state-machine.md"
     - Tools & Optimizations:
       - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
     # - References: "zkEVM/references.md"
