@@ -1,40 +1,85 @@
-## Goal
+## Concept
 
-Polygon zkEVM is a zero-knowledge virtual machine (zkEVM), which is a layer 2 execution layer that can process a batch of EVM transactions and generate a zero knowledge proof for the correctness of the execution.
+Polygon zkEVM is an execution layer 2 that can process a batch of EVM transactions and generate a zero knowledge proof that efficiently proves the correctness of the execution.
 
-The core component of the zkEVM is the **zkProver** 
-
-But before delving deep into the state machines, note that the zkProver is but a component in the Polygon Hermez zkEVM, and the only one responsible for proving.
-
-In order to lay the context for the state machines, recall that the zkProver mainly interacts with two other components, the Node and the Database (DB).
+The decision of proving EVM transactions instead of creating a virtual machine with  simpler transactions is for minimizing the friction of users and dApps when using the solution. It is an approach that requires the recreation of all the EVM opcodes, which
+allows the transparent deployment of any existing Ethereum smart contract. 
+For this purpose, a new set of technologies and tools have been engineered and developed that are briefly presented below.
 
 
+## EVM Arithmetization
 
-<p align="center"><img src="fig1-zkprv-and-node.png" width="600" /></p>
-<div align="center"><b> Figure 1: zkProver and the Node </b></div>
+The first step to prove the execution correctness of an EVM transaction is to build a suitable execution trace. By a suitable execution trace, we mean a set of values that fulfill the constraints imposed by the EVM processing. The trace is expressed as a matrix, where each column has a name. Each column is interpolated into a polynomial and the correctness of the execution is finally reduced to verifying a set of identities between polynomials (columns).
+The process of designing the proper set of columns and identities is called arithmetization. The Polygon zkEVM provides an efficient arithmetization of the EVM.
 
+<!-- TODO. We could do a picture of the matrix -->
 
+## Executor and zkASM
 
-As depicted in Figure 1 above; 
+The task of creating the execution trace is performed by a component called the "Executor".
+The Executor takes as inputs the transactions of a batch, a ChainID, the root 
+of a Merkle tree representing the previous state of the zkEVM in that chain and
+the root of the new state after executing the transactions. 
+Additionally, the executor gets values 
+of the current state of the zkEVM to build the proof.
 
-Firstly, the Node sends the content of Merkle trees to the DB, to be stored there. 
+The executor is in fact an interpreter of an assembly language
+called zkASM. 
+The zkASM language is used to build a program called zkROM that 
+when executed by the Executor provides a suitable execution trace.
+In the zkROM program, each EVM opcode is implemented with a
+set of zkASM instructions. 
+Each instruction utilizes a row of the execution trace matrix, 
+also known as a "step" of the zkEVM. 
 
-Secondly, the Node sends the input transactions to the zkProver. 
+## zkProver
 
-Thirdly, the zkProver accesses the DB, fetching the information it needs to produce verifiable proofs of the transactions sent by the Node. This information consists of, among others, the Merkle roots, the keys and hashes of relevant siblings. 
+The executor is part of the **zkProver**, which is the
+core component of the Polygon zkEVM.
+The following Figure shows, at a high level, the interaction of the zkProver with the other components of the solution, which are the Node and the Database (DB):
 
-Fourthly, the zkProver generates the proofs of transactions, and sends these proofs back to the Node. 
+![Prover high level](figures/intro-zkprv-and-node.png)
 
+1. The Node sends the content of the Ethereum state and the EVM Merkle trees to the DB, to be stored there. 
 
-Our goal is to prove the correctness of the execution of a batch of transactions can be proved.
+2. The Node sends the input batch of transactions to the zkProver. 
 
-To illustrate the process of building a state machine like the EVM, whose execution correctness can be proved, 
-we need to explain the process of arithmetization o 
+3. The zkProver accesses the DB, fetching the information it needs to produce verifiable proofs of the transaction batch sent by the Node. 
 
- arithmetize the execution of EVM transactions so that
+4. The zkProver generates the proofs of transactions, and sends these proofs back to the Node. 
 
+## Polynomial Identity Language (PIL)
 
-The previous program written in an assembly language that is
-read by a program called "the executor".
-The executior generates an execution trace according to each instruction of 
-the assembly program.
+The Polynomial Identity Language (PIL) is a novel domain-specific language
+for defining the constraints of the execution trace of state machines. 
+It is used to define the name of the polynomials of the execution trace and, to describe the identities or relationships that these polynomials must fulfill to consider an execution as correct.
+
+## Modular Design
+
+The amount of columns and identities can grow beyond thousands 
+for the execution trace of complex state machines like the EVM.
+Managing such a huge matrix makes its design complex and hard to handle.
+
+To simplify this, the Polygon zkEVM uses a divide and conquer technique
+in which the execution trace is split in smaller matrices.
+Then, using a proving technique called plookup, it is possible to 
+relate rows in one matrix with rows in another matrix.
+In particular, we use inclusion and permutation.
+Inclusion checks that the rows in a matrix are
+included in another matrix.
+Permutation checks that the rows of a matrix are the same 
+rows of another matrix but in a different order.  
+
+The PIL language allows to name the columns of each matrix in which the execution trace is divided (using the keyword $\mathtt{namespace}$) and, it also allows the definition of inclusions 
+(usig the keyword $\mathtt{in}$) and permutations (with the keyword $\mathtt{is}$). 
+
+In the Polygon zkEVM, the execution trace is divided into a main matrix 
+and matrices of secondary state machines. 
+
+## Further Reading
+
+In the subsections following, simple examples of arithmetization are shown and,
+the assembly and PIL languages are introduced. 
+In posterior sections, the assembly, the PIL, and the secondary state machines are described in more detail.
+
+We must stress that this documentation is still a "Work In Progress" (WIP). In particular, some aspects are more covered than others, some components still miss an explanation, some sections are going to be greatly extended and, some other sections might be reorganized.
