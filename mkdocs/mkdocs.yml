@@ -34,6 +34,10 @@ nav:
       - "First Example: Fibonacci": "zkEVM/Architecture/fibonacci.md"
       - Simple State Machine: "zkEVM/Architecture/simple-state-machine.md"  
       - Modular Design: "zkEVM/Architecture/modular-design.md"  
+    - zkASM:
+      - Introduction: "zkEVM/zkASM/introduction.md"
+      - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
+      - Some Examples: "zkEVM/zkASM/some-examples.md"
     - PIL:
       - Introduction: "zkEVM/PIL/introduction.md"
       - Hello Word Examples: "zkEVM/PIL/hello-world-examples.md"
@@ -41,10 +45,6 @@ nav:
       - Cyclical Nature: "zkEVM/PIL/cyclical-nature.md"
       - Modularity: "zkEVM/PIL/modularity.md"
       - Advanced Features: "zkEVM/PIL/advanced-features.md"
-    - zkASM:
-      - Introduction: "zkEVM/zkASM/introduction.md"
-      - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
-      - Some Examples: "zkEVM/zkASM/some-examples.md"
     - State Machines:
       - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
       - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
