@@ -36,13 +36,15 @@ nav:
       - Modular Design: "zkEVM/Architecture/modular-design.md"  
     - PIL:
       - Polynomial Identity Language: "zkEVM/PIL/Polynomial-Identity-Language-typ.md"
+    - zkASM:
+      - Zero-Knowledge Assembly Language: "zkEVM/zkASM/zkasm.md"
     - State Machines:
       - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
       - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
       - Hashing: "zkEVM/State-Machines/Hashing/Hashing-State-Machine-typ.md"
     - Tools & Optimizations:
       - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
-    - References: "zkEVM/references.md"
+    # - References: "zkEVM/references.md"
   - Hermez 1.0:
     - About:
       - Ethereum Scalability and zk-Rollups: "Hermez_1.0/about/scalability.md"
