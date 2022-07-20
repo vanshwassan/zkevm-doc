@@ -48,6 +48,7 @@ nav:
       - Cyclical Nature: "zkEVM/PIL/cyclical-nature.md"
       - Modularity: "zkEVM/PIL/modularity.md"
       - Advanced Features: "zkEVM/PIL/advanced-features.md"
+      - Related Repositories: "zkEVM/PIL/related-repos.md"
     - State Machines:
       - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
       - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
