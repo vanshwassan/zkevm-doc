@@ -35,7 +35,7 @@ nav:
       - Simple State Machine: "zkEVM/Basic-Concepts/simple-state-machine.md"  
       - Modular Design: "zkEVM/Basic-Concepts/modular-design.md"  
     - Architecture:
-      - Introduction: "zkEVM/Architecture/introduction.md"
+      - zkProver: "zkEVM/Architecture/zkProver.md"
     - zkASM:
       - Introduction: "zkEVM/zkASM/introduction.md"
       - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
