@@ -29,15 +29,18 @@ extra:
 
 nav:
   - Polygon zkEVM:
+    - Basic Concepts:
+      - Introduction: "zkEVM/Basic-Concepts/introduction.md"
+      - "First Example: Fibonacci": "zkEVM/Basic-Concepts/fibonacci.md"
+      - Simple State Machine: "zkEVM/Basic-Concepts/simple-state-machine.md"  
+      - Modular Design: "zkEVM/Basic-Concepts/modular-design.md"  
     - Architecture:
       - Introduction: "zkEVM/Architecture/introduction.md"
-      - "First Example: Fibonacci": "zkEVM/Architecture/fibonacci.md"
-      - Simple State Machine: "zkEVM/Architecture/simple-state-machine.md"  
-      - Modular Design: "zkEVM/Architecture/modular-design.md"  
     - zkASM:
       - Introduction: "zkEVM/zkASM/introduction.md"
       - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
       - Some Examples: "zkEVM/zkASM/some-examples.md"
+      - Related Repositories: "zkEVM/zkASM/related-repos.md"
     - PIL:
       - Introduction: "zkEVM/PIL/introduction.md"
       - Hello Word Examples: "zkEVM/PIL/hello-world-examples.md"
@@ -54,8 +57,8 @@ nav:
       - Memory Align: "zkEVM/State-Machines/Memory-Align/memory-align-state-machine.md"
       - Complementaries: "zkEVM/State-Machines/Complementary/complementary-state-machines.md"
       - Configuration File: "zkEVM/State-Machines/Complementary/configuration-file.md"
-    - Tools & Optimizations:
-      - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
+    # - Tools & Optimizations:
+    #   - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
     # - References: "zkEVM/references.md"
   - Hermez 1.0:
     - About:
