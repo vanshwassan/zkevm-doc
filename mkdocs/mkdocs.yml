@@ -52,6 +52,8 @@ nav:
       - Binary: "zkEVM/State-Machines/Binary/Binary-State-Machine-typ.md"
       - Memory: "zkEVM/State-Machines/Memory/memory-state-machine.md"
       - Memory Align: "zkEVM/State-Machines/Memory-Align/memory-align-state-machine.md"
+      - Complementaries: "zkEVM/State-Machines/Complementary/complementary-state-machines.md"
+      - Configuration File: "zkEVM/State-Machines/Complementary/configuration-file.md"
     - Tools & Optimizations:
       - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
     # - References: "zkEVM/references.md"
