@@ -67,7 +67,7 @@ The mechanics of the Storage SM and its basic operations are described in detail
 
 
 
- 
+
 <!-- 
 ### Example. An UPDATE Operation
 
@@ -646,11 +646,11 @@ to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at
 
 In order to ensure that $\mathbf{L_{x}}$ actually stores the value $V_\mathbf{{x}}$; The verifier first checks key-correctness. He takes the remaining key $\text{RK} = 10100$ and, 
 
-​(a)	Concatenates $\text{kb}_\mathbf{2} = 1$, and gets $\text{ } \text{RK} \| \text{kb}_\mathbf{2} = 10100 \|1$,
+(a)	Concatenates $\text{kb}_\mathbf{2} = 1$, and gets $\text{ } \text{RK} \| \text{kb}_\mathbf{2} = 10100 \|1$,
 
-​(b)	Concatenates $\text{kb}_\mathbf{1} = 0$  to get $\text{ } \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} = 10100 \|1\|0$,
+(b)	Concatenates $\text{kb}_\mathbf{1} = 0$  to get $\text{ } \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} = 10100 \|1\|0$,
 
-​(c)	Concatenates $\text{kb}_\mathbf{0} = 0$, yielding $\text{ }  \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0} = 10100 \|1\|0\|0$. 
+(c)	Concatenates $\text{kb}_\mathbf{0} = 0$, yielding $\text{ }  \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0} = 10100 \|1\|0\|0$. 
 
 He sets $\tilde{K}_{\mathbf{x}} := 10100 \|1\|0\|0 = 10100100$. 
 Since $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$, the verifier concludes that the supplied key is correct.
@@ -777,6 +777,7 @@ A leaf therefore is henceforth constructed in two steps;
 
 - Firstly, for a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, compute the hash the value $V_\mathbf{{x}}$, 
   
+
 \begin{aligned}
   \text{Hashed Value} = \text{HV}_\mathbf{{x}} = \mathbf{H_{noleaf}}(V_\mathbf{{x}})
 \end{aligned}
@@ -817,13 +818,13 @@ Since the levels to root is 3, the prover provides; the least-significant key-bi
 The verifier first uses the least-significant bits of the key $K_{\mathbf{c}} = 10010100$ to navigate the SMT from the root, $\mathbf{{root}_{a..f}}$, to the leaf $\mathbf{L_c}$. Then, he executes the following computations;
 
 1. He computes, $\mathbf{L_c} = \mathbf{H_{leaf}}\big( \mathbf{ \text{RK}_{\mathbf{c}}} \| \text{HV}_{\mathbf{c}} \big) = \mathbf{H_{leaf}}( 10010 \| \text{HV}_{\mathbf{c}})$
-    
+  
 2. Then, he uses the sibling $\mathbf{{S}_{ab}}$ to compute, $\tilde{ \mathbf{B}}_{\mathbf{abc}} := \mathbf{H_{noleaf}} \big( \mathbf{{S}_{ab}}\|\mathbf{L}_{\mathbf{c}} \big)$.
-    
+  
 3. Next, he computes, $\tilde{ \mathbf{B}}_{\mathbf{abcd}} := \mathbf{H_{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{abc}} \| \mathbf{L}_{\mathbf{d}} \big)$.
-    
+  
 4. Now, verifier uses $\tilde{ \mathbf{B}}_{\mathbf{abcd}}$ to compute the *supposed* root,  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}}  := \mathbf{H_{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{abcd}}\| \mathbf{S}_{\mathbf{ef}} \big)$.
-    
+  
 5. Checks if $\tilde{ \mathbf{root}}_{\mathbf{ab..f}}$ equals ${ \mathbf{root}}_{\mathbf{ab..f}}$.
 
 
@@ -1755,11 +1756,11 @@ Step 1. **Computing the new leaf value**
 
 (b)	The `VALUE_LOW` $= \big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ is stored in a register called `HASH_LEFT`, whilst `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$ is stored in another register called `HASH_RIGHT`.
 
-(c)	The hashed value of $\text{V}_{0123}$ is computed using `HASH0` as, $\text{HASH0}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. Note that this is in fact, $\text{POSEIDON}\big(0\|0\|0\|0\|\text{VALUE\_LOW}\|\text{VALUE\_HIGH}\big)$. The hashed value is then stored in `HASH_RIGHT`.
+(c)	The hashed value of $\text{V}_{0123}$ is computed using `HASH0` as, $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ {\text{RIGHT}}\big)$. Note that this is in fact, $\text{POSEIDON}\big(0\|0\|0\|0\|\text{VALUE}\_ {\text{LOW}}\|\text{VALUE}\_ {\text{HIGH}}\big)$. The hashed value is then stored in `HASH_RIGHT`.
 
 (This means the `HASH_RIGHT` and the `HASH_LOW` are 'make-shift' registers. Whenever a value is stored in it, the old value that was previously stored therein is simply pushed out. They hold values only for the next computation.)
 
-(d)	Next the Rkey is copied into the `HASH_LEFT` register. And the leaf value is computed by using `HASH1` as, $\text{HASH1}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. i.e., The value of the leaf is, $\text{HASH1}\big( \text{RKey}\|\text{HashedValue}\big)$. The leaf value is then copied into another register called `NEW_ROOT`. 
+(d)	Next the Rkey is copied into the `HASH_LEFT` register. And the leaf value is computed by using `HASH1` as, $\text{HASH1}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ {\text{RIGHT}}\big)$. i.e., The value of the leaf is, $\text{HASH1}\big( \text{RKey}\|\text{HashedValue}\big)$. The leaf value is then copied into another register called `NEW_ROOT`. 
 
 
 
@@ -1773,7 +1774,7 @@ Check if the path bit that led to the leaf is 0 or 1, by using the `GetNextKeyBi
 
 (b)	The hash value of the sibling node is fetched, using the `GetSiblingHash()` function. And it is pushed into the `HASH_RIGHT` register.
 
-(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. 
+(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}} \|\text{HASH}\_{\text{RIGHT}}\big)$. 
 
 i.e., The parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{LeafValue}\|\text{SiblingHash}\big)$.
 
@@ -1783,7 +1784,7 @@ i.e., The parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{LeafValue}\|\tex
 
 (b)	The hash value of the sibling node is fetched, using the `GetSiblingHash()` function. And it is pushed into the `HASH_LEFT` register.
 
-(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH\_LEFT}\|\text{HASH\_RIGHT}\big)$. 
+(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ \text{RIGHT}\big)$. 
 
 i.e., The parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{SiblingHash}\|\text{LeafValue}\big)$. 
 
@@ -1825,7 +1826,7 @@ Actions such as;
 
    It is for the same reason, SIF Assembly utilises special registers; the `SIBLING_VALUE_HASH` and `SIBLING_RKEY`. 
 
-2. The opposite SMT Action, the `Set_DeleteFound` or `SDF`, may entail a previously extended branch being reserved. 
+2. The opposite SMT Action, the `Set_DeleteFound` or `SDF`, may entail a previously extended branch being reversed. 
 
    As in the SIF case, if a branch had been extended but now the extension needs to be reversed due to a deleted leaf value, a special routine called `SDF_ClimbBranch` is used when updating values of nodes along the newly shortened branch. This `SDF_ClimbBranch` routine is the exact same routine as the`SIF_ClimbBranch`. Similarly, the SDF Assembly code uses the `SDF_ClimbTree` as in the Set_UPDATE Assembly.
 
