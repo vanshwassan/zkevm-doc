@@ -94,7 +94,7 @@ We define a read block as the string concatenating the content of the words affe
 
 Figure 7 shows the affected read words $\mathtt{m}_0$ and $\mathtt{m}_1$ that form the affected read block and the read value $\mathtt{val}$ for a read from the EVM at address $\mathtt{0x22}$ in our example memory of Table 6.
 
-![Schema of MLOAD example](fig7-schm-mld-eg.png)
+![Schema of MLOAD example](figures/fig-schm-mld-eg.png)
 <div align="center"><b> Figure 1: Schema of MLOAD Example </b></div>
 
 Let us now introduce the flow at the time of validating a read. Suppose that we want to validate that if we perform an $\mathtt{MLOAD}$ operation at the address $\mathtt{0x22}$, we get the previous value $\mathtt{0x1f\dotsb7236e21}$. At this point, the main state machine will perform several operations. First of all, it will have to query for the values $\mathtt{m}_0$ and $\mathtt{m}_1$. Henceforth, it must call the Memory SM in order to validate the previous queries.
@@ -119,7 +119,7 @@ $$
 \mathtt{w}_0 = \mathtt{0x88d1}\color{-red!75}\mathtt{e201e6\dots}\color{black},\quad \mathtt{w}_1 = \mathtt{0x}\color{-red!75} \mathtt{662b}\color{black} \mathtt{ff\dots54f9}.
 $$
 
-![Schema of MSTORE example](fig8-schm-mstr-eg.png)
+![Schema of MSTORE example](figures/fig-schm-mstr-eg.png)
 <div align="center"><b> Figure 8: Schema of MSTORE example. </b></div>
 
 Just as before, the main state machine will need to perform several operations. We will be given an address $\mathtt{addr}$, an offset value $\mathtt{offset}$ and a value to be wrote $\mathtt{val}$. Identically as before, the Main SM will be in charge of reading the zkEVM memory to find $\mathtt{m}_0$ and $\mathtt{m}_1$ from the given address and offset. Of course, the validity of this query should be performed with a specific Plookup into the Memory SM, just as before.

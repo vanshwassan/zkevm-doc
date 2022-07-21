@@ -55,7 +55,7 @@ A generic state machine is characterised by; sets of states (as inputs) stored i
 A state machine can be monolithic, where it is a prototype of one particular computation, while others may specialise with certain types of computations. Depending on the computational algorithm, a state machine may have to run through a number of state transitions before producing the desired output. Iterations of the same sequence of operations may be required, to the extend that most common state machines are cyclic by nature.
 
 
-![Figure 1: A Generic State Machine](fig0-gen-state-mchn.png)
+![Figure 1: A Generic State Machine](figures/fig-gen-state-mchn.png)
 <div align="center"><b> Figure 1: A Generic State Machine </b></div>
 
 
@@ -126,7 +126,7 @@ See Figure 2 below, for an illustration of this UPDATE operation, using the $\te
 
 
 
-![Figure 2: Value UPDATE Example](fig0-updt-mkl-tree.png)
+![Figure 2: Value UPDATE Example](figures/fig-updt-mkl-tree.png)
 <div align="center"><b> Figure 2: Value UPDATE Example </b></div>
 
 
@@ -177,7 +177,7 @@ $\mathbf{H}$
 3. The root is  $\mathbf{root}_{\mathbf{a..h}} = \mathbf{H} \big(\mathbf{B}_{\mathbf{abcd}}\| \mathbf{B}_{\mathbf{efgh}} \big)$.
 
 
-![Figure 3: A Merkle Tree Example](fig1-mkl-tree-gen1.png)
+![Figure 3: A Merkle Tree Example](figures/fig-mkl-tree-gen.png)
 <div align="center"><b> Figure 3: A Merkle Tree Example </b></div>
 
 
@@ -291,7 +291,7 @@ Suppose that the key, $K_{\mathbf{a}} = 11010110$. In order to build a binary SM
 See, Figure 4 below, for the SMT representing the single key-value pair $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$, where  $K_{\mathbf{a}} = 11010110$.
 
 
-![Figure 4: A Single key-value pair SMT](fig3-sngl-kv-eg.png)
+![Figure 4: A Single key-value pair SMT](figures/fig-sngl-kv-eg.png)
 <div align="center"><b> Figure 4: A Single key-value pair SMT </b></div>
 
 
@@ -332,7 +332,7 @@ To build a binary SMT with this two key-values, $(K_{\mathbf{a}}, \text{V}_{\mat
 See, Figure 5(a) below, for the SMT representing the two key-value pairs $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$ and $(K_{\mathbf{b}}, \text{V}_{\mathbf{b}})$, where  $K_{\mathbf{a}} = 11010110$ and $K_{\mathbf{b}} = 11010101$.
 
 
-![Figure 5(a): Two key-value pairs SMT - Case 1](fig4a-mpt-2kv-eg.png)
+![Figure 5(a): Two key-value pairs SMT - Case 1](figures/fig-a-mpt-kv-eg.png)
 <div align="center"><b> Figure 5(a): Two key-value pairs SMT - Case 1 </b></div>
 
 
@@ -360,7 +360,7 @@ To build a binary SMT with this two key-values, $(K_{\mathbf{a}}, \text{V}_{\mat
 See, Figure 5(b) below, depicting the SMT representing the two key-value pairs $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$ and $(K_{\mathbf{b}}, \text{V}_{\mathbf{b}})$, where  $K_{\mathbf{a}} = 11010100$ and $K_{\mathbf{b}} = 11010110$. 
 
 
-![Figure 5(b): Two key-value pairs SMT - Case 2](fig4b-mpt-2kv-eg.png)
+![Figure 5(b): Two key-value pairs SMT - Case 2](figures/fig-b-mpt-kv-eg.png)
 <div align="center"><b> Figure 5(b): Two key-value pairs SMT - Case 2 </b></div>
 
 
@@ -393,7 +393,7 @@ See, Figure 5(c) below, depicting the SMT representing the two key-value pairs $
 
 
 
-![Figure 5(c): Two key-value pairs SMT - Case 3](fig4c-mpt-2kv-eg.png)
+![Figure 5(c): Two key-value pairs SMT - Case 3](figures/fig-c-mpt-kv-eg.png)
 <div align="center"><b> Figure 5(c): Two key-value pairs SMT - Case 3 </b></div>
 
 
@@ -443,7 +443,7 @@ $\text{lvl}(\mathbf{L}_{\mathbf{e}}) = 2$, $\text{lvl}(\mathbf{L}_{\mathbf{f}}) 
 
  
 
-![Figure 6: An SMT of 7 key-value pairs](fig2-mpt-gen-eg.png)
+![Figure 6: An SMT of 7 key-value pairs](figures/fig-mpt-gen-eg.png)
 <div align="center"><b> Figure 6: An SMT of 7 key-value pairs </b></div>
 
 
@@ -514,7 +514,7 @@ Verifier is unaware that $V_{\mathbf{fk}}$ is in fact the concatenated value of 
 
 
 
-![Figure 7: MPT - Fake Leaf Attack](fig6-fake-leaf-eg1.png)
+![Figure 7: MPT - Fake Leaf Attack](figures/fig-fake-leaf-eg.png)
 <div align="center"><b> Figure 7: MPT - Fake Leaf Attack </b></div>
 
 
@@ -639,7 +639,7 @@ to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at
 
 
 
-![Figure 8: Non-binding Key-Value Pairs](fig7-non-binding-eg0.png)
+![Figure 8: Non-binding Key-Value Pairs](figures/fig-non-binding-eg.png)
 <div align="center"><b> Figure 8: Non-binding Key-Value Pairs</b></div>
 
 
@@ -808,7 +808,7 @@ Consider an SMT where the keys are 8-bit long, and the prover commits to the key
 
 
 
-![Figure 9 : ZK Merkle Proof Example](fig8-zk-mkl-prf.png)
+![Figure 9 : ZK Merkle Proof Example](figures/fig-zk-mkl-prf.png)
 <div align="center"><b> Figure 9 : ZK Merkle Proof Example </b></div>
 
 
@@ -896,7 +896,7 @@ He then checks if  $\mathbf{{\tilde{root}}_{ab0}} = \mathbf{{root}_{ab0}}$. If t
 
 
 
-![Figure 10: Key Not Set Example](fig9-key-not-set-eg.png)
+![Figure 10: Key Not Set Example](figures/fig-key-not-set-eg.png)
 <div align="center"><b> Figure 10: Key Not Set Example </b></div>
 
 
@@ -1004,7 +1004,7 @@ Consider the SMT given in Figure 11 below.
 
 
 
-![Figure 11: Value UPDATE Example](fig10-val-update-eg.png)
+![Figure 11: Value UPDATE Example](figures/fig-val-update-eg.png)
 <div align="center"><b> Figure 11: Value UPDATE Example </b></div>
 
 
@@ -1076,7 +1076,7 @@ At this stage the verifier checks if this is indeed a zero node;
 
 
 
-![Figure 12: CREATE Operation - Zero Node](fig11-crt-zero-node.png)
+![Figure 12: CREATE Operation - Zero Node](figures/fig-crt-zero-node.png)
 <div align="center"><b> Figure 12: CREATE Operation - Zero Node </b></div>
 
 
@@ -1161,7 +1161,7 @@ Therefore, no further extension is necessary. And the CREATE Operation is comple
 
 
 
-![Figure 13(a): CREATE Operation - Non-zero Leaf Node](fig12a-crt-nzleaf-1ext.png)
+![Figure 13(a): CREATE Operation - Non-zero Leaf Node](figures/fig-a-crt-nzleaf-ext.png)
 <div align="center"><b> Figure 13(a): CREATE Operation - Non-zero Leaf Node </b></div>
 
 
@@ -1221,7 +1221,7 @@ The leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ are now made child-nodes of t
 
 
 
-![Figure 13(b): CREATE Operation - Three Branch Extensions](fig12b-crt-nzleaf-3xt.png)
+![Figure 13(b): CREATE Operation - Three Branch Extensions](figures/fig-b-crt-nzleaf-xt.png)
 <div align="center"><b> Figure 13(b): CREATE Operation - Three Branch Extensions </b></div>
 
 
@@ -1304,7 +1304,7 @@ Since the sibling $\mathbf{L_a}$ is not a zero node, the hashed value $\text{HV}
 See the above DELETE Operation illustrated in Figure 13(a) below, and notice how the SMT maintains its original shape. 
 
 
-![Figure 14(a): DELETE Operation - Non-Zero Sibling](fig13a-dlt-nz-sib.png)
+![Figure 14(a): DELETE Operation - Non-Zero Sibling](figures/fig-a-dlt-nz-sib.png)
 <div align="center"><b> Figure 14(a): DELETE Operation - Non-Zero Sibling </b></div>
 
 
@@ -1333,7 +1333,7 @@ Notice that, in this example, the DELETE Operation alters the topology of the SM
 
 
 
-![Figure 14(b): DELETE Operation - Zero Sibling](fig13b-dlt-z-sib.png)
+![Figure 14(b): DELETE Operation - Zero Sibling](figures/fig-b-dlt-z-sib.png)
 <div align="center"><b> Figure 14(b): DELETE Operation - Zero Sibling </b></div>
 
 
@@ -1420,7 +1420,7 @@ That is, the Navigation Path to the leaf corresponding to $\text{Key}_{\mathbf{0
 
 
 
-![Figure 15 : Navigation Path Derivation](fig14-path-frm-key.png)
+![Figure 15 : Navigation Path Derivation](figures/fig-path-frm-key.png)
 <div align="center"><b> Figure 15 : Navigation Path Derivation </b></div>
 
 
@@ -1581,7 +1581,7 @@ $\text{POSEIDON}^{\pi}$ runs 30 rounds, 3 times. Adding up to a total of 90 roun
 
 
 
-![Figure 16 : POSEIDON HASH0 ](fig15-posdn-eg.png)
+![Figure 16 : POSEIDON HASH0 ](figures/fig-posdn-eg.png)
 <div align="center"><b> Figure 16 : POSEIDON HASH0 </b></div>
 
 
@@ -1892,6 +1892,8 @@ The preparation for these polynomial constraints actually starts in the Storage 
 
 <div align="center"><b> Table 2: Boolean Polynomials For Execution Tracing </b></div>
 
+<center>
+
 | Selectors              | Setters                | Instructions      |
 | :--------------------- | :--------------------- | :---------------- |
 | selFree[i]             | setHashLeft[i]         | iHash             |
@@ -1909,7 +1911,7 @@ The preparation for these polynomial constraints actually starts in the Storage 
 |                        |                        | iConst3           |
 |                        |                        | iAddress          |
 
-  
+</center>  
 
 Everytime each of these Boolean polynomials are utilised or performed, a record of a "1" is kept in its register. This is called an **execution trace**. 
 
