@@ -1701,12 +1701,12 @@ The Set_UPDATE zkASM code, first initialises the `LEVEL` register to `(1,0,0,0)`
 
 Then uses the `GetLevelBit()` function to read the two least-significant bits of the leaf level, which happens in two cases, each with its own two subcases;
 
-- ***Case 1***. If the least-significant bit of leaf level is `0`, then the `GetLevelBit()` function is used again to read the second least-significant bit of the leaf level.
+-  ***Case 1***. If the least-significant bit of leaf level is `0`, then the `GetLevelBit()` function is used again to read the second least-significant bit of the leaf level.
 
   - ***Subcase 1.1***: If the second least-significant bit of the leaf level is `0`, it means the leaf level is a multiple of 4, which is equivalent to 0 because leaf level works in `modulo` 4. So, the `LEVEL` register must remain as `(1,0,0,0)`.
   - ***Subcase 1.2***:  If the second least-significant bit of the leaf level is `1`, it means the leaf level in its binary form ends with a `10`. Hence, leaf level is a number of the form `2 + 4k`, for some positive integer `k`. As a result, the `LEVEL` register must be rotated to the position, `(0,0,1,0)`. The code therefore applies `ROTATE_LEVEL` twice to `LEVEL = (1,0,0,0)` in order to bring it to `(0,0,1,0)`.    
 
-- ***Case 2***. If the least-significant bit of leaf level is `1`, then;
+-  ***Case 2***. If the least-significant bit of leaf level is `1`, then;
 
   The `LEVEL` register is rotated three times to the left, using ROTATE_LEVEL, and bringing the `LEVEL` register to `(0,1,0,0)`. 
 
@@ -1913,6 +1913,3 @@ The preparation for these polynomial constraints actually starts in the Storage 
 Everytime each of these Boolean polynomials are utilised or performed, a record of a "1" is kept in its register. This is called an **execution trace**. 
 
 Therefore, instead of performing some expensive computations in order to verify correctness of execution (at times repeating the same computations being verified), the trace of execution is tested. The verifier takes the execution trace, and tests if it satisfies the polynomial constraints (or identities) in the PIL code. This technique helps the zkProver to achieve succintness as a zero-knowledge proof/verification system.
-
-
-

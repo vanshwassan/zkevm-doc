@@ -26,7 +26,7 @@ mkdocs serve
 
 ## Clone repo
 ```
-git clone https://github.com/hermeznetwork/docs.git
+git clone https://github.com/0xPolygonHermez/zkevm-doc.git
 ```
 ## Go to mkdocs folder
 ```
