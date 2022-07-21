@@ -58,7 +58,7 @@ Figure 1 shows these codifications for 3-bit strings but the idea can be easily 
 
 
 
-![Codifications of 3-bit strings for signed and unsigned integers as used by the EVM ](fig1-cdfctn-3bit-strngs.png)
+![Codifications of 3-bit strings for signed and unsigned integers as used by the EVM ](figures/fig-cdfctn-3bit-strngs.png)
 <div align="center"><b> Figure 1: Codifications of 3-bit strings for signed and unsigned integers as used by the EVM </b></div>
 
 
@@ -110,7 +110,7 @@ On the other hand, the $\text{AND}$, $\text{OR}$, $\text{XOR}$ and $\text{NOT}$ 
 Table 1 depicts the truth tables of $\text{AND}$, $\text{OR}$ and $\text{XOR}$ operators, respectively.
 
 
-![Truth Tables of bit-wise operations](fig2-trth-tbls-bitws.png)
+![Truth Tables of bit-wise operations](figures/fig-trth-tbls-bitws.png)
 <div align="center"><b> Table 1: Truth Tables of bit-wise operations </b></div>
 
 

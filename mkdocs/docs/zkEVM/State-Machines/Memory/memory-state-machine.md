@@ -184,7 +184,7 @@ There are various important details to remark from the point in which all memory
 - $\textbf{Remark}$. Notice that $\texttt{step}$ can take values beyond $N$ and that the value of $\texttt{step}$ after the row of the last address can coincide with a previous value. As we will show in the next section, where we describe the constraints, these facts do not cause any issue.
 - $\texttt{val[0..7]}$ are all set to $0$ until the last row.
 
-![](figures/fig-tbl6-exec-trc.png)
+![Complete Memory SM Execution Trace](figures/fig-exec-trc.png)
 <div align="center"><b> Table 6: Complete Memory SM execution trace for our example. </b></div>
 
 ## Constraints
