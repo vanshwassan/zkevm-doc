@@ -93,7 +93,10 @@ and build the parsers
 $ npm run build
 ```
 
-The resulting .json is in charge of representing all the identities and operations 
-among all the registers. The used values are input freely from the executor or taken 
-from the .json compiled by the zkASM compiler. This .json will be finally used in 
-the STARK proof generation, which will prove all the specified constrains. 
+Among all the contents of the .json file, there is a key called `expressions` which 
+is an array containing all the identities and operations among the corresponding
+polynomials defined by the zkExecutor. The used values are input freely from the 
+executor or taken from the .json compiled by the zkASM compiler. Moreover, there 
+exists other keys which represent all inclusion, permutation and copy constrain
+arguments. This .json will be finally used in the STARK proof generation, which 
+will prove all the specified constrains. 
