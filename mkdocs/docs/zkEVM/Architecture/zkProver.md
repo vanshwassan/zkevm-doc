@@ -93,6 +93,21 @@ and build the parsers
 $ npm run build
 ```
 
+First of all, the resulting .json file specifies, under the `references` key, 
+all the polynomials that are references in the .pil file. The `references` key-value 
+stores, in its keys, the name and the namespace associated to each polynomial in
+the form `nameSpace.name`. Each value describes a property associated to each polynomial
+such:
+
+- `type`: specifies if a certain polynomial is commited, constant, calculated...
+
+- `id`: unique *id* associated to each polynomial.
+
+- `polDeg`: reflects the resulting polynomial degree.
+
+- `isArray`: flag to control array-based polynomial definitions 
+(see [PIL Components](../PIL/components.md) for more information). 
+
 Among all the contents of the .json file, there is a key called `expressions` which 
 is an array containing all the identities and operations among the corresponding
 polynomials defined by the zkExecutor. The used values are input freely from the 
@@ -100,3 +115,10 @@ executor or taken from the .json compiled by the zkASM compiler. Moreover, there
 exists other keys which represent all inclusion, permutation and copy constrain
 arguments. This .json will be finally used in the STARK proof generation, which 
 will prove all the specified constrains. 
+
+Another important key fields for debugging purposes are
+
+- `nCommitements`: which specifies the total number of commited polynomials. 
+ 
+- `nConstants`: which specifies the total number of constant polynomials 
+referenced in the PIL file. 
