@@ -23,21 +23,3 @@ At the mkdocs directory execute:
 ```
 mkdocs serve
 ```
-
-
-# Other option for deploying static content on server
-
-## Clone repo
-```
-git clone https://github.com/0xPolygonHermez/zkevm-doc.git
-```
-## Go to mkdocs folder
-```
-cd mkdocs
-```
-
-## Deploy static content
-```
-../pull-and-build-mkdocs.sh
-```
-This automatically pulls last changes, and builds mkdocs static content.
