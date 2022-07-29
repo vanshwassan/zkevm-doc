@@ -12,6 +12,11 @@ theme:
     - navigation.tracking
 repo_url: https://github.com/hermeznetwork/zkevmdoc
 markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
   - pymdownx.arithmatex:
       generic: true
 extra_javascript:
