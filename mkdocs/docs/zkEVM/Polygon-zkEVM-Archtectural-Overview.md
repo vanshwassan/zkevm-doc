@@ -326,3 +326,15 @@ The Polygon zkEVM repositories can be found at [Polygon Hermez](https://github.c
 
 The repositories listed below are the core repositories as well as repositories for tools and libraries of interest. The rest of the repos can be found [here](https://github.com/orgs/0xPolygonHermez/repositories?type=all).   
 
+
+
+| Core Repos                                                   | Specific Tools & Libraries                                   | Generic Tools & Libraries                                 |
+| :----------------------------------------------------------- | :----------------------------------------------------------- | --------------------------------------------------------- |
+| [zkevm-proverjs](https://github.com/0xPolygonHermez/zkevm-proverjs) | [zkevm-commonjs](https://github.com/0xPolygonHermez/zkevm-commonjs) | [pilcom](https://github.com/0xPolygonHermez/pilcom)       |
+| [zkevm-rom](https://github.com/0xPolygonHermez/zkevm-rom)    | [zkasmcom](https://github.com/0xPolygonHermez/zkasmcom)      | [pil-stark](https://github.com/0xPolygonHermez/pil-stark) |
+| [zkevm-prover](https://github.com/0xPolygonHermez/zkevm-prover) | [zkevm-testvectors](https://github.com/0xPolygonHermez/zkevm-testvectors) |                                                           |
+| [zkevm-node](https://github.com/0xPolygonHermez/zkevm-node)  | [zkevm-storagerom](https://github.com/0xPolygonHermez/zkevm-storage-rom) |                                                           |
+| [zkevm-contracts](https://github.com/0xPolygonHermez/zkevm-contracts) |                                                              |                                                           |
+| [zkevm-bridge-service](https://github.com/0xPolygonHermez/zkevm-bridge-service) |                                                              |                                                           |
+| [zkevm-bridge-ui](https://github.com/0xPolygonHermez/zkevm-bridge-ui) |                                                              |                                                           |
+| [zkevm-doc](https://github.com/0xPolygonHermez/zkevm-doc)    |                                                              |                                                           |

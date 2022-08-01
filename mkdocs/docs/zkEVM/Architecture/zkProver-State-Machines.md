@@ -32,7 +32,7 @@ In order to lay the context for the state machines, recall that the zkProver mai
 
 
 
-<p align="center"><img src="fig1-zkprv-and-node.png" width="600" /></p>
+<p align="center"><img src="figures/fig1-zkprv-and-node.png" width="600" /></p>
 <div align="center"><b> Figure 1: zkProver and the Node </b></div>
 
 
@@ -83,7 +83,7 @@ These instructions dictate how a state should transition in a state machine. How
 
 
 
-<p align="center"><img src="fig2-actions-sec-sm.png" width="800" /></p>
+<p align="center"><img src="figures/fig2-actions-sec-sm.png" width="800" /></p>
 <div align="center"><b> Figure 2: The Main SM Executor's Instructions </b></div>
 
 
@@ -147,7 +147,7 @@ The hardware part, which speaks the Polynomial Identity Language (PIL), defines 
 
 
 
-<p align="center"><img src="fig-micro-pro-pic.png" width="800" /></p>
+<p align="center"><img src="figures/fig-micro-pro-pic.png" width="800" /></p>
 <div align="center"><b> Figure 3 : Micro-Processor State Machine </b></div>
 
 
@@ -231,7 +231,7 @@ Although not all verification involves a Plookup, the diagram below, briefly ill
 
 
 
-<p align="center"><img src="plook-ops-mainSM-copy.png" width="800" /></p>
+<p align="center"><img src="figures/plook-ops-mainSM-copy.png" width="800" /></p>
 <div align="center"><b> Figure 4: Plookup and the zkProver State Machines </b></div>
 
 
@@ -351,7 +351,7 @@ and then generate a zk-SNARK proof.
 
 
 
-<p align="center"><img src="fig5-main-prts-zkpr.png" width="800" /></p>
+<p align="center"><img src="figures/fig5-main-prts-zkpr.png" width="800" /></p>
 <div align="center"><b> Figure 5: Simplified Data Flow in the zkProver </b></div>
 
 
