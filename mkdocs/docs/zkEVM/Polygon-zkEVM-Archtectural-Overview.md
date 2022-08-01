@@ -1,12 +1,12 @@
+# An In-depth Overview of Polygon zkEVM
 
 
 
+A fully developed zero-knowledge Ethereum Virtual Machine (zkEVM) was considered impossible to accomplish, not within the next two or three years. Yet Polygon team has open-sourced its alpha zkEVM. The announcement was made at EthCC[5]. All code has since been published, for public scrutiny.
 
-# Polygon zkEVM's Archtectural Overview
+Although this documentation is still **Work In Progress** (WIP), it is published in the same spirit, of allowing the community of developers to meaningfully participate in this phenomenon.
 
-
-
-This document presents a high-level description of the Polygon zkEVM, its main components, as well as its overall design. It also highlights adopted design strategies so as to ensure that the Polygon zkEVM solves the blockchain trilemma; Scalability, Security and Decentralisation.
+In this document the team presents a high-level description of the Polygon zkEVM, its main components, as well as its overall design. Design strategies adopted to ensure that Polygon zkEVM solves the blockchain trilemma; Scalability, Security and Decentralisation; are also highlighted.
 
 
 
@@ -325,17 +325,4 @@ The next step is to prepare for a public testnet. Although it is difficult to se
 The Polygon zkEVM repositories can be found at [Polygon Hermez](https://github.com/0xPolygonHermez). 
 
 The repositories listed below are the core repositories as well as repositories for tools and libraries of interest. The rest of the repos can be found [here](https://github.com/orgs/0xPolygonHermez/repositories?type=all).   
-
-
-
-| Core Repos                                                   | Specific Tools & Libraries                                   | Generic Tools & Libraries                                 |
-| :----------------------------------------------------------- | :----------------------------------------------------------- | --------------------------------------------------------- |
-| [zkevm-proverjs](https://github.com/0xPolygonHermez/zkevm-proverjs) | [zkevm-commonjs](https://github.com/0xPolygonHermez/zkevm-commonjs) | [pilcom](https://github.com/0xPolygonHermez/pilcom)       |
-| [zkevm-rom](https://github.com/0xPolygonHermez/zkevm-rom)    | [zkasmcom](https://github.com/0xPolygonHermez/zkasmcom)      | [pil-stark](https://github.com/0xPolygonHermez/pil-stark) |
-| [zkevm-prover](https://github.com/0xPolygonHermez/zkevm-prover) | [zkevm-testvectors](https://github.com/0xPolygonHermez/zkevm-testvectors) |                                                           |
-| [zkevm-node](https://github.com/0xPolygonHermez/zkevm-node)  | [zkevm-storagerom](https://github.com/0xPolygonHermez/zkevm-storage-rom) |                                                           |
-| [zkevm-contracts](https://github.com/0xPolygonHermez/zkevm-contracts) |                                                              |                                                           |
-| [zkevm-bridge-service](https://github.com/0xPolygonHermez/zkevm-bridge-service) |                                                              |                                                           |
-| [zkevm-bridge-ui](https://github.com/0xPolygonHermez/zkevm-bridge-ui) |                                                              |                                                           |
-| [zkevm-doc](https://github.com/0xPolygonHermez/zkevm-doc)    |                                                              |                                                           |
 

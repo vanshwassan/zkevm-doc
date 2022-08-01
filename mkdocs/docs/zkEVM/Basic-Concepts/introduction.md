@@ -1,8 +1,8 @@
-We must stress that this documentation is still a **Work In Progress** (WIP). In particular, some aspects are more covered than others, some components still miss an explanation, some sections are going to be greatly extended and, some other sections might be reorganized.
+We would like to emphasise that this documentation is still **Work In Progress** (WIP). Some aspects have been covered in more detail, while others still need further expansion. Also, sections of this documentation might later be reorganized in order to achieve better flow.
 
 ## Concept
 
-Polygon zkEVM is an execution layer 2 that can process a batch of EVM transactions and generate a zero knowledge proof that efficiently proves the correctness of the execution.
+Polygon zkEVM is zk-rollup that executes smart contracts transparently, by publishing zero-knowledge validity proofs, while maintaining opcode compatibility with the Ethereum Virtual Machine.
 
 The decision of proving EVM transactions instead of creating a virtual machine with  simpler transactions is for minimizing the friction of current Ethereum users and dApps when using the solution. It is an approach that requires the recreation of all the EVM opcodes, which
 allows the transparent deployment of any existing Ethereum smart contract. 

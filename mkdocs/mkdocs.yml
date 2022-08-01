@@ -28,13 +28,14 @@ extra:
       link: https://hermez.io/
 
 nav:
-  - Polygon zkEVM:
+  - Polygon zkEVM: "zkEVM/Polygon-zkEVM-Archtectural-Overview.md"
     - Basic Concepts:
       - Introduction: "zkEVM/Basic-Concepts/introduction.md"
       - "First Example: Fibonacci": "zkEVM/Basic-Concepts/fibonacci.md"
       - Simple State Machine: "zkEVM/Basic-Concepts/simple-state-machine.md"  
       - Modular Design: "zkEVM/Basic-Concepts/modular-design.md"  
     - Architecture:
+      - zkProver State Machines: "zkEVM/Architecture/zkProver-State-Machines.md"
       - zkProver: "zkEVM/Architecture/zkProver.md"
     - zkASM:
       - Introduction: "zkEVM/zkASM/introduction.md"
