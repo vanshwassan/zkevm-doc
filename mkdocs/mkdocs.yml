@@ -28,7 +28,7 @@ extra:
       link: https://hermez.io/
 
 nav:
-  - Polygon zkEVM: "zkEVM/Polygon-zkEVM-Archtectural-Overview.md"
+  - Polygon zkEVM:
     - Basic Concepts:
       - Introduction: "zkEVM/Basic-Concepts/introduction.md"
       - "First Example: Fibonacci": "zkEVM/Basic-Concepts/fibonacci.md"
