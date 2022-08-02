@@ -1,8 +1,3 @@
-[ToC]
-
-
-
-
 
 # zkProver State Machines - An Overview
 
@@ -123,13 +118,12 @@ zkASM codes take instructions from the Main SM and generate prescriptive assembl
 
 The Polynomial Identity Language (or PIL) is especially designed for the zkProver, because almost all state machines express computations in terms of polynomials. State transitions in state machines must therefore satisfy computation-specific polynomial identities.
 
-All PIL codes, in the zkProver's state machines, form the very DNA of the verifier code. 
-
 Recall that the aim of this project is creating the most effective solution to the Blockchain Trilemma; Privacy, Secure and Scalable. And its context is that of an efficient Zero-Knowledge Commitment Scheme. Since the most secure and efficient commitment schemes are the Polynomial Commitment Schemes, it was expedient to translate computations into some polynomial language, where verification boils down to testing whether execution satisfies certain polynomial identities.
 
+All PIL codes, in the zkProver's state machines, therefore form the very DNA of the verifier code. 
 
 
-These two languages, zkASM and PIL, were designed mindful of prospects for broader adoption outside Polygon Hermez.
+These two languages, zkASM and PIL, were designed mindful of prospects for broader adoption outside Polygon zkEVM.
 
 
 
@@ -154,9 +148,7 @@ The hardware part, which speaks the Polynomial Identity Language (PIL), defines 
 
 Although these two micro-processor SMs, the Main SM and the Storage SM, have the same look and feel, they differ considerably.
 
-For instance, the Storage SM specialises with execution of Storage Actions (also called SMT Actions), whilst the Main SM is responsible a wider range of Actions. Nevertheless the Main SM delegates most of these Actions to specialist state machines.
-
-And, of course, the Storage SM remains secondary in that it also receives instructions from the Main SM, and not conversely.
+For instance, the Storage SM specialises with execution of Storage Actions (also called SMT Actions), whilst the Main SM is responsible for a wider range of Actions. Nevertheless the Main SM delegates most of these Actions to specialist state machines. And, of course, the Storage SM remains secondary in that it also receives instructions from the Main SM, and not conversely.
 
 It is worth noting that each of these micro-processor SMs has its own ROM.
 
@@ -223,9 +215,9 @@ Here is a step-by-step outline of how the system achieves proof/verification of 
 - 'Prover' uses a specific polynomial commitment scheme to commit and prove knowledge of the committed polynomials,
 - [Plookup](https://eprint.iacr.org/2020/315.pdf) is one of the ways to check if the Prover's commited polynomials produce correct traces.
 
-While the polynomial constraints are written in the PIL language, the instructions that are initially zk-assembly but subsequently expressed and stored in JSON format.
+While the polynomial constraints are written in the PIL language, the instructions are initially written in zk-assembly but subsequently expressed and stored in JSON format.
 
-The above outline of the proof/verification procedure was explained in this [blogpost](https://blog.hermez.io/zkevm-documentation/), and further detailed in the documentation [here](https://docs.hermez.io/zkEVM/architecture/introduction/).
+The above outline of the proof/verification procedure was explained in this [blogpost](https://blog.hermez.io/zkevm-documentation/), and further detailed in the documentation [here](https://docs.hermez.io/zkEVM/Basic-Concepts/simple-state-machine/).
 
 Although not all verification involves a Plookup, the diagram below, briefly illustrates the wide role Plookup plays in the zkProver.
 
@@ -246,8 +238,7 @@ Although not all verification involves a Plookup, the diagram below, briefly ill
 
 
 
-
-The zkProver has the following four components; 
+For the sake of simplicity, one can think of the zkProver as being composed of the following four components; 
 
 1. The Executor, which is the Main State Machine Executor
 2. The STARK Recursion Component
@@ -256,7 +247,7 @@ The zkProver has the following four components;
 
 
 
-In what follows is how, in the nutshell, the zkProver uses these components to generates verifiable proofs. Figure 5 below, surmises the process. 
+In the nutshell, the zkProver uses these four components to generates verifiable proofs. Figure 5 below surmises the process. 
 
 
 
@@ -271,11 +262,9 @@ The Executor is in fact the Main SM Executor. It takes as inputs; the transactio
 The executor also needs; 
 
 1. The PIL, which is the list of polynomials, the list of the registers, and
-2. The ROM, which stores the list of instructions about execution.
+2. The ROM, which stores the list of instructions pertaining to execution.
 
-So, with this input, the Executor executes this program on top of this hardware (i.e., the PIL) and generates the committed polynomials; which are the state machine cycles, or a list of all the states. It also generates some public data.
-
-Public data forms part of the input to the zk-SNARK verifier.
+So, with these inputs, the Executor executes all instructions on top of the PIL hardware and generates the committed polynomials; which are the state machine cycles, or a list of all the states. It also generates some public data,which forms part of the input to the zk-SNARK verifier.
 
 A full description of the Executor can be found in the Main State Machine's individual document.
 
@@ -303,7 +292,9 @@ The component is referred to as the STARK Recursion, because;
 
 (b) Collates them into bundles of a few zk-STARK proofs, 
 
-(c) And produced a further zk-STARK proof of each bundle.
+(c) And produces a further zk-STARK proof of each bundle,
+
+(d) The resulting zk-STARK proofs of the bundle are also collated and proved with only one zk-STARK proof.
 
 This way, hundreds of zk-STARK proofs are represented and proved with only one zk-STARK proof.
 
@@ -315,7 +306,7 @@ This way, hundreds of zk-STARK proofs are represented and proved with only one z
 
 
 
-The zk-STARK proof produced by the STARK Recursion Component is the input to a CIRCOM component.
+The single zk-STARK proof produced by the STARK Recursion Component is the input to a CIRCOM component.
 
 CIRCOM is a [circuits library](https://github.com/socathie/circomlib-ml) used in the zkProver to generate the *witness* for the zk-STARK proof produced by the STARK Recursion Component.
 
@@ -326,7 +317,7 @@ The original CIRCOM [paper](https://www.techrxiv.org/articles/preprint/CIRCOM_A_
 
 Arithmetic circuits are mostly used as standard models for studying the complexity of computations involving polynomials.
 
-That being said, the CIRCOM component takes as inputs; the zk-STARK proof from the Batch Machine Executor and the Verifier Data; in order to produce a *witness*. This witness is in fact an Arithmetic circuit expressed in terms of its R1CS constraints.  
+That being said, the CIRCOM component takes as inputs; the zk-STARK proof from the STARK Recursion Component and the Verifier Data; in order to produce a *witness*. This witness is in fact an Arithmetic circuit expressed in terms of its R1CS constraints.  
 
 
 
@@ -356,6 +347,6 @@ and then generate a zk-SNARK proof.
 
 
 
-
+#### A Strategy To Achieving Succinctness
 
 zk-STARK proofs are used because of their speed, and they require no trusted setup. They are however a lot more sizable compared to zk-SNARK proofs. It is for this reason, and the succinctness of the zk-SNARKs, that the zkProver uses a zk-SNARK to attest to the correctness of the zk-STARK proofs. zk-SNARKs are therefore published as the validity proofs to state changes. This strategy has huge benefits as it causes gas costs to reduce from 5M to 350K.
