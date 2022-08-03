@@ -29,6 +29,8 @@ Recall that registers are, in fact, composed of $4$ columns. Hence, for instance
       \end{tabular}
   \end{figure} -->
 
+# Introduction
+
 Ethereum is a state machine that transitions from an old state to a new state by reading a series of transactions. In order to interpret a set of EVM opcodes, it is a natural choice to design another state machine as an interpreter. One should think of it as building a state machine inside another state machine, or more concretely, building an Ethereum inside Ethereum itself. The distinction here is that the former contains a virtual machine, the zkEVM, that is zero-knowledge friendly.
 
 ## The zkEVM as a Microprocessor
