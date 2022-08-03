@@ -1,3 +1,5 @@
+
+# zkASM: The Basic Syntax
 This section is dedicated to explaining the basic syntax of zkASM from a high-level point of view. The advanced syntax is totally dependent of the use case (e.g., the design of a zkEVM) and will be explained in more detail with examples in a later section.
 
 It is important to remark that each instruction of the zkASM is executed sequentially (the exception being the execution of a jump): one after the other. Instructions are depicted line-by-line and are divided into two parts. The left side part includes the part of the code that actually gets executed in the corresponding file, while the right part is related to the execution of opcodes, jumps and subroutines and is indicated by the colon "$:$" symbol.
