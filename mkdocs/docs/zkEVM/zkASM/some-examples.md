@@ -1,8 +1,10 @@
+# zkASM Examples
+
 This section serves as a compendium of useful examples.
 
 ## EVM ADD
 
-Let's take the EVM ADD opcode as our first introductional example:
+Let us take the `EVM ADD` opcode as our introductory example:
 
 ```
 opADD:
@@ -22,21 +24,21 @@ opADD:
                     :JMP(readCode)
 ```
 
-Let us explain in detail how the ADD opcode gets interpreted by us. Recall that at the beginning the stack pointer is pointing to the next "empty" address in the stack:
+Let us explain in detail how the ADD opcode gets interpreted by us. Recall that, in the beginning, the stack pointer is pointing to the next "empty" address in the stack:
 
-1. First, we check if the stack is filled "properly" in order to carry on the ADD operation. This means that, as the ADD opcode needs two elements to operate, it is checked that these two elements are actually in the stack:
+1. First, we check if the stack is filled 'properly' to carry on with the ADD operation. This means that as the ADD opcode needs two elements to operate, it is checked that these two elements are actually present in the stack:
 
         SP - 2          :JMPN(stackUnderflow)
 
-    If less than two elements are present, then the `stackUnderflow` function gets executed.
+    If less than two elements are present, the `stackUnderflow` function gets executed.
 
-2. Next, we move the stack pointer to the first operand, load its value and place the result in the `A` register. Similarly, we move the stack pointer to the next operated, load its value and place the result in the `C` register.
+2. Next, we move the stack pointer to the first operand, load its value and store the result in `A` register. Similarly, we move the stack pointer to the next operated, load its value and place the result in `C` register.
 
         SP - 1 => SP
         $ => A          :MLOAD(SP--)
         $ => C          :MLOAD(SP)
 
-3. Now its when the operation takes place. We perform the addition operation by storing the value of the registers `A` and `C` into the variables `arithA` and `arithB` and then we call the subrutine `addARITH` that is the one in charge of actually performing the addition.
+3. Now the operation takes place. We perform the addition operation by storing the value of the registers `A` and `C` in the variables `arithA` and `arithB` and then we call the subroutine `addARITH` that is the one in charge of actually performing the addition.
 
         A               :MSTORE(arithA)
         C               :MSTORE(arithB)
@@ -44,12 +46,12 @@ Let us explain in detail how the ADD opcode gets interpreted by us. Recall that 
         $ => E          :MLOAD(arithRes1)
         E               :MSTORE(SP++)
 
-    Finally, the result of the addition gets placed into the register `E` and the corresponding value gets placed into the stack pointer location; moving it forward afterwise.
+    Finally, the result of the addition gets placed into the register `E` and the corresponding value gets placed into the stack pointer location, moving it forward afterwise.
 
-4. A bunch of checks are performed. It is first checked that after the operation the stack is not full and then that we do not run out of gas.
+4. Next, a bunch of checks are performed. First, it is checked that post-operation, the stack is not full and the next check that we are not running out of gas.
 
         1024 - SP       :JMPN(stackOverflow)
         GAS-3 => GAS    :JMPN(outOfGas)
                         :JMP(readCode)
 
-    Last but not least, there is an instruction indicating to move forward to the next intruction.
+    Lastly, there is an instruction indicating to move forward to the next instruction.
