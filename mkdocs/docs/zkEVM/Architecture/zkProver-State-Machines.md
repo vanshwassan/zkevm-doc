@@ -349,4 +349,5 @@ and then generate a zk-SNARK proof.
 
 #### A Strategy To Achieving Succinctness
 
-zk-STARK proofs are used because of their speed, and they require no trusted setup. They are however a lot more sizable compared to zk-SNARK proofs. It is for this reason, and the succinctness of the zk-SNARKs, that the zkProver uses a zk-SNARK to attest to the correctness of the zk-STARK proofs. zk-SNARKs are therefore published as the validity proofs to state changes. This strategy has huge benefits as it causes gas costs to reduce from 5M to 350K.
+zk-STARK proofs are used because of their speed, and they require no trusted setup. They are however a lot more sizable compared to zk-SNARK proofs. It is for this reason, and the succinctness of the zk-SNARKs, that the zkProver uses a zk-SNARK to attest to the correctness of the zk-STARK proofs. zk-SNARKs are therefore published as the validity proofs to state changes. This strategy has huge benefits as it results in gas costs reducing from 5M to 350K.
+

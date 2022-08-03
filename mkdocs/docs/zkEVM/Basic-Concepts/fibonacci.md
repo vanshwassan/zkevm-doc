@@ -1,12 +1,9 @@
-## Fibonacci State Machine
 
 
 
 Designing a simple zero-knowledge cryptographic tool or app can involve a lot of intricacies. Consider now, how complex it is to develop a zkEVM. It is a huge and complex project.
 
-In this document we breakdown the complexities of the Polygon zkEVM's design in terms of a simplified example, a Fibonacci State Machine.
-
-The aim is to illustrate, in a generic sense, how the state machine approach has been implemented to realise the Polygon zkEVM.
+In this document we breakdown the complexities of the Polygon zkEVM's design in terms of a simplified example, a Fibonacci State Machine. The aim is to illustrate, in a generic sense, how the state machine approach has been implemented to realise the Polygon zkEVM.
 
 
 
@@ -27,7 +24,7 @@ The Fibonacci sequence  $\mathbf{a_1, a_2, \dots , a_n}$  has the property that 
 Here are the first twelve members of the sequence;
 
 $$
-\mathbf{ \ \ 0,\ \ 1,\ \ 1,\ \ 2,\ \ 3,\ \ 5,\ \ 8,\ \ 13,\ \ 21,\ \ 34,\ \ 55,\ \ 89,\ \ \dots }
+\mathbf{ 0, 1, 1, 2, 3, 5, 8, 13, 21, 34, 55, 89, \dots}
 $$
 It is easy to check whether  $\mathbf{377}$  and  $\mathbf{987}$  are members of the Fibonacci sequence. But to do the same with $\mathbf{ 12,586,269,025 }$, one clearly needs a formula or a computer program. The task here is a state machine crypto tool to achieve this.
 
@@ -47,7 +44,7 @@ Consider a state machine with registries $\mathbf{A} = ( A_1, A_2, \dots , A_l )
 Since the two registries contain the Fibonacci sequence, except that $\mathbf{B}$ is one step ahead of $\mathbf{A}$, they are related as follows,
 $$
 \begin{aligned} 
-A_{i+1} &= B_i , \\
+A_{i+1} &= B_i , \\ 
 B_{i+1} &= A_i + B_i.
 \end{aligned}
 $$
@@ -58,7 +55,7 @@ The idea here is to express the registries as polynomials and ultimately employ 
 
 #### Polynomial Identities
 
-As it is the tradition in blockchains, the polynomials that represent the two registries are taken from the set of polynomials  $\mathbb{Z}_p [x]$,  where the coefficients are elements of a prime field $\mathbb{Z}_p$. 
+As it is the tradition in blockchains, the polynomials that represent the two registries are taken from the set of polynomials $\mathbb{Z}_p[x]$,  where the coefficients are elements of a prime field $\mathbb{Z}_p$. 
 
 For this specific example, as shown in Figure 1 above, the polynomials are evaluated over the subgroup $H = \{\omega,\omega^2,\omega^3,\dots,\omega^8 = 1\} = \langle\omega\rangle$ of order $8$. 
 
@@ -67,6 +64,7 @@ $$
 P(\omega^i) = A_i, \\
 Q(\omega^i) = B_i.
 $$
+
 Since every $x$ in $H$ is of the form $x = \omega^i$ for some $i$, we have 
 $$
 \begin{aligned}
@@ -74,20 +72,20 @@ P(x\omega) &=  P(\omega^{i + 1})  =  A_{i+1}, \\
 Q(x\omega) &= Q(\omega^{i+1})  =  B_{i+1}.
 \end{aligned}
 $$
+
 But substituting the relations, $A_{i+1} = B_i$ and $B_{i+1} = A_i + B_i$, results in the following identities,
 $$
 \begin{aligned}
-
-P(x\omega) &= A_{i+1} = B_i = Q(\omega^i) = \bigg\lvert_H Q(x),  \\ 
-
+P(x\omega) &= A_{i+1} = B_i = Q(\omega^i) = \bigg\lvert_H Q(x),\\ 
 Q(x\omega) &= B_{i+1} = A_i + B_i  = P(\omega^i) + Q(\omega^i) = \bigg\lvert_H P(x) + Q(x).
 \end{aligned}
 $$
+
 That is, 
 
 $$
 \begin{aligned}
-P(x\omega) &= \bigg\lvert_H  Q(x), \\
+P(x\omega) &= \bigg\lvert_H  Q(x),\\
 Q(x\omega) &= \bigg\lvert_H  P(x) + Q(x).
 \end{aligned}
 $$
@@ -108,7 +106,7 @@ For example, let us test if the polynomial identities hold for all values of  $i
 
 $$
 \begin{aligned}
-&P(x \omega) = P(\omega^8 \cdot \omega)  =   P(\omega^1)  =  A_1 = 0,\ \ \text{but} \\
+&P(x \omega) = P(\omega^8 \cdot \omega)  =   P(\omega^1)  =  A_1 = 0,\ \ \text{but}\\
 &Q(x) = Q(w^8) = B_8 = 21 \not= 0.
 \end{aligned}
 $$
@@ -117,7 +115,7 @@ $$
 
 $$
 \begin{aligned}
-&Q(x \omega) = Q(\omega) = B_1 = 1 \\
+&Q(x \omega) = Q(\omega) = B_1 = 1\\
 &P(x) = P(\omega^8) + Q(\omega^8) = 21 + 13 = 34 \not= 1.
 \end{aligned}
 $$
@@ -141,6 +139,7 @@ The corresponding polynomial $R(x)$ is defined as follows,
 $$
 R(\omega^i) = C_i.
 $$
+
 That is, 
 $$
 \begin{aligned}
@@ -148,10 +147,11 @@ R(\omega^i) &= C_i = 1, \text{ if }\ \ i \mod 8 = 1 , \\
 R(\omega^i) &= C_i = 0, \text{ otherwise}.
 \end{aligned}
 $$
+
 The polynomial $R(x)$ is incorporated into the previous polynomial identities as follows,
 $$
 \begin{aligned}
-P(x \omega) &= \bigg\lvert_H Q(x) \big( 1 - R(x \omega) \big), \\
+P(x \omega) &= \bigg\lvert_H Q(x) \big( 1 - R(x \omega) \big),\\
 Q(x \omega) &= \bigg\lvert_H \big( P(x) + Q(x) \big) \big( 1 - R(x \omega) \big) + R(x \omega)
 \end{aligned}
 $$
@@ -161,17 +161,18 @@ Let us test if these new polynomial identities are cyclic, by again using  $x = 
 - For the first identity we have 
   $$
   \begin{aligned}
-  LHS &= P(x \omega) = P(\omega^8 \cdot \omega) = P(\omega^1) = A_1 = 0, \\
+  LHS &= P(x \omega) = P(\omega^8 \cdot \omega) = P(\omega^1) = A_1 = 0,\\
   RHS &= Q(x) \big( 1 - R(x \omega) \big) = Q(\omega^8) \big( 1 - R(\omega^8 \cdot \omega) \big) = A_8 \big( 1 - R(\omega) \big) = 13 \big( 1 - 1 \big) = 0.
   \end{aligned}
   $$
+  
   So the first identity holds true for  $x = \omega^8$,  and it is easy to check that it holds true for all other values of  $x$  in  $H$.
 
 - For the second identity we have 
   $$
   \begin{aligned}
-  LHS &= Q(x \omega) = Q(\omega^8 \cdot \omega) = Q(\omega^1) = B_1 = 1 ,\\
-  RHS &= \big( P(\omega^8) + Q(\omega^8) \big) \big( 1 - R(\omega^8 \cdot \omega) \big) + R(\omega^8 \cdot \omega) \\ 
+  LHS &= Q(x\omega) = Q(\omega^8 \cdot \omega) = Q(\omega^1) = B_1 = 1,\\
+  RHS &= \big(P(\omega^8) + Q(\omega^8) \big) \big( 1 - R(\omega^8 \cdot \omega) \big) + R(\omega^8 \cdot \omega)\\ 
   &= \big( A_8 + B_8 \big) \big( 1 - R(\omega^1) \big) + R(\omega^1)\\
   &= \big( 13 + 21 \big) \big( 1 - 1 \big) + 1 = 1 .
   \end{aligned}
@@ -186,7 +187,7 @@ Let us test if these new polynomial identities are cyclic, by again using  $x = 
 Note that instead of being restricted to the given initial conditions $\big( A_1 , B_1 \big) = \big( 0 , 1 \big) $,  the Fibonacci state machine together with its polynomial identities can be easily adjusted to any other initial conditions  $\big( A_1 , B_1 \big) $ as follows; 
 $$
 \begin{aligned} 
-P(x \omega) &= \bigg\lvert_H Q(x) \big( 1 - R(x \omega) \big) + A_1 R(x \omega), \\
+P(x \omega) &= \bigg\lvert_H Q(x) \big( 1 - R(x \omega) \big) + A_1 R(x \omega),\\
 Q(x \omega) &= \bigg\lvert_H \big( P(x) + Q(x) \big) \big( 1 - R(x \omega) \big) + B_1 R(x \omega) .
 \end{aligned}
 $$

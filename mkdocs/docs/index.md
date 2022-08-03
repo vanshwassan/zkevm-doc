@@ -296,3 +296,4 @@ Given the EVM opcode compatibility, zkEVM is designed to process smart contracts
 The team also leverages the synergies among the different Polygon teams that are also looking into zk-rollup solutions for achieving Ethereum scalability. Although development is still underway, it was important for this document to be released early so as to align with the goal of transparency set by the open-source projects, as well as keep the Polygon community of developers and users of Polygon Hermez 1.0 updated with the upcoming changes.
 
 Our next step will be to develop a public testnet. Although it is difficult to set a fixed date for the same, our plan is to launch it by mid-2022.
+

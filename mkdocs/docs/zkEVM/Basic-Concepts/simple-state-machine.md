@@ -1,86 +1,174 @@
-## A Simple State Machine
 
-Next we show the arithmetization process of a more complex but yet simple state machine. Our simple state machine transitionates from one state to the following one using the rules of a certain instruction. This machine can be represented as follows:
 
-![image](figures/simple-state-machine-overview.pdf.png)
+Next we show the arithmetization process of a more complex but yet simple state machine. Unlike the Fibonacci state machine, our simple state machine transitions from one state to the next in response to certain external instructions. See Figure 1 below, for such a state machine, with registries $\texttt{A}$ and $\texttt{B}$, and a state $\big(\texttt{A}^{\texttt{i}},\texttt{B}^{\texttt{i}}\big)$ that changes to another state $\big(\texttt{A}^{\texttt{i+2}},\texttt{B}^{\texttt{i+2}}\big)$ in accordance to two instructions, $\texttt{Instruction}^{\texttt{i}}$ and $\texttt{Instruction}^{\texttt{i+1}}$.
 
-The following program describes a state machine with two registries $\mathtt{A}$ and $\mathtt{B}$ that accepts an input:
+<img src="figures/simple-state-machine-overview.pdf.png" alt="image" style="zoom:48%;" />
 
-$$\begin{array}{|l|}
+
+<div align="center"><b>  Figure 1: A State Machine Receiving Instructions </b></div>
+
+
+
+In the context of the zkProver, these instructions are written as zk-Assembly (zkASM) codes, and stored in a ROM in JSON-format.
+
+
+
+### State Machine Instructions
+
+Suppose the above simple state machine receives an input, together with the following execution instruction, $\texttt{Instruction}^{\texttt{1}}$, written in Assembly.
+
+
+
+<div align="center"><b> Table 1: Instruction^1 written in zk-Assembly </b></div>
+
+$$\begin{array}{|l|c|}
 \hline
-\mathbf{Instruction} \\ \hline
-\mathtt{\$\{getInput()\} => A}\\ \hline
-\mathtt{3 => B} \\ \hline
-\mathtt{:ADD} \\ \hline
-\mathtt{0 => A,B} \\ \hline
+\texttt{ } & \texttt{Instruction}^{\texttt{1}} \\ \hline
+\texttt{line 1} & \mathtt{\$\{getInput()\} => A}\\ \hline
+\texttt{line 2} & \mathtt{3 => B} \\ \hline
+\texttt{line 3} & \mathtt{:ADD} \\ \hline
+\texttt{line 4} & \mathtt{0 => A,B} \\ \hline
 \end{array}$$
 
-The previous program written in an assembly language that is
-read by a program called "the executor".
-The executor generates an execution trace according to each instruction of 
-the assembly program.
-In the previous program, the assembly instructions mean the following:
-
--  $\mathtt{\$\{getInput()\} => A}$. It is an instruction that asks for a free input value and saves it into register $A$.
-
--  $\mathtt{3 => B}$. Moves the value 3 into register $\mathtt{B}$. 
-
--  $\mathtt{:ADD}$. Sums the values of the registers $\mathtt{A}$ and $\mathtt{B}$ and saves the output into register $\mathtt{A}$. 
-
--  $\mathtt{0 => A, B}$. Moves the value 0 into registers $\mathtt{A}$ and $\mathtt{B}$. 
 
 
-For example, the execution trace that the executor must generate with free input $7$ is the following:
+In accordance with each line of $\texttt{Instruction}^{\texttt{1}}$, the state machine executor must;
 
-$$\begin{array}{|l|c|c|c|c|c|}
+- $\texttt{line 1}$: Get a free input value and save it into register $\texttt{A}$.
+- $\texttt{line 2}$: Move the value $\mathtt{3}$ into register $\mathtt{B}$.
+- $\texttt{line 3}$: Compute the sum of the registry values $\mathtt{A}$ and $\mathtt{B}$, and save the output into register $\mathtt{A}$.
+- $\texttt{line 4}$: Set the registers $\mathtt{A}$ and $\mathtt{B}$ to the value $\mathtt{0}$.
+
+
+
+For a free input value of $7$, the corresponding state transitions can be recorded in a table as follows;
+
+
+
+<div align="center"><b> Table 2: Record of all State Changes </b></div>
+
+$$\begin{array}{|l|c|c|c|c|c|c|}
 \hline
-\mathbf{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
-\mathtt{\$\{getInput()\} => A} & 7 & 0 & 7 & 0 & 0 \\ \hline
-\mathtt{3 => B} & 0 & 7 & 7 & 0 & 3 \\ \hline
-\mathtt{:ADD} & 0 & 7 & 10 & 3 & 3 \\ \hline
-\mathtt{0 => A,B} & 0 & 10 & 0 & 3 & 0 \\ \hline
+\texttt{ } & \texttt{Instruction}^{\texttt{1}} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
+\texttt{line 1} & \mathtt{\$\{getInput()\} => A} & 7 & 0 & 7 & 0 & 0 \\ \hline
+\texttt{line 2} & \mathtt{3 => B} & 0 & 7 & 7 & 0 & 3 \\ \hline
+\texttt{line 3} & \mathtt{:ADD} & 0 & 7 & 10 & 3 & 3 \\ \hline
+\texttt{line 4} & \mathtt{0 => A,B} & 0 & 10 & 0 & 3 & 0 \\ \hline
 \end{array}$$
 
-We denote as $\mathtt{X'}$ as the next state of the register $\mathtt{X}$, where $\mathtt{X} \in \{\mathtt{A}, \mathtt{B}\}$. 
 
-Now we need to create a proper set of arithmetic constraints to prove the correctness of the execution trace. To achieve this, we add auxiliary states and selectors to express the relations between the next values of registries $A$ and $B$ as a linear combination of the previous ones
-and these auxiliary states and selectors.
-This is shown in the following figure:
 
-![image](figures/simple-state-machine.pdf.png)
+Note that $\mathtt{A'}$ and $\mathtt{B'}$ denote the next state of the registers $\mathtt{A}$ and $\mathtt{B}$, respectively. 
 
-Where we denote:
 
-a)  $\mathtt{inX}^i \in \{0,1\}$: Selector to include or not $X_i$ in
-    the linear combination.
 
-b)  $\mathtt{setX}^i \in \{0,1\}$: Selector to move or not the result of
-    the linear combination into $X_{i+1}$.
+Observe also that, each line of $\texttt{Instruction}^{\texttt{1}}$ does not always affect all register values. Since every register is initialised to $\mathtt{0}$ at the start, the state transitions are such that,
 
-c) $\mathtt{freeIn}^i$ contains the inputs that we can freely choose to execute the program.
+- $\texttt{line 1}$ only affects two registers; $\mathtt{free}$ and $\mathtt{A'}$.
+- $\texttt{line 2}$ affects the register $\mathtt{B'}$ alone. Any other state change is due to the rules and the logic of the state machine (i.e., changes in registers; $\mathtt{free}$ and $\mathtt{A}$).
+- $\texttt{line 3}$ affects the register $\mathtt{A'}$ alone. Again, the state change in register $\mathtt{B}$ is due to the state machine's rules and logic.
+- $\texttt{line 4}$ affects only two registers; $\mathtt{A'}$ and $\mathtt{B'}$. The state change in register $\mathtt{A}$ is also due to the rules and the logic of the state machine.
 
-d) $\mathtt{const}^i$ contains the fixed values of the instructions.
 
-Introducing the new auxiliary variables, we have the following extended table:
 
+### Computational Trace
+
+Recall that the intention with developing these state machines is not only to carry out computations, but to also ensure that correctness of these computations is verifiable. In addition, verification must be achievable even by users with modest computer power. That said, keeping record of computations, as seen in Table 2 above, is not preferable for verification purposes, because the registry values can be very large for some state machines. And thus, defeating the ultimate purpose and aim of our rollup.
+
+One therefore needs a way to keep track of all the computations and their correct execution, without requiring excessive memory. This is achieved by utilising the computational trace.
+
+For our verification purposes, the **computational trace** does not capture the actual state values of each state transition, but uses selectors and setters to keep record of whether registry values have been altered (during each state transition) in a way that tallies with the received instructions.
+
+Like switches that can either be ON or OFF, selectors and setters can also be either $\mathtt{1}$ or $\mathtt{0}$. Each selector (and each setter) is hence recorded;
+
+- As the value $\mathtt{1}$, if the corresponding registry value was altered by the instruction,
+- Or, as the value $\mathtt{0}$, otherwise.
+
+The computational trace therefore consists only of bits, instead of large registry values. 
+
+In the zkEVM context, the computational trace is stored as a lookup table in the ROM of the relevant state machine.
+
+
+
+#### Example (Computational Trace)
+
+Take as an example, $\texttt{Instruction}^{\texttt{1}}$ above. Set selectors $\texttt{selA}$, $\texttt{selB}$ and $\texttt{inFree}$ for the registers $\texttt{A}$, $\texttt{B}$ and $\texttt{free}$, respectively. And, setters $\texttt{setA}$ and $\texttt{setB}$ for the registers $\mathtt{A'}$ and $\mathtt{B'}$, respectively. 
+
+Rule for the $\texttt{inFree}$ selector: Record $\texttt{inFree}$ as $\mathtt{1}$ only if the value of the register $\texttt{free}$ is non-zero.
+
+As discussed above;
+
+- The register values, $\mathtt{free}$ and $\mathtt{A'}$, were changed in $\texttt{line 1}$. Therefore, only selector $\texttt{inFree}$ and setter $\texttt{setA}$ are recorded as $\mathtt{1}$.
+- The register values  $\mathtt{B'}$, $\mathtt{free}$ and $\mathtt{A}$ were changed in $\texttt{line 2}$. So, only selector $\texttt{selA}$ and setter $\texttt{setB}$ are recorded as $\mathtt{1}$.
+-  The register values $\mathtt{A'}$ and $\mathtt{B}$ were changed in $\texttt{line 3}$. Hence, only selector $\texttt{selB}$ and setter $\texttt{setA}$ are recorded as $\mathtt{1}$.
+-  The register values  $\mathtt{A'}$, $\mathtt{B'}$ and $\mathtt{A}$ were changed in $\texttt{line 4}$. Consequently, only setters  $\texttt{setA}$ and $\texttt{setB}$, and selector $\texttt{selA}$ are recorded as $\mathtt{1}$.
+
+The computational trace after executing $\texttt{Instruction}^{\texttt{1}}$ is as reflected in Table 3 below.
+
+  
+
+<div align="center"><b> Table 3: Computational Trace for Instruction^1 </b></div>
+
+$$\begin{array}{|l|c|c|c|c|c|c|c|c|c|c|c|}
+\hline
+\texttt{ } & \texttt{Instruction}^{\texttt{1}} & \mathtt{free} & \texttt{setB} & \texttt{setA} & \texttt{inFree} & \texttt{selB} & \texttt{selA} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
+\texttt{line 1} & \mathtt{\$\{getInput()\} => A} & 7 & 0 & 1 & 1 & 0 & 0 & 0 & 7 & 0 & 0 \\ \hline
+\texttt{line 2} & \mathtt{3 => B} & 0 & 1 & 0 & 0 & 0 & 1 & 7 & 7 & 0 & 3 \\ \hline
+\texttt{line 3} & \mathtt{:ADD} & 0 & 0 & 1 & 0 & 1 & 0 & 7 & 10 & 3 & 3 \\ \hline
+\texttt{line 4} & \mathtt{0 => A,B} & 0 & 1 & 1 & 0 & 0 & 1 & 10 & 0 & 3 & 0 \\ \hline
+\end{array}$$
+
+
+
+
+
+### Arithmetic Constraints
+
+Next we create a proper set of arithmetic constraints required in proving correctness of execution. Similar to the Fibonacci SM, where each state had to conform to polynomial identities and each polynomial identity was nothing but an algebraic relation between two consecutive states, our executor SM also needs such algebraic relations. These algebraic relations are also called **arithmetic constraints**.
+
+In order to fully express the relations between the next values of registries $\texttt{A}$ and $\texttt{B}$ as a linear combination of the current registry values, auxiliary registers and selectors need to be added.
+
+This is shown in Figure 2 below, as an algebraic processor of sorts.
+
+
+
+<img src="figures/simple-state-machine.png" alt="image" style="zoom:100%;" />
+
+<div align="center"><b> Figure 2: The State Machine as an Algebraic Processor</b></div>
+
+
+
+The notation used Figure 2 is as follows,
+
+a)  $\mathtt{inFree}^i \in \{0,1\}$ indicates whether $\mathtt{free^i}$ is included in the linear combination or not.
+
+b)  $\mathtt{setX}^i \in \{0,1\}$ indicates whether the result of the linear combination was moved into $\mathtt{X^{i+1}}$ or not.
+
+c) $\mathtt{freeIn}^i$ carries inputs freely chosen in order to execute the program.
+
+d) $\mathtt{const}^i$ carries fixed values moved into specified registers as per instructions received.
+
+
+
+Introducing the new auxiliary variables results in the following extended table:
 $$
 \scriptsize
-\begin{array}{|l|}
+\begin{array}{|l|c|}
 \hline
-\mathbf{Instruction} \\ \hline
-\mathtt{\$\{getInput()\} => A} \\ \hline
-\mathtt{3 => B} \\ \hline
-\mathtt{:ADD} \\ \hline
-\mathtt{0 => A, B} \\ \hline
+\texttt{ } & \texttt{Instruction}^{\texttt{1}} \\ \hline
+\texttt{line 1} & \mathtt{\$\{getInput()\} => A}\\ \hline
+\texttt{line 2} & \mathtt{3 => B} \\ \hline
+\texttt{line 3} & \mathtt{:ADD} \\ \hline
+\texttt{line 4} & \mathtt{0 => A,B} \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|}
 \hline
 \texttt{free} & \texttt{const} & \texttt{setB} & \texttt{setA} & \texttt{inFree} & \texttt{selB} & \texttt{selA} \\ \hline
 7 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-0 & 3 & 1 & 0 & 0 & 0 & 0 \\ \hline
-0 & 0 & 0 & 1 & 0 & 1 & 1 \\ \hline
-0 & 0 & 1 & 1 & 0 & 0 & 0 \\ \hline
+0 & 3 & 1 & 0 & 0 & 0 & 1 \\ \hline
+0 & 0 & 0 & 1 & 0 & 1 & 0 \\ \hline
+0 & 0 & 1 & 1 & 0 & 0 & 1 \\ \hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|}
@@ -117,6 +205,8 @@ In our previous program, we can provide a result of the execution by giving $A(\
 Notice that the last instruction resets the states' values and "glues" the last instruction with the first one, achieving a cycle.
 
 
+
+
 ## Programs with Conditional Jumps
 
 We are going to add the instruction $\mathtt{JMPZ}$ to our assembly. $\mathtt{JMPZ}$ jumps to a specified position in the program if the preceding state of the register $\mathtt{A}$ is zero. 
@@ -126,7 +216,7 @@ In the next program, $\mathtt{JMPZ}$ will jump to position $5$ if the previous r
 $$
 \begin{array}{|c|l|}
 \hline
-\textbf{Position} & \mathbf{Instruction} \\ \hline
+\textbf{Position} & \texttt{Instruction} \\ \hline
 0 & \mathtt{\$\{getInput()\} => A}  \\ \hline
 1 & \mathtt{-3 => B} \\ \hline
 2 & \mathtt{:ADD} \\ \hline
@@ -142,30 +232,36 @@ In programs with conditional jumps, our previous model will not work, because th
 
 As it can be seen next, with conditional jumps, the length of the execution trace is **not constant** (it depends on the free input):
 
-$$\scriptsize
+
+$$
+\scriptsize
 \begin{array}{|l|c|c|c|c|c|}
 \hline
-\mathbf{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
+\texttt{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
 \mathtt{\$\{getInput()\} => A} & 7 & 0 & 7 & 0 & 0 \\ \hline
 \mathtt{-3 => B} & 0 & 7 & 7 & 0 & -3 \\ \hline
 \mathtt{:ADD} & 0 & 7 & 4 & -3 & -3 \\ \hline
 \mathtt{:JMPZ(5)} & 0 & 4 & 4 & -3 & -3 \\ \hline
 \mathtt{:ADD} & 0 & 4 & 1 & -3 & -3 \\ \hline
 \mathtt{0 => A, B} & 0 & 1 & 0 & -3 & 0 \\ \hline
-\end{array}$$
+\end{array}
+$$
 
-$$\scriptsize
+$$
+\scriptsize
 \begin{array}{|l|c|c|c|c|c|}
 \hline
-\mathbf{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
+\texttt{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
 \mathtt{\$\{getInput()\} => A} & 3 & 0 & 3 & 0 & 0 \\ \hline
 \mathtt{-3 => B} & 0 & 3 & 3 & 0 & -3 \\ \hline
 \mathtt{:ADD} & 0 & 3 & 0 & -3 & -3 \\ \hline
 \mathtt{:JMPZ(5)} & 0 & 0 & 0 & -3 & -3 \\ \hline
 \mathtt{0 => A, B} & 0 & 0 & 0 & -3 & 0 \\ \hline
-\end{array}$$
+\end{array}
+$$
+The first execution is done in 6 steps, meanwhile the second one has been done in 5 steps.
 
-The first execution is done in 6 steps, meanwhile the second one has been done in 5 steps. 
+
 
 ### Managing Conditional Jumps
 
@@ -236,7 +332,7 @@ $$
 \tiny
 \begin{array}{|l|}
 \hline
-\mathbf{Instruction} \\ \hline
+\texttt{Instruction} \\ \hline
 \mathtt{\$\{getInput()\} => A} \\ \hline
 \mathtt{-3 => B} \\ \hline
 \mathtt{:ADD} \\ \hline
@@ -266,13 +362,13 @@ $$
 4 & 5 & 4 & 1 & -3 & -3\\ \hline
 5 & 0 & 1 & 0 & -3 & 0\\ \hline
 \end{array}
-$$ 
+$$
 
 $$
 \tiny
 \begin{array}{|l|}
 \hline
-\mathbf{Instruction} \\ \hline
+\texttt{Instruction} \\ \hline
 \mathtt{\$\{getInput()\} => A} \\ \hline
 \mathtt{-3 => B} \\ \hline
 \mathtt{:ADD} \\ \hline
