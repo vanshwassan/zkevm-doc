@@ -20,34 +20,35 @@ Figure 12 depicts a connection between the polynomials $[a,b,c]$ and $[d,e,f]$.
 <br>
 To illustrate this process,
 
-1. First, design a state machine to manage arithmetic operations over $2$-byte elements.
+1. First, design a state machine to manage arithmetic operations over 2-byte elements.
 2. Then, connect this state machine with another state machine (that needs to perform arithmetic operations) via a lookup argument.
 
 ## The Arithmetic State Machine
 
-The _Arithmetic State Machine_ is in charge of checking that some arithmetic operations like additions and multiplications are correctly performed over $2$-byte elements. For this, the polynomials; $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$, and $\texttt{e}$; must satisfy the identity:
+The _Arithmetic State Machine_ is in charge of checking that some arithmetic operations like additions and multiplications are correctly performed over 2-byte elements. For this, the polynomials $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$, and $\texttt{e}$ must satisfy the identity:
 
 $$
 \texttt{a}(X) \cdot \texttt{b}(X) + \texttt{c}(X) = 2^{16} \cdot \texttt{d}(X) + \texttt{e}(X).
 $$
 
-Notice the following,
+Notice the following:
 
-(a) The multiplication between $\texttt{a}$ and $\texttt{b}$, which are $2$-byte elements, can be expressed with $\texttt{e}$ and $\texttt{d}$, where these are also $2$-byte elements.
+1. The multiplication between $\texttt{a}$ and $\texttt{b}$, which are 2-byte elements, can be expressed with $\texttt{e}$ and $\texttt{d}$, which are also 2-byte elements.
 
-(b) Enforce that all the evaluations of $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$ and $\texttt{e}$ are $2$-byte elements.
+2. Enforce that all the evaluations of $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$ and $\texttt{e}$ are 2-byte elements.
 
 ![Architecture of the Arithmetic State Machine](figures/fig13-arth-sm-arch.png)
 
 <div align="center"><b> Figure 13: Architecture of the Arithmetic State Machine </b></div>
 
-Figure 13 shows how the Arithmetic State Machine is designed. And, Tableb14 displays an example of how the computational trace looks like.
+Figure 13 shows how the Arithmetic State Machine is designed. Tableb14 displays an example of how the computational trace looks like.
 
 ![Computational Trace of the Arithmetic State Machine](figures/fig14-arth-sm-arch.png)
 
 <div align="center"><b> Table 14: Computational Trace of the Arithmetic State Machine </b></div>
-
-The Arithmetic state machine works as follows. $\texttt{LATCH}$ is used to flag when the operation is ready. Note that $\texttt{SET}[A]$, $\texttt{SET}[B]$, $\texttt{SET}[C]$, $\texttt{SET}[D]$, $\texttt{SET}[E]$ and $\texttt{LATCH}$ are constant polynomials. $\texttt{freeIn}$ is committed, and contains the values on which arithmetic operations are performed. Polynomials $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$ and $\texttt{e}$ compose the state variables.
+<br>
+The Arithmetic State Machine works as follows:
+ $\texttt{LATCH}$ is used to flag when the operation is ready. Note that $\texttt{SET}[A]$, $\texttt{SET}[B]$, $\texttt{SET}[C]$, $\texttt{SET}[D]$, $\texttt{SET}[E]$ and $\texttt{LATCH}$ are constant polynomials. $\texttt{freeIn}$ is committed and contains the values on which arithmetic operations are performed. Polynomials $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$, and $\texttt{e}$ compose the state variables.
 
 The polynomial identities that define the Arithmetic State Machine are as follows:
 
@@ -63,7 +64,7 @@ $$
 \end{aligned}
 $$
 
-These are included in PIL as shown in the code excerpt below.
+These are included in PIL as shown in the code excerpt below:
 
 ![PIL Example](figures/fig13-pil-eg-arth-sm.png)
 

@@ -5,7 +5,7 @@
 
 
 # The Arithmetic State Machine
-As a secondary state machine, the Arithmetic State Machine has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL (program) which is a set of verification rules, written in the PIL language. The Arithmetic SM Executor is written in two versions; Javascript and C/C++.
+As a secondary state machine, the Arithmetic State Machine has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL (program) which is the set of verification rules written in the PIL language. The Arithmetic SM Executor is written in two versions: Javascript and C/C++.
 
 
 
@@ -22,7 +22,7 @@ The Polygon Hermez Repo is here  [https://github.com/0xPolygonHermez](https://gi
 
 The Arithmetic State Machine (SM) is one of the six secondary state machines receiving instructions from the Main SM Executor. As a secondary state machine, the Arithmetic SM has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL program written in the PIL language.
 
-The main purpose of the Arithmetic SM is carry out elliptic curve arithmetic operations, such as Point Addition and Point Doubling.
+The main purpose of the Arithmetic SM is to carry out elliptic curve arithmetic operations, such as Point Addition and Point Doubling.
 
 
 
@@ -38,7 +38,7 @@ Consider an elliptic curve $E$ defined by $y^2 = x^3 + ax + b$ over the finite f
 p = 2^{256} - 2^{32} - 2^9 - 2^8 - 2^7 -2^6 - 2^4 - 1.
 \end{aligned}
 
-Set the coefficients $a = 0$ and $b = 7$, so that $E$ reduces to
+Set the coefficients $a = 0$ and $b = 7$, so that $E$ reduces to:
 \begin{aligned}
 y^2 = x^3 + 7.
 \end{aligned}
@@ -110,20 +110,19 @@ q_0 \cdot p = 0, \\
 
 where $q_0,q_1,q_2 \in \mathbb{Z}$, implying that these equations hold true over the integers. 
 
-This approach is taken in order avoid having to compute divisions by $p$.
+This approach is taken in order to avoid computing divisions by $p$.
 
 
+Also, note that there arise three possible computation scenarios:
 
-Note also that only three possible computation scenarios arise:
-
-1. $\text{EQ}_0$ is activated while the rest are deactivated,
-2. $\text{EQ}_1$, $\text{EQ}_3$ and $\text{EQ}_4$ are activated but $\text{EQ}_0$ and $\text{EQ}_2$ are deactivated, 
-3. $\text{EQ}_2$, $\text{EQ}_3$ and $\text{EQ}_4$ are activated and $\text{EQ}_0$ and $\text{EQ}_1$ are deactivated.
+1. $\text{EQ}_0$ is activated while the rest are deactivated
+2. $\text{EQ}_1$, $\text{EQ}_3$, and $\text{EQ}_4$ are activated while $\text{EQ}_0$ and $\text{EQ}_2$ are deactivated 
+3. $\text{EQ}_2$, $\text{EQ}_3$, and $\text{EQ}_4$ are activated while $\text{EQ}_0$ and $\text{EQ}_1$ are deactivated.
 
 Since at most, one of $\text{EQ}_1$ and $\text{EQ}_2$ are activated in any scenario, we can afford "sharing'' the same $q_0$ for both.
 
 
-Motivated by the implemented operations, the Arithmetic SM is composed of 6 registers 
+Motivated by the implemented operations, the Arithmetic SM is composed of 6 registers: 
 \begin{aligned}
 x_1,\ y_1,\ x_2,\ y_2,\ x_3,\ y_3.
 \end{aligned}
@@ -135,17 +134,17 @@ There is also a need to provide $s$ and $q_0,q_1,q_2$, which are also $256$-bit 
 
 
 
-### How The Operations Are Performed
+### How are the Operations Performed?
 
 
 
-Compute the previous operations at $2$-byte level. 
+Compute previous operations at the $2$-byte level. 
 
-This means that if, for instance, one is performing the multiplication of $x_1$ and $y_1$, at the first clock $x_1[0] \cdot y_1[0]$ is computed. 
+This means that if, for instance, one is performing the multiplication of $x_1$ and $y_1$, at the first clock, $x_1[0] \cdot y_1[0]$ is computed. 
 
 Then, $(x_1[0] \cdot y_1[1]) + (x_1[1] \cdot y_1[0])$ is computed in the second clock, followed by $(x_1[0] \cdot y_1[2]) + (x_1[1] \cdot y_1[1]) + (x_1[2] \cdot y_1[0])$  in the third, and so on. 
 
-As depicted in [Figure 1](\ref{eq:school}), this process is completely analogous to the schoolbook multiplication. However, it is performed at $2$-byte level, instead of at decimal level.
+As depicted in [Figure 1](\ref{eq:school}), this process is completely analogous to schoolbook multiplication. However, it is performed on the $2$-byte level, instead of being on the decimal level.
 
 
 ![School Multiplication Example](figures/fig-sch-mlt-eg.png)
@@ -156,7 +155,7 @@ As depicted in [Figure 1](\ref{eq:school}), this process is completely analogous
  -->
 
 
-Use the following notation;
+Use the following notation:
 
 $$
 \begin{aligned}
@@ -183,12 +182,12 @@ This is continued until one reaches the computation, $\mathbf{eq}_{15} =
 (x_1[0] \cdot y_1[15]) + (x_1[1] \cdot y_1[14]) + \dots + x_2[15] -
 y_3[15]$. 
 
-This is the time when $y_2$ come into place. 
+This is the time when $y_2$ comes into the picture. 
 
-Since we have filled the first $256$ bits of the result of the operation (and the result can be made of more than $256$ bits) we need a new register to place the result from this point. We change the addition of $x_2[i] -
+Since we have filled the first $256$ bits of the result of the operation (and the result can be made of more than $256$ bits), we need a new register to place the result from this point. We change the addition of $x_2[i] -
 y_3[i]$ by $-y_2[i]$. 
 
-Therefore, we obtain that 
+Therefore, we obtain that: 
 
 $$
 \begin{aligned}
@@ -200,7 +199,7 @@ $$
 
 and so on. 
 
-Continuing until the last two 
+Continuing until the last two: 
 
 $$
 \begin{aligned}
