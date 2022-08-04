@@ -1,29 +1,29 @@
+# Modularity in PIL
+
 Although several polynomials could be added to the above state machine so as to express more operations, it would only make the design hard to test, audit or formally verify.
 
-In order to avoid this complication, PIL lets one use a divide and conquer technique:
+In order to avoid this complication, PIL lets one use a divide-and-conquer technique:
 
-(a) Instead of developing one (big) state machine, a typical architecture consists of different state machines.
+- Instead of developing one (big) state machine, a typical architecture consists of different state machines.
 
-(b) Each state machine is devoted to proving the execution of a specific task, each with its own set of constraints.
+- Each state machine is devoted to proving the execution of a specific task, each with its own set of constraints.
 
-(c) Then, relevant polynomials on different state machines are related and compared using lookup tables or permutation arguments.
+- The relevant polynomials on different state machines are related and compared using lookup tables or permutation arguments. This guarantees consistency as if it would have been a single state machine.
 
-(d) This guarantees consistency as if it would have been a single state machine.
-
-PIL is therefore best suited for a modular design of state machines.
+PIL is, therefore, best suited for modular design of state machines.
 
 Figure 12 depicts a connection between the polynomials $[a,b,c]$ and $[d,e,f]$.
 
 ![Polynomial Connections Across State Machines](figures/fig12-pol-cnnct-sms.png)
 
 <div align="center"><b> Figure 12: Polynomial Connections Across State Machines </b></div>
-
+<br>
 To illustrate this process,
 
 1. First, design a state machine to manage arithmetic operations over $2$-byte elements.
 2. Then, connect this state machine with another state machine (that needs to perform arithmetic operations) via a lookup argument.
 
-### The Arithmetic State Machine
+## The Arithmetic State Machine
 
 The _Arithmetic State Machine_ is in charge of checking that some arithmetic operations like additions and multiplications are correctly performed over $2$-byte elements. For this, the polynomials; $\texttt{a}$, $\texttt{b}$, $\texttt{c}$, $\texttt{d}$, and $\texttt{e}$; must satisfy the identity:
 
