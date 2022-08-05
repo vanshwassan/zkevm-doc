@@ -1,63 +1,74 @@
+
 <!-- https://hackmd.io/_ktX_wjcTua_Ios-o8QAnQ?both -->
 
-# zkProver debugging
-[TOC]
+# zkProver Debugging
 
-## Repositories involved
-- [zkproverjs](https://github.com/hermeznetwork/zkproverjs): prover reference implementation writen in javascript
-- [zkproverc](https://github.com/hermeznetwork/zkproverc): prover implementation writen in C
-- [zkasm](https://github.com/hermeznetwork/zkasm): compiles .zkasm to a json ready for the zkproverjs
-- [zkpil](https://github.com/hermeznetwork/zkpil): Polynomial Identity Language
-- [zkvmpil](https://github.com/hermeznetwork/zkvmpil): PIL source code for the zkVM (state-machines)
-- [zkrom](https://github.com/hermeznetwork/zkrom): zkasm source code of the zkEVM
-- [zkevmdoc](https://github.com/hermeznetwork/zkevmdoc): docs zkevm
+## Repositories Used
 
-## Setup environment
-- ideal repository structure:
+- [zkproverjs](https://github.com/hermeznetwork/zkproverjs): Prover reference implementation writen in javascript.
+- [zkproverc](https://github.com/hermeznetwork/zkproverc): Prover implementation written in C.
+- [zkasm](https://github.com/hermeznetwork/zkasm): Compiles .zkasm to a .json ready for the zkproverjs.
+- [zkpil](https://github.com/hermeznetwork/zkpil): Polynomial Identity Language.
+- [zkvmpil](https://github.com/hermeznetwork/zkvmpil): PIL source code for the zkVM (state-machines).
+- [zkrom](https://github.com/hermeznetwork/zkrom): zkASM source code of the zkEVM.
+- [zkevmdoc](https://github.com/hermeznetwork/zkevmdoc): zkEVM documentation.
+
+## Setup Environment
+
+- Ideal repository structure:
 ```
 github
     --> zkrom
     --> zkvmpil
     --> zkproverjs
 ```
-- Next steps are required to run the `zkprover:executor`:
+- To run the `zkprover:executor`, run the following git commands:
 ```
 git clone https://github.com/hermeznetwork/zkrom.git
+
 cd zkrom
+
 npm i && npm run build
+
 cd ..
+
 git clone https://github.com/hermeznetwork/zkvmpil.git
+
 cd zkvmpil
+
 npm i && npm run build
+
 git clone https://github.com/hermeznetwork/zkproverjs.git
+
 cd zkproverjs
+
 npm i
 ```
 - Detailed explanation:
-  - repository `zkrom`
-    - `main/*` : contains assembly code
-    - `build`: compiled assembly. code ready to the executor
-  - repository `zkvmpil`
+  - Repository `zkrom`
+    - `main/*`: Contains assembly code
+    - `build`: Compiled assembly. Code ready for the Executor
+  - Repository `zkvmpil`
     - `src`: state-machines
-    - `build`: compiled state-machines. code ready to the executor 
-  - repository `zkproverjs`
-    - `src/main_executor.js`: cli to run executor easily
-      - executor needs files fenerated from `zkrom/build` & `zkvm pil/build`
+    - `build`: compiled state-machines. Code ready for the Executor 
+  - Repository `zkproverjs`
+    - `src/main_executor.js`: CLI to run Executor easily
+      - Executor needs files generated from `zkrom/build` & `zkvm pil/build`
       - it also needs an `input.json`
       - Examples:
         - [zkrom file](https://github.com/hermeznetwork/zkrom/blob/main/build/rom.json)
         - [zkvmpil file](https://github.com/hermeznetwork/zkvmpil/blob/main/build/zkevm.pil.json)
         - [input file](https://github.com/hermeznetwork/zkproverjs/blob/main/testvectors/input.json)
 
-- Run executor (in `zkproverjs` repository)
->to just test the executor, the output is not needed
+- Run Executor (in `zkproverjs` repository). To only test the Executor, the output is not required.
+
 ```
 node src/main_executor.js ./testvectors/input.json -r ../zkrom/build/rom.json -p ../zkvmpil/build/zkevm.pil.json -o ./testvectors/poly.bin
 ``` 
-## Executor insights
-Basically, the executor runs the program that is specified by the ROM.
-The program can be seen in the `rom.json` file, which includes some debugging information.
-Let's see an example of `assembly code` builded into the `rom.json`:
+## Executor Insights
+Basically, the Executor runs the program that is specified by the ROM.
+The program can be seen in the `rom.json` file, which includes the debugging information.
+Let us see an example of `assembly code` build into the `rom.json`:
 ```
 ASSEMBLY: 1 => B
 JSON FILE:
@@ -69,24 +80,23 @@ JSON FILE:
   "fileName": "../zkrom/main/main.zkasm"
  }
 ```
-All operations are defined in the JSON file, plus `line` & `fileName` where the assembly code is.
-This JSON file is ready to be interpreted by the `executor`
+All operations are defined in the JSON file, plus `line` & `fileName` where the assembly code is. This JSON file is ready to be interpreted by the `executor`
 
-## VSCode debugging
-In the `zkproverjs` repository you can find an example of `launch.json` to debug the executor code: https://github.com/hermeznetwork/zkproverjs/blob/main/.vscode/launch.json#L8
+## VSCode Debugging
+In the `zkproverjs` repository, you can find an example of `launch.json` to debug the Executor code: https://github.com/hermeznetwork/zkproverjs/blob/main/.vscode/launch.json#L8
 
-## Debugging tips
+## Debugging Tips
 - Main executor code to debug: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L12
-- variable `l` is the rom.json that is going to be executed: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L61
-- debug helpers
+- Variable `l` is the rom.json that is going to be executed: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L61
+- Debug Helpers
   - [print registers](https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L1030)
-- By monioring `ctx(context)`, registers and `op` you will see all the states changes made by the executor
-- `ctx.input` contins all the variables loaded from `input.json`
-- `storage` makes refrence to the merkle-tree
-- transactions places at `input.json` are pre-processed and store it on `ctx.pTxs`. Besides, `globalHash` is computed given all the `inputs.json` according to [specification (TO_BE_UPDATED)](https://hackmd.io/tEny6MhSQaqPpu4ltUyC_w#validateBatch) 
+- By monitoring `ctx(context)`, registers, and `op`, you will see all the states changes made by the Executor.
+- `ctx.input` contains all the variables loaded from `input.json`.
+- `storage` makes reference to the Merkle tree.
+- The transactions places at `input.json` are pre-processed and are stored on `ctx.pTxs`. Besides, `globalHash` is computed given all the `inputs.json` according to [`specifications`] <!--(TO_BE_UPDATED)]-->https://hackmd.io/tEny6MhSQaqPpu4ltUyC_w#validateBatch
 
 
-## Table rom assembly instructions
+## Table ROM Assembly Instructions
 
 |   NAME    |     DESCRIPTION      |                                                                                 EXECUTION                                                                                  |
 |:---------:|:--------------------:|:--------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
@@ -103,9 +113,9 @@ In the `zkproverjs` repository you can find an example of `launch.json` to debug
 | ECRECOVER |  signature recover   |                                                                 op = ECRECOVER( A: HASH, B: R, C:S, D: V)                                                                  |
 |  ASSERT   |      assertion       |                                                                                   A = op                                                                                   |
 
-## Examples assembly
+## Examples Assembly
 ### MSTORE
-- assembly
+- Assembly
 ```javascript=
 A                       :MSTORE(sequencerAddr)
 ```
@@ -122,11 +132,11 @@ A                       :MSTORE(sequencerAddr)
   "fileName": ".../zkrom/main/main.zkasm"
  }
 ```
-- description:
-load `A` register in `op`, write in memory position 4 (`offset`) the `op` value
+- Description:
+Load register `A` in `op` and write in memory position 4 (`offset`) the `op` value.
 
 ### MREAD
-- assembly:
+- Assembly:
 ```javascript=
 $ => A          : MLOAD(pendingTxs)
 ```
@@ -147,11 +157,11 @@ $ => A          : MLOAD(pendingTxs)
   "fileName": ".../zkrom/main/main.zkasm"
  }
 ```
-- description:
-load a memory value from position 1 (`offset`) into `op` (action marked by `inFREE`), set `op` in `A` register
+- Description:
+Load a memory value from position 1 (`offset`) into `op` (action marked by `inFREE`) and set `op` in register `A`.
 
 ### LOAD FROM STORAGE
-- assembly
+- Assembly
 ```javascript=
 $ => A                          :MLOAD(sequencerAddr)
 0 => B,C
@@ -193,19 +203,20 @@ $ => A                          :SLOAD
   "fileName": ".../zkrom/main/main.zkasm"
  }
 ```
-- description
-  - load from memory position 5 (`sequencerAccValue`) into `op`, store `op` on `D` register
-  - load from memory position 4 (`sequencerAddr`) into `op`, store `op` on `A` register
-  - load CONST in `op`, store it in registers `B` and `C`
-  - Perform SLOAD (reading from merkle-tree) with the follwing key: `storage.get(SR, H[A0 , A1 , A2 , B0 , C0 , C1 , C2 , C3, 0...0]))`
-    - `SR` is the current state-root saved in register `SR`
-    - `A0, A1, A2` has the sequencer address
-    - `B0` is set to `0` pointing out that the `balance` is going to be read
-    - `C0,C1,C2,C3` are set to 0 since they are not used when reading balance from merkle-tree
-  - merkle-tree value is store in `op` (marked by `inFREE` tag), set `op` to register `A`
+- Description
+  - Load from memory position 5 (`sequencerAccValue`) into `op` and store `op` on register `D`.
+  - Load from memory position 4 (`sequencerAddr`) into `op` and store `op` on register `A`.
+  - Load CONST in `op` and store it in registers `B` and `C`.
+  - Perform SLOAD (reading from Merkle tree) with the following key: `storage.get(SR, H[A0 , A1 , A2 , B0 , C0 , C1 , C2 , C3, 0...0]))`
+    - `SR` is the current state-root saved in register `SR`.
+    - `A0, A1, A2` carry the sequencer address.
+    - `B0` is set to `0`, pointing out that the `balance` is going to be read.
+    - `C0,C1,C2,C3` are set to 0 since they are not used when reading balance from 
+    Merkle tree.
+  - Merkle tree value is stored in `op` (marked with `inFREE` tag), set `op` to register `A`.
 
 ### WRITE TO STORAGE
-- assembly
+- Assembly
 ```javascript=
 $ => A                          :MLOAD(sequencerAddr)
 0 => B,C
@@ -247,13 +258,13 @@ $ => SR                         :SSTORE
   "fileName": ".../zkrom/main/main.zkasm"
  }
 ```
-- description
-  - read from memory position 4 (`sequencerAddr`) and store it on `op`, set `op` to register A
-  - set CONST to `op`, store `op` in registers `B` and `C`
-  - Perform SWRITE (write to merkle-tree) according: `storage.set(SR, (H[A0 , A1 , A2 , B0 , C0 , C1 , C2 , C3, 0...0], D0 + D1 * 2^64 + D2 * 2^128 + D3 * 2^192 )`
-    - `SR` is the current state-root saved in register `SR`
-    - `A0, A1, A2` has the sequencer address
-    - `B0` is set to `0` pointing out that the `balance` is going to be read
-    - `C0,C1,C2,C3` are set to 0 since they are not used when reading balance from merkle-tree
-    - `D0, D1, D2, D3` is the value writen in the merkle-tree pointed out by `H[A0 , A1 , A2 , B0 , C0 , C1 , C2 , C3, 0...0]` --> in this example register `D` has the balance of the `seqAddr`
-  - write merkle-tree state root in `SR` register 
+- Description
+  - Read from memory position 4 (`sequencerAddr`) and store it on `op`. Set `op` to register A.
+  - Set CONST to `op` and store `op` in registers `B` and `C`.
+  - Perform SWRITE (write to Merkle tree) according: `storage.set(SR, (H[A0 , A1 , A2 , B0 , C0 , C1 , C2 , C3, 0...0], D0 + D1 * 2^64 + D2 * 2^128 + D3 * 2^192 )`
+    - `SR` is the current state-root saved in register `SR`.
+    - `A0, A1, A2` carry the sequencer address.
+    - `B0` is set to `0` pointing out that the `balance` is going to be read.
+    - `C0,C1,C2,C3` are set to 0 since they are not used when reading balance from the Merkle tree.
+    - `D0, D1, D2, D3` is the value written in the Merkle tree pointed out by `H[A0 , A1 , A2 , B0 , C0 , C1 , C2 , C3, 0...0]`. In this example, register `D` has the balance of the `seqAddr`.
+  - Write Merkle tree state root in register `SR`.
