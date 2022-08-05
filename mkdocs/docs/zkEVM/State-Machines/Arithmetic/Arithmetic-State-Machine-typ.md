@@ -105,7 +105,7 @@ where $q_0,q_1,q_2 \in \mathbb{Z}$, implying that these equations hold true over
 
 This approach is taken in order to avoid computing divisions by $p$.
 
-Also note that there arise three possible computation scenarios:
+Also, note that there arise three possible computation scenarios:
 
 1. $\text{EQ}_0$ is activated while the rest are deactivated.
 2. $\text{EQ}_1$, $\text{EQ}_3$, and $\text{EQ}_4$ are activated while $\text{EQ}_0$ and $\text{EQ}_2$ are deactivated. 
