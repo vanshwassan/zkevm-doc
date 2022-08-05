@@ -1,15 +1,11 @@
 [ToC]
 
-
-
-
-
 # The Arithmetic State Machine
 As a secondary state machine, the Arithmetic State Machine has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL (program) which is the set of verification rules written in the PIL language. The Arithmetic SM Executor is written in two versions: Javascript and C/C++.
 
 
 
-The Polygon Hermez Repo is here  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
+The Polygon Hermez Repo is here:  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
 
 **Arithmetic SM Executor**: [sm_arith folder](https://github.com/0xPolygonHermez/zkevm-proverjs/tree/main/src/sm/sm_arith)
 
@@ -20,11 +16,9 @@ The Polygon Hermez Repo is here  [https://github.com/0xPolygonHermez](https://gi
 
 ## Introduction
 
-The Arithmetic State Machine (SM) is one of the six secondary state machines receiving instructions from the Main SM Executor. As a secondary state machine, the Arithmetic SM has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL program written in the PIL language.
+The Arithmetic State Machine (SM) is one of the six secondary state machines receiving instructions from the Main SM Executor. 
 
-The main purpose of the Arithmetic SM is to carry out elliptic curve arithmetic operations, such as Point Addition and Point Doubling.
-
-
+The main purpose of the Arithmetic SM is to carry out the elliptic curve arithmetic operations such as Point Addition and Point Doubling.
 
 
 
@@ -44,12 +38,11 @@ y^2 = x^3 + 7.
 \end{aligned}
 
 
-
 #### Field Arithmetic 
 
 Consider points $( x_1, y_1)$ , $( x_2, y_2)$, and $( x_3, y_3)$ on $E$.
 
-Here, $y_2$ and $y_3$ are the result of performing field arithmetic over $x_1,y_1$ and $x_2$. That is,
+Here, $y_2$ and $y_3$ are the results of performing field arithmetic over $x_1,y_1$ and $x_2$. That is,
 $$
 x_1 \cdot y_1 + x_2 = y_2 \cdot 2^{256} + y_3.
 $$
@@ -62,7 +55,7 @@ Note that,
 
 #### Elliptic Curve Point Addition 
 
-Given two points, $P = (x_1,y_1)$ and  $Q = (x_2,y_2)$, on the curve $E$ with $x_1 \neq x_2$, the point $P+Q = (x_3,y_3)$  is computed as follows,
+Given two points, $P = (x_1,y_1)$ and  $Q = (x_2,y_2)$, on the curve $E$ with $x_1 \neq x_2$, the point $P+Q = (x_3,y_3)$  is computed as follows:
 
 
 \begin{aligned}
@@ -80,7 +73,7 @@ s = \dfrac{y_2 - y_1}{x_2 - x_1}.
 #### Elliptic Curve Point Doubling 
 
 Given a point $P = (x_1,y_1)$ on the curve $E$ such that $P \neq \mathcal{O}$, the point $P+P = 2P =
-(x_3,y_3)$ is computed as follows,
+(x_3,y_3)$ is computed as follows:
 
 \begin{aligned}
 x_3 &= s^2 - 2x_1,\\
@@ -112,23 +105,21 @@ where $q_0,q_1,q_2 \in \mathbb{Z}$, implying that these equations hold true over
 
 This approach is taken in order to avoid computing divisions by $p$.
 
+Also note that there arise three possible computation scenarios:
 
-Also, note that there arise three possible computation scenarios:
-
-1. $\text{EQ}_0$ is activated while the rest are deactivated
-2. $\text{EQ}_1$, $\text{EQ}_3$, and $\text{EQ}_4$ are activated while $\text{EQ}_0$ and $\text{EQ}_2$ are deactivated 
+1. $\text{EQ}_0$ is activated while the rest are deactivated.
+2. $\text{EQ}_1$, $\text{EQ}_3$, and $\text{EQ}_4$ are activated while $\text{EQ}_0$ and $\text{EQ}_2$ are deactivated. 
 3. $\text{EQ}_2$, $\text{EQ}_3$, and $\text{EQ}_4$ are activated while $\text{EQ}_0$ and $\text{EQ}_1$ are deactivated.
 
 Since at most, one of $\text{EQ}_1$ and $\text{EQ}_2$ are activated in any scenario, we can afford "sharing'' the same $q_0$ for both.
 
 
-Motivated by the implemented operations, the Arithmetic SM is composed of 6 registers: 
+Motivated by the implemented operations, the Arithmetic SM is composed of six registers: 
 \begin{aligned}
 x_1,\ y_1,\ x_2,\ y_2,\ x_3,\ y_3.
 \end{aligned}
 
-Each of these registers is composed of $16$ sub-registers of $16$-bit ($2$ byte) capacity, adding up to
-a total of $256$ bits per register. 
+Each of these registers is composed of $16$ sub-registers of $16$-bit ($2$ byte) capacity, adding up to a total of $256$ bits per register. 
 
 There is also a need to provide $s$ and $q_0,q_1,q_2$, which are also $256$-bit field elements. 
 
