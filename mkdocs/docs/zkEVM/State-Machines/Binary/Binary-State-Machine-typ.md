@@ -10,15 +10,15 @@
 
 
 
-The Binary State Machine (SM) is one of the six secondary state machines receiving instructions, called Binary Actions, from the Main State Machine Executor.
+The Binary State Machine (SM) is one of the six secondary state machines that receives instructions, called Binary Actions, from the Main State Machine Executor.
 
 It is responsible for the execution of all binary operations in the zkProver.
 
-As a secondary state machine, the Binary State Machine has the executor part (the Binary SM Executor) and an internal Binary PIL (program) which is a set of verification rules, written in the PIL language. The Binary SM Executor is written in two versions; Javascript and C/C++.
+As a secondary state machine, the Binary State Machine has the executor part (the Binary SM Executor) and an internal Binary PIL (program) which is a set of verification rules, written in the PIL language. The Binary SM Executor is written in two versions: Javascript and C/C++.
 
 
 
-The Polygon Hermez Repo is here  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
+The Polygon Hermez Repo is here:  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
 
 **Binary SM Executor**: [sm_binary.js](https://github.com/0xPolygonHermez/zkevm-proverjs/blob/main/src/sm/sm_binary.js)
 
@@ -38,7 +38,7 @@ The Polygon Hermez Repo is here  [https://github.com/0xPolygonHermez](https://gi
 
 
 
-The zkEVM (zero-knowledge Ethereum Virtual Machine) performs the following binary operations on 256-bit strings,
+The zkEVM (zero-knowledge Ethereum Virtual Machine) performs the following binary operations on 256-bit strings:
 
 - $\text{ADD }$ ($+$), the addition operation adds two 256-bit numbers.
 - $\text{SUB }$ ($-$), the subtraction operation computes the difference between two 256-bit numbers.
@@ -54,7 +54,7 @@ The zkEVM (zero-knowledge Ethereum Virtual Machine) performs the following binar
 
 In order to understand how the $\text{ADD}$, $\text{SUB}$, $\text{LT}$ and $\text{SLT}$ operations work, one needs to first understand how the zkEVM codes 256-bit strings to signed and unsigned integers.
 
-Figure 1 shows these codifications for 3-bit strings but the idea can be easily extended to 256-bit strings.
+Figure 1 shows these codifications for 3-bit strings but the idea can easily be extended to the 256-bit strings.
 
 
 
@@ -67,7 +67,7 @@ Adding two strings is performed bit-by-bit using the corresponding carry.
 
 
 
-For example, add the 3-bit strings $\mathtt{0b001}$ and $\mathtt{0b101}$, where $\mathtt{0b}$ means binary,
+For example, add the 3-bit strings $\mathtt{0b001}$ and $\mathtt{0b101}$, where $\mathtt{0b}$ means binary:
 
 - Start with an initial $carry=0$ and add the least significant bits,
 
@@ -81,37 +81,37 @@ For example, add the 3-bit strings $\mathtt{0b001}$ and $\mathtt{0b101}$, where 
 
     $0+1+carry=0+1+0=1$, with the final carry being $carry'=0$.
 
-- As a result: $\mathtt{0b001}+\mathtt{0b101} = \mathtt{0b110}$ with $carry=0$.
+- As a result, $\mathtt{0b001}+\mathtt{0b101} = \mathtt{0b110}$ with $carry=0$.
 
 
 
-The sum $\mathtt{0b001}+\mathtt{0b101} = \mathtt{0b110}$, for unsigned integers is $1+5=6$, while for signed integers encoded with complement to two, this sum is $1+(-3) =(-2)$.
+The sum $\mathtt{0b001}+\mathtt{0b101} = \mathtt{0b110}$, for the unsigned integers is $1+5=6$, while for the signed integers encoded with complement to two, this sum is $1+(-3) =(-2)$.
 
-In other words, the same binary sum can be done for both signed integers and for unsigned integers.
+In other words, the same binary sum can be done for both the signed as well as the unsigned integers.
 
 
 
-The operations $\text{LT}$ and $\text{SLT}$ are different however.
+The operations $\text{LT}$ and $\text{SLT}$ are, however, different.
 
 When comparing unsigned integers (using $\text{LT}$), the natural order for comparisons is applied. For example, $010 < 110$, i.e., $2 < 6$.
 
 When comparing signed integers (using $\text{SLT}$), one must take into account the most significant bit that acts as the sign.
 
-- If the most-significant bits of the two strings being compared is the same, the the natural order applies. For example, $101  < 110$. i.e., $-3 < -2$
+- If the most-significant bits of the two strings being compared is the same, the natural order applies. For example, $101  < 110$. i.e., $-3 < -2$
 
 - However, if the most significant bits of strings being compared are different, then the order must be flipped (bigger numbers start with 0). For example, $110 < 001$. i.e., $-2  <  1$.
 
-Finally, notice that with unsigned integers, there is a caveat since 4 and -4 have the same codification.
+Finally, notice that with the unsigned integers, there is a caveat since 4 and -4 have the same codification.
 
 
 
-On the other hand, the $\text{AND}$, $\text{OR}$, $\text{XOR}$ and $\text{NOT}$ operations are bit-wise operations, that is to say, the operation is done bit-by-bit. As a result, there is no carry to be considered when operating a pair of bits. This makes the checks easier to implement for bit-wise operations.
+On the other hand, the $\text{AND}$, $\text{OR}$, $\text{XOR}$ and $\text{NOT}$ operations are bit-wise operations, i.e. the operation is done bit-by-bit. As a result, there is no carry to be considered when operating a pair of bits. This makes the checks easier to implement for bit-wise operations.
 
 Table 1 depicts the truth tables of $\text{AND}$, $\text{OR}$ and $\text{XOR}$ operators, respectively.
 
 
 ![Truth Tables of bit-wise operations](figures/fig-trth-tbls-bitws.png)
-<div align="center"><b> Table 1: Truth Tables of bit-wise operations </b></div>
+<div align="center"><b> Table 1: Truth Tables of Bit-wise Operations </b></div>
 
 
 
@@ -129,7 +129,7 @@ Notice that we do not consider the $\text{NOT}$ operation. This is because the $
 
 
 
-The Executor of the Binary SM records the trace of each computation in the state machine, and this computational trace is used to prove correctness of computations.
+The Executor of the Binary SM records the trace of each computation in the state machine and this computational trace is used to prove correctness of computations.
 
 The execution trace is typically in the form of 256-bit strings. And the polynomial constraints, that every correct execution trace must satisfy, are described in a PIL file (or 'code').
 
@@ -143,7 +143,7 @@ For the Binary SM, these computations refers to the aforementioned binary operat
 
 
 
-Each operation that the Binary SM checks has a code as shown in Table 2, below. 
+Each operation that the Binary SM checks has a code as shown in Table 2 below. 
 
 In instances where none of the defined binary operations is carried out, the Binary SM's operation is considered to be a $\text{NOP}$ (No Operation), in which case any code not in the defined list of codes can be used.
 
@@ -177,7 +177,7 @@ In instances where none of the defined binary operations is carried out, the Bin
 
 The Binary SM is internally designed to use plookups of bytes for all the binary operations. 
 
-That is, it uses plookups that contain all the possible input bytes and output byte combinations,
+That is, it uses plookups that contain all the possible input bytes and output byte combinations:
 
 $$
 \text{byte}_{in_0} \star \text{byte}_{in_1} = \text{byte}_{out},
@@ -230,7 +230,7 @@ where each $a_i$ is a byte that can take values between $0$ and $2^8 - 1$.
 
 
 
-**Example 1.**
+**Example 1**
 
 If $\mathbf{a} = 29967$, its byte decomposition can be written as $\mathbf{a} = (\mathtt{0x75}, \mathtt{0x0F})$, because $\mathbf{a} = 29967 = 117 \cdot 2^8 + 15$, and in hexadecimal, $117 \mapsto \mathtt{0x75}$ and $15 \mapsto \mathtt{0x0F}$.
 
@@ -242,11 +242,11 @@ If $\mathbf{a} = 29967$, its byte decomposition can be written as $\mathbf{a} = 
 
 
 
-Here is how the addition operation on two $256$-bit numbers is reduced to a byte-by-byte addition, and thus ready to use the byte-wise Plookup table.
+In this section, you will see how the addition operation on two $256$-bit numbers is reduced to a byte-by-byte addition, and thus ready to use the byte-wise Plookup table.
 
 
 
-Observe that adding two bytes $a$ and $b$ (i.e., $a$ and $b$ are members of the set $[0, 2^8-1]$), may result in a sum $c$ which cannot be expressed as a single byte. 
+Observe that adding two bytes $a$ and $b$ (i.e., $a$ and $b$ are members of the set $[0, 2^8-1]$), may result in a sum $c$, which cannot be expressed as a single byte. 
 
 For example, if $a = \mathtt{0xFF}$ and $b = \mathtt{0x01}$, then,
 $$
@@ -260,7 +260,7 @@ Consider now the process of adding two bytes.
 
 
 
-**Example 2.**
+**Example 2**
 
 Take for instance, $\mathbf{a} = (a_1, a_0) = (\mathtt{0xFF}, \mathtt{0x01})$ and $\mathbf{b} = (b_1, b_0) = (\mathtt{0xF0}, \mathtt{0xFF})$.
 
@@ -282,17 +282,17 @@ carry_2 &= 1.
 \end{aligned}
 $$
 
-The previous example shows is scheme depicts several cases that need to be treated separately;
+The previous example depicts several cases that need to be treated separately:
 
 
 
-1. If $a_1 + b_1 < 2^8$ and $a_2 + b_2 < 2^8$, then the sum $\mathbf{a} + \mathbf{b}$ is simply,
+1. If $a_1 + b_1 < 2^8$ and $a_2 + b_2 < 2^8$, then the sum $\mathbf{a} + \mathbf{b}$ is simply.
 
 $$
 \mathbf{a} + \mathbf{b} = (a_2 + b_2, a_1 + b_1).
 $$
 
-2. If $a_1 + b_1 < 2^8$ but $a_2 + b_2 \geq 2^8$, then $a_2 + b_2$ does not fit in a single byte. Hence, the sum of $a_2$ and $b_2$ has to be written as,
+2. If $a_1 + b_1 < 2^8$ but $a_2 + b_2 \geq 2^8$, then $a_2 + b_2$ does not fit in a single byte. Hence, the sum of $a_2$ and $b_2$ has to be written as:
 
 $$
 a_2 + b_2 = 1 \cdot 2^8 + c_2,
@@ -304,13 +304,13 @@ $$
 $$
 
 
-3. If $a_1 + b_1 \geq 2^8$, then we have that:
+3. If $a_1 + b_1 \geq 2^8$, then we have:
 
 $$
 a_1 + b_1 = 1 \cdot 2^8 + c_1,
 $$
 
-​	for some byte $c_1$. Then we can write,
+​	for some byte $c_1$, we can write:
 $$
 \mathbf{a} + \mathbf{b} = (a_2 + b_2 + 1) \cdot 2^8 + c_1.
 $$
@@ -332,17 +332,14 @@ $$
 $$
 \mathbf{a} + \mathbf{b} = (c_2, c_1).
 $$
-Observe that addition of $256$-bit numbers can be reduced to additions at byte-level by operating through the previous cases in an iterative manner. 
-
-
-
+Observe that the addition of the $256$-bit numbers can be reduced to additions at byte-level by operating through the previous cases in an iterative manner. 
 
 
 ### Subtraction 
 
 
 
-Reducing Subtraction to byte-level turns out to be trickier than Addition case. 
+Reducing Subtraction to a byte-level is trickier than Addition case. 
 
 
 
@@ -352,7 +349,7 @@ Observe that $\mathtt{0xFF}$ cannot be subtracted from $\mathtt{0x01}$ because $
 
 However, we know that the result is $\mathbf{a} - \mathbf{b} = \mathbf{c} = \mathtt{0x0002}$.
 
-In order to get this result, notice that the operation can be described as follows,
+In order to get this result, notice that the operation can be described as follows:
 
 $$
 \begin{aligned}
@@ -371,9 +368,9 @@ Nonetheless, it may be necessary to look at more examples so as to better unders
 
 
 
-Consider now subtraction of numbers with $3$ bytes. Say, $a = \mathtt{0x0001FE}$ and $b = \mathtt{0xFEFFFF}$.
+Consider subtraction of numbers with $3$ bytes. Say, $a = \mathtt{0x0001FE}$ and $b = \mathtt{0xFEFFFF}$.
 
-First analyse the first two bytes, as in the previous example,
+First analyse the first two bytes, as in the previous example:
 
 $$
 \begin{aligned}
@@ -382,7 +379,7 @@ $$
 \end{aligned}
 $$
 
-But now observe that $\mathtt{0x01} - \mathtt{0xFF} - \mathtt{0x01}$ is also a negative value. Hence, there is a need to repeat the strategy and keep a carry to the next byte,
+But now observe that $\mathtt{0x01} - \mathtt{0xFF} - \mathtt{0x01}$ is also a negative value. Hence, there is a need to repeat the strategy and keep a carry to the next byte:
 
 $$
 \begin{aligned}
@@ -401,7 +398,7 @@ In general, let $a = (a_i)_i$ and $b = (b_i)_i$, with $a_i, b_i$ bytes, be the b
 
 
 
-We have two possible cases,
+We have two possible cases:
 
 - If $a_i - \texttt{carry} \geq b_i$, then $a_i - b_i - \texttt{carry}$ provides the corresponding $i$-th byte of the representation of $a - b$.
 - If $a_i - \texttt{carry} < b_i$ then we should compute the corresponding $i$-th byte of the representation of $a - b$ as,
@@ -412,13 +409,13 @@ $$
 
 
 
-However, we need to discuss the last step of our example. Observe that we can not perform the operation $\mathtt{0x00} - \mathtt{0xFE} - \mathtt{0x01}$ since it corresponds to a negative value. But as we are working with unsigned integers, we will do the two's complement and set the last byte to, 
+However, we need to discuss the last step of our example. Observe that we can not perform the operation $\mathtt{0x00} - \mathtt{0xFE} - \mathtt{0x01}$ since it corresponds to a negative value. But as we are working with unsigned integers, we will do the two's complement and set the last byte to:
 $$
 2^8 - \mathtt{0xFE} + \mathtt{0x00} - \mathtt{0x01} = 255 - \mathtt{0xFE} + \mathtt{0x00} - \mathtt{0x01} + 1 = 255 - b_3 + a_3 - \texttt{carry} + 1.
 $$
 
 
-Observe that this is also included in the case when $a_i - \texttt{carry} < b_i$, so we must not treat the last bit in a different manner. To end up with our example, we get the following byte representation of $a - b$,
+Observe that this is also included in the case when $a_i - \texttt{carry} < b_i$, so we must not treat the last bit in a different manner. To end up with our example, we get the following byte representation of $a - b$:
 $$
 c = (\mathtt{0x01}, \mathtt{0x01}, \mathtt{0xFF}) = \mathtt{0x01} \cdot 2^{16} + \mathtt{0x01} \cdot 2^8 + \mathtt{0xFF}.
 $$
@@ -434,29 +431,31 @@ $$
 
 
 
-We want to describe the less than comparator byte-wise. For $256$-bits integers, the operation $<$ will output $c = 1$ if $a < b$ and $c = 0$ otherwise. As we are working in the natural integers order, the most significant byte decide and, if they are equal, we should consider the previous one until we can decide. Let us propose the example with $a = \mathtt{0xFF AE 09}$ and $b = \mathtt{0x FF AE 02}$. We know that $a > b$. Why? We should start at the most significant byte. We know that
+We want to describe the less than comparator byte-wise. For $256$-bits integers, the operation $<$ will output $c = 1$ if $a < b$ and $c = 0$ otherwise. As we are working in the natural integers order, the most significant byte decides and if they are equal, we should consider the previous one until we can decide. Let us propose the example with $a = \mathtt{0xFF AE 09}$ and $b = \mathtt{0x FF AE 02}$. We know that $a > b$. Why? We should start at the most significant byte. We know that
 $$
 a \mathtt{>> 16} = \mathtt{0x FF} = \mathtt{0x FF} = b \mathtt{>> 16}.
 $$
 
 
-Hence, we can not decide with this byte. An the same happens with the second byte, they are both equal to $\mathtt{0x AE}$. Hence, the less significant byte decides, 
+Hence, we can not decide with this byte. And the same happens with the second byte: they are both equal to $\mathtt{0x AE}$. Hence, the less significant byte decides, 
 $$
 \mathtt{0x 09} > \mathtt{0x 02}.
 $$
 
 
-However, the problem with our set up is that we must start with the less significant byte and climb up to the most significant byte. The strategy will be to use some kind of a carry in order to "carry" the decisions from previous bytes. Let us do an example step by step, now with $a = \mathtt{0x FF AA 02}$ and $b = \mathtt{0x 01 AA 09}$. First of all, we will compare the less significant bytes. Since
+However, the problem with our set up is that we must start with the less significant byte and climb up to the most significant byte. The strategy will be to use some kind of a carry in order to "carry" the decisions from previous bytes. 
+Let us see step-by-step example: 
+$a = \mathtt{0x FF AA 02}$ and $b = \mathtt{0x 01 AA 09}$. First of all, we will compare the less significant bytes. Since,
 $$
 \mathtt{0x 02} < \mathtt{0x 09},
 $$
-we will set up $\mathtt{carry} = 1$. We will carry this decision until we finish to process all bytes or, alternatively, we should change to the complementary decision. Therefore, since the next two bytes are equal and we are not at the end, we maintain $\mathtt{carry}$ to $1$. The previous step is the last one. We compare the most significant bytes,
+we will set up $\mathtt{carry} = 1$. We will carry this decision until we finish to process all bytes or, alternatively, we should change to the complementary decision. Therefore, since the next two bytes are equal and we are not at the end, we maintain $\mathtt{carry}$ to $1$. The previous step is the last one. We compare the most significant bytes:
 $$
 \mathtt{0x FF} \not < \mathtt{0x 01}.
 $$
 
 
-Henceforth, we should output a $0$, independently to the previous carry decision. But, let us suppose now that $b = \mathtt{0x FF AA 09}$. Then, in this last step, we should output a $1$, since $a < b$. The idea is that, in the last step, if both bytes are equal, we should output the decision carry $\mathtt{carry}$. In general, in the step $i$, comparing bytes $a_i$ and $b_i$, we have $3$ cases,
+Henceforth, we should output a $0$, independently to the previous carry decision. But, let us suppose now that $b = \mathtt{0x FF AA 09}$. Then, in this last step, we should output a $1$, since $a < b$. The idea is that, in the last step, if both bytes are equal, we should output the decision carry $\mathtt{carry}$. In general, in the step $i$, comparing bytes $a_i$ and $b_i$, we have $3$ cases:
 
 - If $a_i < b_i$, we set $\mathtt{carry}$ to $1$. If we are at the most significant byte, we output $1$.
 - If $a_i = b_i$, we let $\mathtt{carry}$ unchanged in order to maintain the previous decision. If we are at the most significant byte, we output $\mathtt{carry}$.
@@ -474,11 +473,12 @@ Henceforth, we should output a $0$, independently to the previous carry decision
 
 
 
-In computer science, the most common method of representing signed integers on computers, is called \textbf{two's complement}. When the most significant bit is a one, the number is signed as negative. The way to express a negative integer $x$ into two's complement form is chosen so that, among integers of the same sign, the lexicographical order is maintained. That is, if $a < b$ are signed integers of the same sign, then its two's complement representations preserve the same order. This will not be true if the signs are different. For example, it is not surprising that
+In computer science, the most common method of representing signed integers on computers, is called 
+\textbf{two's complement}. When the most significant bit is "1", the number is signed as negative. The way to express a negative integer $x$ into two's complement form is chosen so that among integers of the same sign, the lexicographical order is maintained. That is, if $a < b$ are signed integers of the same sign, then its two's complement representations preserve the same order. This will not be true if the signs are different. For example, it is not surprising that
 $$
 000\dots0 > 111\dots1
 $$
-using the two's complement encoding, because $111\dots1$ is negative and $000\dots0$ is positive. The two's complement form of negative integer $x$ in a $N$-bits system is the binary representation of $2^N - x$. For example, let $x = -1$ and $N = 4$. Then,
+using the two's complement encoding, because $111\dots1$ is negative and $000\dots0$ is positive. The two's complement form of the negative integer $x$ in a $N$-bits system is the binary representation of $2^N - x$. For example, let $x = -1$ and $N = 4$. Then,
 $$
 10000 - 0001 = 1111.
 $$
@@ -488,11 +488,11 @@ $$
 $$
 
 
-Hence, observe that $-1 > -2$ because $1111 > 1110$ and conversely: the order is preserved for integers of the same sign. 
+Hence, observe that $-1 > -2$ because $1111 > 1110$ and conversely, the order is preserved for integers of the same sign. 
 
 
 
-We will describe a method to compare signed integers byte-wise. First of all, let us analyze the order among all the signed bytes, in order to understand how to compare them. Once we achieve this, the strategy will be very similar to the previous Less Than. 
+We will describe a method to compare signed integers byte-wise. First of all, let us analyze the order among all the signed bytes in order to understand how to compare them. Once we achieve this, the strategy will be very similar to the previous section: **Less Than**. 
 
 
 
@@ -520,29 +520,29 @@ Recall that we are processing the bytes of $a$ and $b$ from the less significant
 
 1. First of all, we start comparing $a_0$ and $b_0$. 
 
-​	(a)	If $a_0 < b_0$, we set $\texttt{carry} = 1$.
+​	a. If $a_0 < b_0$, we set $\texttt{carry} = 1$.
 
-​	(b)	Otherwise we set $\texttt{carry} = 0$.	
+​	b. Otherwise we set $\texttt{carry} = 0$.	
 
 
 
 2. For all $0 < i < 31$, we compare $a_i$ and $b_i$.
 
-​	(a)	If $a_i < b_i$, we set $\texttt{carry} = 1$.
+​	a. If $a_i < b_i$, we set $\texttt{carry} = 1$.
 
-​	(b)	If $a_i = b_i$, we leave $\texttt{carry}$ unchanged from the previous step.
+​	b. If $a_i = b_i$, we leave $\texttt{carry}$ unchanged from the previous step.
 
-​	(c)	Otherwise, we set $\texttt{carry} = 0$.
+​	c. Otherwise, we set $\texttt{carry} = 0$.
 
 
 
 3. Now, we have to compare the last byte. We follow the described strategy of comparing the signs:
 
-​	(a)	If $\texttt{sgn}(a) > \texttt{sgn}(b)$, we output a $1$, so $a < b$.
+​	a. If $\texttt{sgn}(a) > \texttt{sgn}(b)$, we output a $1$, so $a < b$.
 
-​	(b)	If $\texttt{sgn}(a) < \texttt{sgn}(b)$, we output a $0$, so $a < b$.
+​	b. If $\texttt{sgn}(a) < \texttt{sgn}(b)$, we output a $0$, so $a < b$.
 
-​	(c)	If $\texttt{sgn}(a) = \texttt{sgn}(b)$, we compare the last bytes $a_{31}$ and $b_{31}$ in the same way we have compare the previous bytes. We output $0$ or $1$ accordingly.
+​	c. If $\texttt{sgn}(a) = \texttt{sgn}(b)$, we compare the last bytes $a_{31}$ and $b_{31}$ in the same way we have compare the previous bytes. We output $0$ or $1$ accordingly.
 
 ​			  (i)	If $a_{31} < b_{31}$, we output a $1$, so $a < b$.
 
@@ -552,7 +552,7 @@ Recall that we are processing the bytes of $a$ and $b$ from the less significant
 
 
 
-Let us exemplify the previous procedure setting $a = \mathtt{0xFF FF FF 00}$ and $b = \mathtt{0x00 FF FF FF}$. We know that $a < b$, so we should output a $1$. Observe that the less significant byte of $a$ is leaser than the less significant byte of $b$. Hence, we should put $\texttt{carry}$ equal to $1$. The next two bytes of $a$ and $b$ are both equal to $\mathtt{0xFF FF}$, therefore we maintain $\texttt{carry}$ unchanged equal to $1$. However, since $a$ is negative and $b$ is positive, we should change the decision and output a $1$, independently of the $\texttt{carry}$. 
+Let us exemplify the previous procedure setting $a = \mathtt{0xFF FF FF 00}$ and $b = \mathtt{0x00 FF FF FF}$. We know that $a < b$, so we should output a $1$. Observe that the less significant byte of $a$ is lesser than the less significant byte of $b$. Hence, we should put $\texttt{carry}$ equal to $1$. The next two bytes of $a$ and $b$ are both equal to $\mathtt{0xFF FF}$, therefore, we maintain $\texttt{carry}$ unchanged equal to $1$. However, since $a$ is negative and $b$ is positive, we should change the decision and output a $1$, independently of the $\texttt{carry}$. 
 
 
 
@@ -564,7 +564,7 @@ Let us exemplify the previous procedure setting $a = \mathtt{0xFF FF FF 00}$ and
 
 
 
-We want to describe the equality comparator byte-wise. For unsigned $256$-bits integers, the operation $=$ will output $c = 1$ if $a = b$ and $c = 0$ otherwise. This operation is very simple to describe byte-wise, since $a = b$ if and only if all its bytes coincide. 
+We want to describe the equality comparator byte-wise. For the unsigned $256$-bits integers, the operation $=$ will output $c = 1$ if $a = b$ and $c = 0$, otherwise. This operation is very simple to describe byte-wise, since $a = b$ if and only if all its bytes coincide. 
 
 
 
@@ -602,7 +602,7 @@ We will describe an algorithm in order to proceed processing all the bytes. We w
 
 
 
-We will describe all bitwise operations at once because they are the easiest ones, since we do not need to introduce carries. 
+We will describe all the bitwise operations at once because they are the easiest ones since we do not need to introduce carries. 
 
 
 
@@ -635,7 +635,7 @@ $$
 
 
 
-The Binary SM has 8 registries, each with an 32-bit Input/Output capacity. i.e., A total of 256 bits.
+The Binary SM has 8 registries, each with an 32-bit Input/Output capacity, i.e. a total of 256 bits.
 
 It carries out binary computations in accordance with instructions from the Main SM Executor.
 
@@ -647,20 +647,20 @@ The binary operations it executes, together with their specific opcodes, are;
 
 
 
-### The Nutshell
+### In The Nutshell
 
 
-Firstly, the Binary SM Executor translates the Binary Actions into the PIL language. 
+First, the Binary SM Executor translates the Binary Actions into the PIL language. 
 
-Secondly, it executes the Binary Actions. 
+Then it executes the Binary Actions. 
 
-And thirdly, it uses the Binary PIL program [binary.pil](https://github.com/hermeznetwork/zkproverjs/blob/main/pil/binary.pil), to check correct execution of the Binary Actions using [Plookup]().
+And then, it uses the Binary PIL program [binary.pil](https://github.com/hermeznetwork/zkproverjs/blob/main/pil/binary.pil), to check correct execution of the Binary Actions using [Plookup]().
 
 
 
 #### Translation to PIL Language
 
-It builds the constant polynomials, which are generated once-off at the beginning. These are; 
+It builds the constant polynomials, which are generated once-off at the beginning. These are:
 
 - the 4 bits long operation code `P_OPCODE`, 
 - the 1-bit Carry-in  `P_CIN`, 
@@ -671,9 +671,9 @@ It builds the constant polynomials, which are generated once-off at the beginnin
 
 
 
-It also creates constants required in the Binary PIL program;
+It also creates constants required in the Binary PIL program:
 
-- `RESET` is used to reset registry values every time the state machine completes a cycle of state transitions,
+- `RESET` is used to reset registry values every time the state machine completes a cycle of state transitions.
 - `FACTOR`, which is an array of size 8, is used for correct placement of output registry values.
 
 
@@ -716,7 +716,7 @@ Each row of the lookup table is a vector of the form; \{ `P_LAST`, `P_OPCODE`, `
 
 The Binary PIL program takes in byte-size inputs, as in the Binary SM Executor, each 256-bit input committed polynomial is first broken into 32 bytes.
 
-For each of the 32 triplets `freeInA`, `freeInB` and `freeInC`, tallying with the three 256-bit committed polynomials  A,B and C, the Binary PIL program,
+For each of the 32 triplets `freeInA`, `freeInB` and `freeInC`, tallying with the three 256-bit committed polynomials  A,B and C, the Binary PIL program:
 
 1. Prepares a Plookup input vector of the form;  \{`last`, `opcode`, `freeInA`, `freeInB`, `cIn`, `freeInC`, `cOut`\}, where each element is a byte.
 2. Runs Plookup,
