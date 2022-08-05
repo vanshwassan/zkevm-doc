@@ -1,67 +1,66 @@
-# The mock server is at git@github.com:hermeznetwork/zk-mock-prover.git
+<!-- The mock server is at git@github.com:hermeznetwork/zk-mock-prover.git-->
 
-# Server definition
-- `proto/zk-prover-proto` contains the service specification
+# Server Definition
+- `proto/zk-prover-proto` contains the service specifications.
 
-syntax = "proto3";
+    syntax = "proto3";
 
-package zkprover;
+    package zkprover;
 
-service ZKProver {
-    rpc GetStatus(NoParams) returns (State) {}
-    rpc GenProof(stream Batch) returns (stream Proof) {}
-    rpc Cancel(NoParams) returns (State) {}
-    rpc GetProof(NoParams) returns (Proof) {}
-}
-
-message NoParams {}
-
-message State {
-    enum Status {
-        IDLE = 0;
-        ERROR = 1;
-        PENDING = 2;
-        FINISHED = 3;
+    service ZKProver {
+        rpc GetStatus(NoParams) returns (State) {}
+        rpc GenProof(stream Batch) returns (stream Proof) {}
+        rpc Cancel(NoParams) returns (State) {}
+        rpc GetProof(NoParams) returns (Proof) {}
     }
-    Status status = 1;
-    Proof proof = 2;
-}
 
-message ProofX {
-    repeated string proof = 1;
-}
+    message NoParams {}
 
-message PublicInputs {
-    bytes currentStateRoot = 1;
-    bytes currentLocalExitRoot = 2;
-    bytes newStateRoot = 3;
-    bytes newLocalExitRoot = 4;
-    string sequencerAddress = 5;
-    bytes l2TxsDataLastGlobalExitRoot = 6;
-    uint64 chainId = 7;
-}
+    message State {
+        enum Status {
+            IDLE = 0;
+            ERROR = 1;
+            PENDING = 2;
+            FINISHED = 3;
+        }
+        Status status = 1;
+        Proof proof = 2;
+    }
 
-message Proof {
-    repeated string proofA = 1;
-    repeated ProofX proofB = 2;
-    repeated string  proofC = 3;
-    PublicInputs publicInputs = 4;
-}
+    message ProofX {
+        repeated string proof = 1;
+    }
 
-message Batch {
-    string message = 1;
-    bytes currentStateRoot = 2;
-    bytes newStateRoot = 3;
-    bytes l2Txs = 4;
-    bytes lastGlobalExitRoot = 5;
-    string sequencerAddress = 6;
-    uint64 chainId = 7;
-}
+    message PublicInputs {
+        bytes currentStateRoot = 1;
+        bytes currentLocalExitRoot = 2;
+        bytes newStateRoot = 3;
+        bytes newLocalExitRoot = 4;
+        string sequencerAddress = 5;
+        bytes l2TxsDataLastGlobalExitRoot = 6;
+        uint64 chainId = 7;
+    }
 
+    message Proof {
+        repeated string proofA = 1;
+        repeated ProofX proofB = 2;
+        repeated string  proofC = 3;
+        PublicInputs publicInputs = 4;
+    }
 
-- Following documentation pretends to explain further its behaviour
+    message Batch {
+        string message = 1;
+        bytes currentStateRoot = 2;
+        bytes newStateRoot = 3;
+        bytes l2Txs = 4;
+        bytes lastGlobalExitRoot = 5;
+        string sequencerAddress = 6;
+        uint64 chainId = 7;
+    }
 
-## Service functionalities
+- Following documentation explains its behaviour further:
+
+## Service Functionalities
 ```
 rpc GetStatus(NoParams) returns (State) {}
 rpc GenProof(stream Batch) returns (stream Proof) {}
@@ -70,7 +69,7 @@ rpc GetProof(NoParams) returns (Proof) {}
 ```
 
 ### GetStatus
-Function to know the status of the prover.
+This function lets us know the status of the prover.
 
 The client does not need to enter data to make this call.
 The status is returned in the following form:
@@ -90,7 +89,7 @@ message State {
 The status will be one of those defined in the `enum`. Proof is only defined if the status is `FINISHED`.
 
 ### GenProof
-Function to generate the proofs.
+This function generates the proofs.
 
 The client must provide the following information to the server when calling the function:
 ```
@@ -105,11 +104,11 @@ message Batch {
 }
 ```
 
-Where the message can be:
+where the message can be:
 - `"calculate"`: to generate the proof
 - `"cancel"`: to cancel the last proof
 
-And the server will respond:
+and the server will respond:
 ```
 message Proof {
     repeated string proofA = 1;
@@ -119,7 +118,7 @@ message Proof {
 }
 ```
 
-Where:
+where:
 ```
 message PublicInputs {
     bytes currentStateRoot = 1;
@@ -136,16 +135,16 @@ message ProofX {
 }
 ```
 
-This channel will be open until the client decides to close it. In this way, the client can continue requesting proofs by sending the message `Batch`.
+This channel will remain open until client decides to close it. In this way, the client can continue requesting proofs by sending the message `Batch`.
 
 ### Cancel
 If the previous channel is closed and the server has computed a proof, the client can cancel it with this call.
 
 The client does not need to enter data to make this call.
-The prover returns the status to confirm that the proof calculation is canceled.
+The prover returns the status to confirm that the proof calculation is cancelled.
 
 ### GetProof
-Function to get the last calculated proof.
+This function gets the last calculated proof.
 
 The client does not need to enter data to make this call.
 If the status is `FINISHED`, the last proof is returned.
