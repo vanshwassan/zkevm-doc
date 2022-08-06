@@ -36,18 +36,24 @@ It is easy to check whether  $\mathbf{377}$  and  $\mathbf{987}$  are members of
 
 Consider a state machine with registries $\mathbf{A} = ( A_1, A_2, \dots , A_l )$ and  $\mathbf{B} = ( B_1, B_ 2, \dots , B_l )$, so that the i-th state is the pair $\big( A_i , B_i \big)$.  Such a state machine is a **Fibonacci state machine** if indeed the registry values conform to the format of the Fibonnacci sequence. See the picture below, with the initial conditions  $A_1 = 0$  and  $B_1 = 1$. 
 
-<p align="center"><img src="figures/fibo-state-2r.png" width="280" /></p>
+
+
+![Figure 2 : Fibonacci State Machine - Three Registries](figures/fibonacci-sequence.pdf.png)
+
 <div align="center"><b> Figure 1 : Fibonacci State Machine - Two Registries </b></div>
 
 
 
 Since the two registries contain the Fibonacci sequence, except that $\mathbf{B}$ is one step ahead of $\mathbf{A}$, they are related as follows,
+
+
 $$
 \begin{aligned} 
 A_{i+1} &= B_i , \\ 
 B_{i+1} &= A_i + B_i.
 \end{aligned}
 $$
+
 
 The idea here is to express the registries as polynomials and ultimately employ a polynomial commitment scheme in order to fully construct the membership crypto tool. 
 
@@ -65,15 +71,19 @@ P(\omega^i) = A_i, \\
 Q(\omega^i) = B_i.
 $$
 
-Since every $x$ in $H$ is of the form $x = \omega^i$ for some $i$, we have 
+Since every $x$ in $H$ is of the form $x = \omega^i$ for some $i$, we have
+
 $$
 \begin{aligned}
-P(x\omega) &=  P(\omega^{i + 1})  =  A_{i+1}, \\
+P(x\omega) &=  P(\omega^{i + 1})  =  A_{i+1},\\
 Q(x\omega) &= Q(\omega^{i+1})  =  B_{i+1}.
 \end{aligned}
 $$
 
+
 But substituting the relations, $A_{i+1} = B_i$ and $B_{i+1} = A_i + B_i$, results in the following identities,
+
+
 $$
 \begin{aligned}
 P(x\omega) &= A_{i+1} = B_i = Q(\omega^i) = \bigg\lvert_H Q(x),\\ 
@@ -81,7 +91,10 @@ Q(x\omega) &= B_{i+1} = A_i + B_i  = P(\omega^i) + Q(\omega^i) = \bigg\lvert_H P
 \end{aligned}
 $$
 
+
+
 That is, 
+
 
 $$
 \begin{aligned}
@@ -89,6 +102,9 @@ P(x\omega) &= \bigg\lvert_H  Q(x),\\
 Q(x\omega) &= \bigg\lvert_H  P(x) + Q(x).
 \end{aligned}
 $$
+
+
+
 
 
 
@@ -130,7 +146,10 @@ We therefore need some error-correcting polynomial $R(x)$ which makes the polyno
 
 We first modify our Fibonacci state machine by adding a third registry $\mathbf{C} = ( C_1, C_2, \dots , C_l)$. Set the registry values to  $\mathbf{C} = ( 1, 0, 0, \dots , 0)$. So the Fibonacci state machine is now as depicted in Figure 2 below.
 
-<p align="center"><img src="figures/fibo-state-3r.png" width="400" /></p>
+
+
+![Figure 2 : Fibonacci State Machine - Three Registries](figures/fibonacci-sequence-aux.pdf.png)
+
 <div align="center"><b> Figure 2 : Fibonacci State Machine - Three Registries </b></div>
 
 
@@ -141,6 +160,8 @@ R(\omega^i) = C_i.
 $$
 
 That is, 
+
+
 $$
 \begin{aligned}
 R(\omega^i) &= C_i = 1, \text{ if }\ \ i \mod 8 = 1 , \\
@@ -148,7 +169,10 @@ R(\omega^i) &= C_i = 0, \text{ otherwise}.
 \end{aligned}
 $$
 
+
+
 The polynomial $R(x)$ is incorporated into the previous polynomial identities as follows,
+
 $$
 \begin{aligned}
 P(x \omega) &= \bigg\lvert_H Q(x) \big( 1 - R(x \omega) \big),\\
@@ -156,35 +180,49 @@ Q(x \omega) &= \bigg\lvert_H \big( P(x) + Q(x) \big) \big( 1 - R(x \omega) \big)
 \end{aligned}
 $$
 
+
+
 Let us test if these new polynomial identities are cyclic, by again using  $x = \omega^8$. 
 
 - For the first identity we have 
-  $$
-  \begin{aligned}
-  LHS &= P(x \omega) = P(\omega^8 \cdot \omega) = P(\omega^1) = A_1 = 0,\\
-  RHS &= Q(x) \big( 1 - R(x \omega) \big) = Q(\omega^8) \big( 1 - R(\omega^8 \cdot \omega) \big) = A_8 \big( 1 - R(\omega) \big) = 13 \big( 1 - 1 \big) = 0.
-  \end{aligned}
-  $$
-  
-  So the first identity holds true for  $x = \omega^8$,  and it is easy to check that it holds true for all other values of  $x$  in  $H$.
 
-- For the second identity we have 
-  $$
-  \begin{aligned}
-  LHS &= Q(x\omega) = Q(\omega^8 \cdot \omega) = Q(\omega^1) = B_1 = 1,\\
-  RHS &= \big(P(\omega^8) + Q(\omega^8) \big) \big( 1 - R(\omega^8 \cdot \omega) \big) + R(\omega^8 \cdot \omega)\\ 
-  &= \big( A_8 + B_8 \big) \big( 1 - R(\omega^1) \big) + R(\omega^1)\\
-  &= \big( 13 + 21 \big) \big( 1 - 1 \big) + 1 = 1 .
-  \end{aligned}
-  $$
-  The second identity also holds true for  $x = \omega^8$,  and it is readily verifiable that it holds true for all other values of  $x$  in  $H$.  
+$$
+\begin{aligned}
+LHS &= P(x \omega) = P(\omega^8 \cdot \omega) = P(\omega^1) = A_1 = 0,\\
+RHS &= Q(x) \big( 1 - R(x \omega) \big) = Q(\omega^8) \big( 1 - R(\omega^8 \cdot \omega) \big) = A_8 \big( 1 - R(\omega) \big) = 13 \big( 1 - 1 \big) = 0.
+\end{aligned}
+$$
+
+
+
+
+
+So the first identity holds true for  $x = \omega^8$,  and it is easy to check that it holds true for all other values of  $x$  in  $H$.
+
+- For the second identity we have
+
+
+$$
+\begin{aligned}
+LHS &= Q(x\omega) = Q(\omega^8 \cdot \omega) = Q(\omega^1) = B_1 = 1,\\ \\
+RHS &= \big(P(\omega^8) + Q(\omega^8) \big) \big( 1 - R(\omega^8 \cdot \omega) \big) + R(\omega^8 \cdot \omega)\\ 
+&= \big( A_8 + B_8 \big) \big( 1 - R(\omega^1) \big) + R(\omega^1)\\
+&= \big( 13 + 21 \big) \big( 1 - 1 \big) + 1 = 1.
+\end{aligned}
+$$
+
+The second identity also holds true for $x = \omega^8$, and it is readily verifiable that it holds true for all other values of $x$ in $H$.
+
 
 
 
 
 #### Varied Initial Conditions
 
-Note that instead of being restricted to the given initial conditions $\big( A_1 , B_1 \big) = \big( 0 , 1 \big) $,  the Fibonacci state machine together with its polynomial identities can be easily adjusted to any other initial conditions  $\big( A_1 , B_1 \big) $ as follows; 
+Note that instead of being restricted to the given initial conditions $\big( A_1 , B_1 \big) = \big( 0 , 1 \big)$,  the Fibonacci state machine together with its polynomial identities can be easily adjusted to any other initial conditions  $\big( A_1 , B_1 \big)$ as follows; 
+
+
+
 $$
 \begin{aligned} 
 P(x \omega) &= \bigg\lvert_H Q(x) \big( 1 - R(x \omega) \big) + A_1 R(x \omega),\\
@@ -196,16 +234,21 @@ $$
 
 
 
-
 ## Proving Our State Machine (High Level)
 
 
 
-<p align="center"><img src="figures/fibo-polnml-commit.pdf.png" width="500" /></p>
-
-
-
 The previous polynomial relations can be efficiently proven via **polynomial commitments** such as [Kate](https://www.iacr.org/archive/asiacrypt2010/6477178/6477178.pdf) and [FRI-based](https://drops.dagstuhl.de/opus/volltexte/2018/9018/pdf/LIPIcs-ICALP-2018-14.pdf).
+
+
+
+
+![Figure 3 : Polynomial Commitment Scheme](figures/fibo-polnml-commit.pdf.png)
+
+<div align="center"><b> Figure 3 : Polynomial Commitment Scheme </b></div>
+
+
+
 
 Commitment schemes are binding and hiding:
 

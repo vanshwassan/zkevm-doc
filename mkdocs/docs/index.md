@@ -27,7 +27,7 @@
 
 Integrated seamlessly with the Ethereum ecosystem, Polygon zkEVM is a powerful, decentralized technology that provides Layer 2 scalability solutions to blockchain users. With the tremendous increase in the number of transactions taking place on-chain (i.e. base layer Ethereum), the Layer 1 solution is already facing blockchain trilemma: decentralization, scalability, and security. It is where Polygon zkEVM steps in. 
 
-By providing zk-rollups (zero-knowledge rollups) that sit on the top of Ethereum Maninnet, the scalability and the transactions per second (TPS) can be dramatically improved. To prove that the off-chain computations are correct, Polygon zkEVM employs zero-knowledge proofs that can be verified easily. The Layer 2 zero-knowledge proofs are based on the complex polynomial computations that help in leveraging Ethereum scaling and provide fast finality to the off-chain transactions.
+By providing zk-rollups (zero-knowledge rollups) that sit on the top of Ethereum Mainnet, the scalability and the transactions per second (TPS) can be dramatically improved. To prove that the off-chain computations are correct, Polygon zkEVM employs zero-knowledge proofs that can be verified easily. The Layer 2 zero-knowledge proofs are based on the complex polynomial computations that help in leveraging Ethereum scaling and provide fast finality to the off-chain transactions.
 
 ## What is Polygon zkEVM? 
 
@@ -38,7 +38,7 @@ Polygon zkEVM, henceforth called zkEVM, has been developed to emulate Ethereum V
 This document presents a high-level description of the upcoming Polygon zkEVM solution including its main components and design. It also seeks to highlight how Polygon zkEVM departs from the original design of Polygon Hermez 1.0.
 
 
-## Architecture
+## zkEVM Architecture
 
 
 Over and above what its predecessor was designed to do, the main functionality of zkEVM is to provide smart contract support. It performs the task of state transition resulting from the Ethereum Layer 2 transaction executions (transactions that users send to the network). Subsequently, by employing zero-knowledge functionality, it generates validity proofs that attest to the correctness of these state change computations carried out off-chain.

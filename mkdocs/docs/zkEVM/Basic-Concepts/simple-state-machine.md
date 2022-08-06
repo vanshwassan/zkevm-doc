@@ -2,7 +2,9 @@
 
 Next we show the arithmetization process of a more complex but yet simple state machine. Unlike the Fibonacci state machine, our simple state machine transitions from one state to the next in response to certain external instructions. See Figure 1 below, for such a state machine, with registries $\texttt{A}$ and $\texttt{B}$, and a state $\big(\texttt{A}^{\texttt{i}},\texttt{B}^{\texttt{i}}\big)$ that changes to another state $\big(\texttt{A}^{\texttt{i+2}},\texttt{B}^{\texttt{i+2}}\big)$ in accordance to two instructions, $\texttt{Instruction}^{\texttt{i}}$ and $\texttt{Instruction}^{\texttt{i+1}}$.
 
-<img src="figures/simple-state-machine-overview.pdf.png" alt="image" style="zoom:48%;" />
+
+
+![Figure 3 : Polynomial Commitment Scheme](figures/simple-state-machine-overview.pdf.png)
 
 
 <div align="center"><b>  Figure 1: A State Machine Receiving Instructions </b></div>
@@ -34,9 +36,9 @@ $$\begin{array}{|l|c|}
 
 In accordance with each line of $\texttt{Instruction}^{\texttt{1}}$, the state machine executor must;
 
-- $\texttt{line 1}$: Get a free input value and save it into register $\texttt{A}$.
+- $\texttt{line 1}$: Get a free input value and move it into register $\texttt{A}$.
 - $\texttt{line 2}$: Move the value $\mathtt{3}$ into register $\mathtt{B}$.
-- $\texttt{line 3}$: Compute the sum of the registry values $\mathtt{A}$ and $\mathtt{B}$, and save the output into register $\mathtt{A}$.
+- $\texttt{line 3}$: Compute the sum of registry values $\mathtt{A}$ and $\mathtt{B}$, and save the output into register $\mathtt{A}$.
 - $\texttt{line 4}$: Set the registers $\mathtt{A}$ and $\mathtt{B}$ to the value $\mathtt{0}$.
 
 
@@ -79,12 +81,27 @@ One therefore needs a way to keep track of all the computations and their correc
 
 For our verification purposes, the **computational trace** does not capture the actual state values of each state transition, but uses selectors and setters to keep record of whether registry values have been altered (during each state transition) in a way that tallies with the received instructions.
 
-Like switches that can either be ON or OFF, selectors and setters can also be either $\mathtt{1}$ or $\mathtt{0}$. Each selector (and each setter) is hence recorded;
+Like switches that can either be ON or OFF, selectors and setters can also be either $\mathtt{1}$ or $\mathtt{0}$.
 
-- As the value $\mathtt{1}$, if the corresponding registry value was altered by the instruction,
+
+
+Rule for the $\texttt{inFree}$ selector: Record $\texttt{inFree}$ as $\mathtt{1}$ only if the value of the register $\texttt{free}$ is non-zero.
+
+
+
+Rule for selectors $\{\texttt{setX}\}$: Each selector $\texttt{setX}$ is recorded;
+
+- As the value $\mathtt{1}$, if the value of the corresponding registry $\texttt{X}$ was involved in (or contributed to) the computation,
+- Otherwise, $\texttt{selX}$ is recorded as the value $\mathtt{0}$.
+
+
+
+Rule for setters $\{\texttt{setY}\}$: Each setter $\texttt{setY}$ is recorded;
+
+- As the value $\mathtt{1}$, if the corresponding registry value $\texttt{Y}$ was altered by the instruction,
 - Or, as the value $\mathtt{0}$, otherwise.
 
-The computational trace therefore consists only of bits, instead of large registry values. 
+The computational trace therefore consists mostly of bits, instead of large registry values. 
 
 In the zkEVM context, the computational trace is stored as a lookup table in the ROM of the relevant state machine.
 
@@ -94,14 +111,12 @@ In the zkEVM context, the computational trace is stored as a lookup table in the
 
 Take as an example, $\texttt{Instruction}^{\texttt{1}}$ above. Set selectors $\texttt{selA}$, $\texttt{selB}$ and $\texttt{inFree}$ for the registers $\texttt{A}$, $\texttt{B}$ and $\texttt{free}$, respectively. And, setters $\texttt{setA}$ and $\texttt{setB}$ for the registers $\mathtt{A'}$ and $\mathtt{B'}$, respectively. 
 
-Rule for the $\texttt{inFree}$ selector: Record $\texttt{inFree}$ as $\mathtt{1}$ only if the value of the register $\texttt{free}$ is non-zero.
-
 As discussed above;
 
 - The register values, $\mathtt{free}$ and $\mathtt{A'}$, were changed in $\texttt{line 1}$. Therefore, only selector $\texttt{inFree}$ and setter $\texttt{setA}$ are recorded as $\mathtt{1}$.
-- The register values  $\mathtt{B'}$, $\mathtt{free}$ and $\mathtt{A}$ were changed in $\texttt{line 2}$. So, only selector $\texttt{selA}$ and setter $\texttt{setB}$ are recorded as $\mathtt{1}$.
--  The register values $\mathtt{A'}$ and $\mathtt{B}$ were changed in $\texttt{line 3}$. Hence, only selector $\texttt{selB}$ and setter $\texttt{setA}$ are recorded as $\mathtt{1}$.
--  The register values  $\mathtt{A'}$, $\mathtt{B'}$ and $\mathtt{A}$ were changed in $\texttt{line 4}$. Consequently, only setters  $\texttt{setA}$ and $\texttt{setB}$, and selector $\texttt{selA}$ are recorded as $\mathtt{1}$.
+- The register values  $\mathtt{B'}$, $\mathtt{free}$ and $\mathtt{A}$ were changed in $\texttt{line 2}$. But, only setter $\texttt{setB}$ is recorded as $\mathtt{1}$ because it is the only change the instruction effected.
+- The register values $\mathtt{A'}$ and $\mathtt{B}$ were changed in $\texttt{line 3}$. So, setter $\texttt{setA}$ is recorded as $\mathtt{1}$. But since register values $\texttt{A}$ and $\texttt{B}$ were involved in the computation in $\texttt{line 3}$, they are also recorded as $\mathtt{1}$. 
+-  The register values  $\mathtt{A'}$, $\mathtt{B'}$ and $\mathtt{A}$ were changed in $\texttt{line 4}$. Consequently, only setters $\texttt{setA}$ and $\texttt{setB}$ are recorded as $\mathtt{1}$.
 
 The computational trace after executing $\texttt{Instruction}^{\texttt{1}}$ is as reflected in Table 3 below.
 
@@ -113,9 +128,9 @@ $$\begin{array}{|l|c|c|c|c|c|c|c|c|c|c|c|}
 \hline
 \texttt{ } & \texttt{Instruction}^{\texttt{1}} & \mathtt{free} & \texttt{setB} & \texttt{setA} & \texttt{inFree} & \texttt{selB} & \texttt{selA} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
 \texttt{line 1} & \mathtt{\$\{getInput()\} => A} & 7 & 0 & 1 & 1 & 0 & 0 & 0 & 7 & 0 & 0 \\ \hline
-\texttt{line 2} & \mathtt{3 => B} & 0 & 1 & 0 & 0 & 0 & 1 & 7 & 7 & 0 & 3 \\ \hline
-\texttt{line 3} & \mathtt{:ADD} & 0 & 0 & 1 & 0 & 1 & 0 & 7 & 10 & 3 & 3 \\ \hline
-\texttt{line 4} & \mathtt{0 => A,B} & 0 & 1 & 1 & 0 & 0 & 1 & 10 & 0 & 3 & 0 \\ \hline
+\texttt{line 2} & \mathtt{3 => B} & 0 & 1 & 0 & 0 & 0 & 0 & 7 & 7 & 0 & 3 \\ \hline
+\texttt{line 3} & \mathtt{:ADD} & 0 & 0 & 1 & 0 & 1 & 1 & 7 & 10 & 3 & 3 \\ \hline
+\texttt{line 4} & \mathtt{0 => A,B} & 0 & 1 & 1 & 0 & 0 & 0 & 10 & 0 & 3 & 0 \\ \hline
 \end{array}$$
 
 
@@ -132,13 +147,13 @@ This is shown in Figure 2 below, as an algebraic processor of sorts.
 
 
 
-<img src="figures/simple-state-machine.png" alt="image" style="zoom:100%;" />
+![Figure 3 : Polynomial Commitment Scheme](figures/simple-state-machine.png)
 
 <div align="center"><b> Figure 2: The State Machine as an Algebraic Processor</b></div>
 
 
 
-The notation used Figure 2 is as follows,
+The notation used in Figure 2 is as follows,
 
 a)  $\mathtt{inFree}^i \in \{0,1\}$ indicates whether $\mathtt{free^i}$ is included in the linear combination or not.
 
@@ -147,39 +162,44 @@ b)  $\mathtt{setX}^i \in \{0,1\}$ indicates whether the result of the linear com
 c) $\mathtt{freeIn}^i$ carries inputs freely chosen in order to execute the program.
 
 d) $\mathtt{const}^i$ carries fixed values moved into specified registers as per instructions received.
-
-
-
-Introducing the new auxiliary variables results in the following extended table:
 $$
-\scriptsize
+\text{ }
+$$
+
+
+Introducing new auxiliary registers results in the following extended table. 
+
+$$
 \begin{array}{|l|c|}
 \hline
-\texttt{ } & \texttt{Instruction}^{\texttt{1}} \\ \hline
-\texttt{line 1} & \mathtt{\$\{getInput()\} => A}\\ \hline
-\texttt{line 2} & \mathtt{3 => B} \\ \hline
-\texttt{line 3} & \mathtt{:ADD} \\ \hline
-\texttt{line 4} & \mathtt{0 => A,B} \\ \hline
+\texttt{ \ } & \texttt{Instruction}^{\texttt{1}}\\ \hline
+\texttt{line 1} & \mathtt{\$\{getInput()\} => A}\\\hline
+\texttt{line 2} & \mathtt{3 => B}\\\hline
+\texttt{line 3} & \mathtt{:ADD}\\\hline
+\texttt{line 4} & \mathtt{0 => A,B}\\\hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|c|c|c|c|}
 \hline
-\texttt{free} & \texttt{const} & \texttt{setB} & \texttt{setA} & \texttt{inFree} & \texttt{selB} & \texttt{selA} \\ \hline
-7 & 0 & 0 & 1 & 1 & 0 & 0 \\ \hline
-0 & 3 & 1 & 0 & 0 & 0 & 1 \\ \hline
-0 & 0 & 0 & 1 & 0 & 1 & 0 \\ \hline
-0 & 0 & 1 & 1 & 0 & 0 & 1 \\ \hline
+\texttt{free} & \texttt{const} & \texttt{setB} & \texttt{setA} & \texttt{inFree} & \texttt{selB} & \texttt{selA}\\\hline
+7 & 0 & 0 & 1 & 1 & 0 & 0\\\hline
+0 & 3 & 1 & 0 & 0 & 0 & 0\\\hline
+0 & 0 & 0 & 1 & 0 & 1 & 1\\\hline
+0 & 0 & 1 & 1 & 0 & 0 & 0\\\hline
 \end{array}
 \hspace{0.1cm}
 \begin{array}{|c|c|c|c|}
 \hline
-\mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
-0 & 7 & 0 & 0\\ \hline
-7 & 7 & 0 & 3\\ \hline
-7 & 10 & 3 & 3\\ \hline
-10 & 0 & 3 & 0\\ \hline
+\mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'}\\\hline
+0 & 7 & 0 & 0\\\hline
+7 & 7 & 0 & 3\\\hline
+7 & 10 & 3 & 3\\\hline
+10 & 0 & 3 & 0\\\hline
 \end{array}
 $$
+
+
+
 
 Henceforth, the relations between the states of the registries can be expressed algebraically as follows: 
 
@@ -188,6 +208,9 @@ $$\begin{aligned}
 &\mathtt{B}^{i+1} = \mathtt{B}^i + \mathtt{setB}^i \cdot (\mathtt{selA}^i \cdot \mathtt{A}^i + \mathtt{selB}^i \cdot \mathtt{B}^i + \mathtt{inFree}^i \cdot \mathtt{free}^i + \mathtt{const}^i - \mathtt{B}^i).\\
 \end{aligned}$$
 
+
+
+### Polynomial Constraints
 
 Let's represent the states of these registries for four steps as polynomials $\mathtt{A}, \mathtt{B} \in \mathbb{Z}_p[x]$ evaluated on the subgroup $H = \{\omega, \omega^2, \omega^3, \omega^4 = 1\}$, in order to produce a cyclic relation:
 
@@ -234,7 +257,6 @@ As it can be seen next, with conditional jumps, the length of the execution trac
 
 
 $$
-\scriptsize
 \begin{array}{|l|c|c|c|c|c|}
 \hline
 \texttt{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
@@ -247,19 +269,24 @@ $$
 \end{array}
 $$
 
+
+
 $$
-\scriptsize
 \begin{array}{|l|c|c|c|c|c|}
 \hline
 \texttt{Instruction} & \mathtt{free} & \mathtt{A} & \mathtt{A'} & \mathtt{B} & \mathtt{B'} \\ \hline
-\mathtt{\$\{getInput()\} => A} & 3 & 0 & 3 & 0 & 0 \\ \hline
-\mathtt{-3 => B} & 0 & 3 & 3 & 0 & -3 \\ \hline
-\mathtt{:ADD} & 0 & 3 & 0 & -3 & -3 \\ \hline
-\mathtt{:JMPZ(5)} & 0 & 0 & 0 & -3 & -3 \\ \hline
-\mathtt{0 => A, B} & 0 & 0 & 0 & -3 & 0 \\ \hline
+\mathtt{\$\{getInput()\} => A} & 3 & 0 & 3 & 0 & 0\\ \hline
+\mathtt{-3 => B} & 0 & 3 & 3 & 0 & -3\\ \hline
+\mathtt{:ADD} & 0 & 3 & 0 & -3 & -3\\ \hline
+\mathtt{:JMPZ(5)} & 0 & 0 & 0 & -3 & -3\\ \hline
+\mathtt{0 => A, B} &  0 & 0 & 0 & -3 & 0\\ \hline
 \end{array}
 $$
-The first execution is done in 6 steps, meanwhile the second one has been done in 5 steps.
+
+
+The first execution is done in 6 steps, while the second is in 5 steps.
+
+
 
 
 
@@ -271,7 +298,7 @@ Now, let us introduce a new model to manage a program that contains conditional 
 
 To do this, we need to add the **Program Counter (PC)**. The $\mathtt{PC}$ is a special registry that contains the position of the instruction in the program being executed.
 
-We use $\texttt{op}_i$ as a shorthand for the linear combination of our state machine to simplify the forthcoming constraints:
+We use $\texttt{op}^i$ as a shorthand for the linear combination of our state machine to simplify the forthcoming constraints:
 $$
 \mathtt{op}^i := \mathtt{setA}^i \cdot \mathtt{A}^i + \mathtt{setB}^i \cdot \mathtt{B}^i + \mathtt{inFree}^i \cdot \mathtt{free}^i + \mathtt{const}^i.
 $$
@@ -329,7 +356,7 @@ This is exactly the wanted behaviour.
 Next, we show the execution traces for the free inputs 7 and 3 respectively:
 
 $$
-\tiny
+\scriptsize
 \begin{array}{|l|}
 \hline
 \texttt{Instruction} \\ \hline
@@ -364,8 +391,9 @@ $$
 \end{array}
 $$
 
+
 $$
-\tiny
+\scriptsize
 \begin{array}{|l|}
 \hline
 \texttt{Instruction} \\ \hline

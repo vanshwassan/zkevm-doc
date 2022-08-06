@@ -27,7 +27,8 @@ In order to lay the context for the state machines, recall that the zkProver mai
 
 
 
-<p align="center"><img src="figures/fig1-zkprv-and-node.png" width="600" /></p>
+![Figure 1: zkProver and the Node ](figures/fig1-zkprv-and-node.png)
+
 <div align="center"><b> Figure 1: zkProver and the Node </b></div>
 
 
@@ -41,8 +42,6 @@ Secondly, the Node sends the input transactions to the zkProver.
 Thirdly, the zkProver accesses the DB, fetching the information it needs to produce verifiable proofs of the transactions sent by the Node. This information consists of, among others, the Merkle roots, the keys and hashes of relevant siblings. 
 
 Fourthly, the zkProver generates the proofs of transactions, and sends these proofs back to the Node. 
-
-
 
 But this only scratches the surface of what the zkProver does. There is a lot more detail involved in how the zkProver actually creates these verifiable proofs of transactions. And, it is in these details that the state machines come into the picture.
 
@@ -78,7 +77,8 @@ These instructions dictate how a state should transition in a state machine. How
 
 
 
-<p align="center"><img src="figures/fig2-actions-sec-sm.png" width="800" /></p>
+![Figure 2: The Main SM Executor's Instructions](figures/fig2-actions-sec-sm.png)
+
 <div align="center"><b> Figure 2: The Main SM Executor's Instructions </b></div>
 
 
@@ -141,7 +141,8 @@ The hardware part, which speaks the Polynomial Identity Language (PIL), defines 
 
 
 
-<p align="center"><img src="figures/fig-micro-pro-pic.png" width="800" /></p>
+![Figure 3 : Micro-Processor State Machine](figures/fig-micro-pro-pic.png)
+
 <div align="center"><b> Figure 3 : Micro-Processor State Machine </b></div>
 
 
@@ -223,10 +224,9 @@ Although not all verification involves a Plookup, the diagram below, briefly ill
 
 
 
-<p align="center"><img src="figures/plook-ops-mainSM-copy.png" width="800" /></p>
+![Figure 4: Plookup and the zkProver State Machines](figures/plook-ops-mainSM-copy.png)
+
 <div align="center"><b> Figure 4: Plookup and the zkProver State Machines </b></div>
-
-
 
 
 
@@ -340,10 +340,11 @@ and then generate a zk-SNARK proof.
 
 
 
+![Figure 5: Simplified Data Flow in the zkProver](figures/fig5-main-prts-zkpr.png)
 
-
-<p align="center"><img src="figures/fig5-main-prts-zkpr.png" width="800" /></p>
 <div align="center"><b> Figure 5: Simplified Data Flow in the zkProver </b></div>
+
+
 
 
 
