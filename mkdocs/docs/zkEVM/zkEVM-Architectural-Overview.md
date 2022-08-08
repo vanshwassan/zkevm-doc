@@ -35,9 +35,12 @@ The major components of zkEVM are:
 - Aggregators 
 - Active users of the zkEVM network who create transactions.
 
-The skeletal architecture of zkEVM is shown below: 
+The skeletal architecture of zkEVM is shown below:
 
-<p align="center"><img src="figures/fig1-simpl-arch.png" width="600" /></p>
+
+
+![Figure 1 : Skeletal Overview of zkEVM](figures/fig1-simpl-arch.png)
+
 <div align="center"><b> Figure 1 : Skeletal Overview of zkEVM </b></div>
 
 
@@ -106,7 +109,10 @@ The underlying protocol in zkEVM ensures that the state transitions are correct 
 
 The PoE smart contract, therefore, makes two basic calls: A call to receive batches from Sequencers, and another call to Aggregators, requesting batches to be validated. See **Figure 2** below:
 
-<p align="center"><img src="figures/fig2-simple-poe.png" width="650" /></p>
+
+
+![Figure 2: Simplified Proof of Efficiency](figures/fig2-simple-poe.png)
+
 <div align="center"><b> Figure 2: Simplified Proof of Efficiency </b></div>
 
 
@@ -148,10 +154,13 @@ The zkNode Architecture is composed of:
 2. **Synchronizer**: Other than the sequencing and the validating processes, the zkNode also enables synchronisation of batches and their validity proofs, which happens only after these have been added to L1. This is accomplished using a subcomponent called the Synchronizer. A Synchronizer is in charge of getting all the data from smart contracts, which includes the data posted by the sequencers (transactions) and the data posted by the coordinators (which is the validity proof). All this data is stored in a huge database and served to third parties through a service called "JSON-RPC".
    <br><br>The Synchronizer is responsible for reading the events from the Ethereum blockchain, including new batches to keep the state fully synced. The information read from these events must be stored in the database. The Synchronizer also handles possible reorgs, which will be detected by checking if the last `ethBlockNum` and the last `ethBlockHash` are synced.</br></br>
 
-<p align="center"><img src="figures/fig3-zkNode-arch.png" width="600" /></p>
+
+
+![Figure 2: Simplified Proof of Efficiency](figures/fig3-zkNode-arch.png)
+
 <div align="center"><b> Figure 3: zkEVM zkNode Diagram </b></div>
 
-<br>
+
 
 The architecture of zkNode is modular and implements a set of functions as depicted in **Figure 3** above.</br>
 
@@ -166,10 +175,13 @@ The architecture of zkNode is modular and implements a set of functions as depic
 
 zkEVM employs advanced zero-knowledge technology to create validity proofs. It uses a zero-knowledge prover (zkProver), which is intended to run on any server and is being engineered to be compatible with most consumer hardware. Every Aggregator will use this zkProver to validate batches and provide validity proofs. zkProver has its own detailed architecture which is outlined below. It consists of a Main State Machine Executor, a collection of secondary State Machines (each with its own executor), a STARK-proof builder, and a SNARK-proof builder. See **Figure 4** below for a simplified diagram of the zkEVM zkProver:
 
-<p align="center"><img src="figures/fig4-zkProv-arch.png" width="650" /></p>
+
+
+![Figure 4: A Simplified zkProver Diagram](figures/fig4-zkProv-arch.png)
+
 <div align="center"><b> Figure 4: A Simplified zkProver Diagram </b></div>
 
-<br>
+
 
 In a nutshell, the zkEVM expresses state changes in a polynomial form. Therefore, the constraints that each proposed batch must satisfy are, in fact, polynomial constraints or polynomial identities. That is, all the valid batches must satisfy certain polynomial constraints.</br>
 
@@ -183,19 +195,27 @@ The zkNode Architecture is composed of:
 2. **Secondary State Machines**: Every computation required in proving the correctness of transactions is represented in the zkEVM as a state machine. The zkProver, being the most complex part of the whole project, consists of several state machines; from those carrying out bitwise functionalities (e.g., XORing, padding, etc.) to those performing hashing (e.g., Keccak, Poseidon), even to verifying signatures (e.g., ECDSA).
    <br><br>The collection of the secondary state machines, therefore, refers to a collection of all state machines in the zkProver. It is not a subcomponent per se, but a collection of various executors for individual secondary state machines. The set of state machines are:</br>
 
-- Binary SM
-- Memory SM
-- Storage SM 
-- Poseidon SM
-- Keccak SM 
-- Arithmetic SM
+   ​	(a) Binary SM
+
+   ​	(b) Memory SM
+
+   ​	(c) Storage SM
+
+   ​	(d) Poseidon SM
+
+   ​	(e) Keccak SM
+
+   ​	(f) Arithmetic SM
 
 See **Figure 5** below for dependencies among these SMs.
 
 While some SMs use both zkASM and PIL, others rely only on one of these languages depending upon the specific operations each SM is responsible for.
 
-<p align="center"><img src="figures/fig5-col-sm-zkprov.png" width="800" /></p>
+![Figure 4: A Simplified zkProver Diagram](figures/fig5-col-sm-zkprov.png)
+
 <div align="center"><b> Figure 5: zkEVM State Machines </b></div>
+
+
 
 
 3. **STARK Proof Builder**: STARK, which stands for "Scalable Transparent Argument of Knowledge", is a proof system that enables provers to produce verifiable proofs without the need for a trusted setup. A STARK Proof Builder refers to the subcomponent used to produce zero-knowledge STARK proofs, which are zk-proofs attesting to the fact that all the polynomial constraints are satisfied.<br><br>State machines generate polynomial constraints and zk-STARKs are used to prove that batches satisfy these constraints. In particular, zkProver utilises "Fast Reed-Solomon Interactive Oracle Proofs of Proximity (RS-IOPP)", colloquially called [FRI](https://drops.dagstuhl.de/opus/volltexte/2018/9018/pdf/LIPIcs-ICALP-2018-14.pdf), to facilitate fast zk-STARK proving.</br></br>
@@ -220,7 +240,8 @@ Bridge L1 Contract requires two Merkle trees in order to perform the above opera
 
 The exit tree structure is depicted in **Figure 6** below:
 
-<p align="center"><img src="figures/fig6-exit-tr-strct.png" width="700" /></p>
+![Figure 4: A Simplified zkProver Diagram](figures/fig6-exit-tr-strct.png)
+
 <div align="center"><b> Figure 6: The Exit Tree Structure </b></div>
 
 
