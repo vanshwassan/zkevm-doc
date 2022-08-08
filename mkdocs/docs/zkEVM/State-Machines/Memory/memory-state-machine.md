@@ -115,9 +115,9 @@ Table 4 shows an example with all the memory operations present at an execution 
 
 <div align="center"><b> Table 4: Memory Operations and an Execution Trace of the Main SM. </b></div>
 
-The $\texttt{step}$ is the execution step number at the Main SM and in this case, we are showing only the steps that are performing a memory operation. The instruction to execute a memory operation is indicated by the $\texttt{mOp}$ selector. The $\texttt{mWr}$ is also a selector that shows whether the memory operation is a read or a write. In the previous trace, we can observe that the first memory operation is performed at step 11 and it is the write of the sixth 32-byte word. The eight registers $\texttt{val[0..7]}$ provide the bytes to be written in that word.
+The $\texttt{step}$ is the execution step number at the Main SM and in this case, we are showing only the steps that perform memory operations. The instruction to execute a memory operation is indicated by the $\texttt{mOp}$ selector. The $\texttt{mWr}$ is also a selector that shows whether the memory operation is a read or a write. In the previous trace, we can observe that the first memory operation is performed at step 11 and it is the write of the sixth 32-byte word. The eight registers $\texttt{val[0..7]}$ provide the bytes to be written in that word.
 
-It is worth to mention that for a specific word address, the first operation is always a write because it makes no sense to read a position that has not been previously written. Then, in this word address there can be a sequence of reads and writes. In the previous trace, we can observe that for the sixth word, there is a write at step 11, then a read at step $55$ and finally another write at step $63$.
+It is worth mentioning that for a specific word address, the first operation is always a write because it makes no sense to read a position that has not been previously written. Then, in this word address, there can be a sequence of reads and writes. In the previous trace, we can observe that for the sixth word, there is a write at step 11, then a read at step $55$, and finally another write at step $63$.
 
 <center>
 
@@ -134,21 +134,21 @@ It is worth to mention that for a specific word address, the first operation is 
 
 <div align="center"><b> Table 5: Corresponding Memory SM Execution Trace. </b></div>
 
-The trace of the Memory SM must check that the writes are done according to their step and that reads provide the correct words according also to their step.
+The trace of the Memory SM must check that the writes are done according to their steps and that the reads provide the correct words according to their steps.
 
-In order to implement these checks, the execution trace of the Memory SM sorts all the memory operations; firstly by $\texttt{addr}$, and secondly by $\texttt{step}$, as shown in Table 5. This ordering is referred to as the _topology_ of the Memory SM.
+In order to implement these checks, the execution trace of the Memory SM sorts all the memory operations, firstly by $\texttt{addr}$ and secondly by $\texttt{step}$, as shown in Table 5. This ordering is referred to as the _topology_ of the Memory SM.
 
-Finally, we will need to add a few more columns to ensure that the memory execution trace goes exactly across all the ordered writes and reads of the Main SM, with writes storing the provided values and with reads not changing the previous value of the word.
+Finally, we will need to add a few more columns to ensure that the memory execution trace goes exactly across all the ordered writes and reads of the Main SM, with writes storing the provided values and reads not changing the previous value of the word.
 
-In particular, we add three more columns. One these columns is called $\texttt{INCS}$ and it is used to provide an order for the values of the columns. Another column called $\texttt{lastAccess}$ is used to enable an address change when all the memory operations for this address have appeared at the trace. The last column is called $\texttt{ISNOTLAST}$ and it is used to make the checks pass when there are no more memory accesses.
+In particular, we add three more columns. One of these columns is called $\texttt{INCS}$ and it is used to provide an order for the values of the columns. Another column called $\texttt{lastAccess}$ is used to enable an address change when all the memory operations for this address have appeared at the trace. The last column is called $\texttt{ISNOTLAST}$ and it is used to make the checks pass when there are no more memory accesses.
 
 ## List of Columns
 
-The following columns (polynomials) are used by the Memory SM. We divide them between preprocessed and committed polynomials.
+The following columns (polynomials) are used by the Memory SM. (We have divided them as preprocessed and committed polynomials.)
 
 **Preprocessed**:
 
-- $\texttt{INCS}$: Counter that goes from $1$ up to $N$, where $N$ is the number of rows in the computational trace,
+- $\texttt{INCS}$: Counter that goes from $1$ up to $N$, where $N$ is the number of rows in the computational trace:
 
 $$
 \texttt{INCS} = (\underbrace{1, 2, 3, \dots,N-1, N}_{N})
@@ -165,34 +165,34 @@ $$
 **Committed**:
 
 - $\texttt{step}$: Position in which the memory operation was called in the Main SM.
-- $\texttt{mOp}$: Selector indicating whether it is being performed a memory operation or not.
-- $\texttt{mWr}$: Selector that is $1$ if the memory operation is a write and $0$ if it is a read operation.
+- $\texttt{mOp}$: Selector indicating whether it has performed a memory operation or not.
+- $\texttt{mWr}$: Selector which is $1$ if the memory operation is a write and $0$ if it is a read operation.
 - $\texttt{addr}$: A $4$-byte (or $32$ bit) integer indicating the address of a 32-byte word.
 - $\texttt{lastAccess}$: Selector indicating whether it has been reached the last memory access for a particular address or not.
-- $\texttt{val[0..7]}$: Vector containing $8$ $4$-byte integer indicating the $256$-bit value associated to a given address.
+- $\texttt{val[0..7]}$: Vector containing $8$ $4$-byte integers indicating the $256$-bit value associated to a given address.
 
 ## Complete Example
 
 Table 6 shows the complete Memory SM trace for our example in which the computational trace size $N$ is $2^3$.
 
-There are various important details to remark from the point in which all memory accesses have been completed but the $2^3$-th row has not been reached yet:
+There are various important details to remark from the point in which all memory accesses have been completed but the $2^3$-th row has yet not reached:
 
 - $\texttt{mOp}$ and $\texttt{mWr}$ are set to $0$ until the last row.
 - $\texttt{addr}$ is incremented by $1$ to keep the incremental order of the addresses. This value is maintained until the last row.
-- $\texttt{lastAccess}$ is also set to $0$ except in the very last row, where it is set back to $1$ to create the ciclycity behavior.
+- $\texttt{lastAccess}$ is also set to $0$ except in the very last row, where it is set back to $1$ to create the cyclicity behavior.
 - $\texttt{step}$ is incremented by $1$ in each row so that this column fulfills the constraints describing this state machine.
 - $\textbf{Remark}$. Notice that $\texttt{step}$ can take values beyond $N$ and that the value of $\texttt{step}$ after the row of the last address can coincide with a previous value. As we will show in the next section, where we describe the constraints, these facts do not cause any issue.
 - $\texttt{val[0..7]}$ are all set to $0$ until the last row.
 
 ![Complete Memory SM Execution Trace](figures/fig-exec-trc.png)
-<div align="center"><b> Table 6: Complete Memory SM execution trace for our example. </b></div>
+<div align="center"><b> Table 6: Complete Memory SM Execution Trace for Our Example. </b></div>
 
 ## Constraints
 
 ### Topology
 
-Let's start with the set of constraints regarding the topology of the state machine.
-
+Let us start with the set of constraints regarding the topology of the state machine.
+<!-- Parse Error to be asked below -->
 $$
 \begin{align}
 &\texttt{lastAccess} \cdot (\texttt{lastAccess} - 1) = 0,  \label{eq:lastAccessBin}\tag{1}\\
@@ -201,13 +201,13 @@ $$
 \end{align}
 $$
 
-Equations (1) and (2) are straightforward. Equation (1) asserts that $\texttt{lastAccess}$ is a selector (i.e., a column whose values lie in the set $\{0,1\}$), while Equation (2) confirms that $\texttt{addr}$ does not change until it is accessed for the last time. Note that Equation (2) implies that addresses are processed one-by-one in the Memory SM, but it does not guarantees that they are ordered incrementally.
+Equations (1) and (2) are straightforward. Equation (1) asserts that $\texttt{lastAccess}$ is a selector (i.e., a column whose values lie in the set $\{0,1\}$), while Equation (2) confirms that $\texttt{addr}$ does not change until it is accessed for the last time. Note that Equation (2) implies that addresses are processed one-by-one in the Memory SM, but it does not guarantee that they will be ordered incrementally.
 
-Equation (3) is a little bit more tricky. Let's do a case analysis on it.
+Equation (3) is a little bit more tricky. Let us do a case analysis on it.
 
 The curly braces notation in Equation (3) means that the inclusion is only checked at values such that the corresponding selector $\texttt{ISNOTLAST}$ is equal to $1$.
 
-Then, depending on value of the $\texttt{lastAccess}$ selector we have two cases:
+Then, depending on value of the $\texttt{lastAccess}$ selector, we have two cases:
 
 - If $\texttt{lastAccess} = 0$:
 
@@ -221,12 +221,12 @@ $$
 \texttt{addr}' - \texttt{addr} \subset \texttt{INCS}.
 $$
 
-In words, whenever a transition do not change the address in question, verify that $\texttt{step}' > \texttt{step}$; otherwise verify that $\texttt{addr}' > \texttt{addr}$. Therefore, Equation (3) ensures that both $\texttt{step}$ and $\texttt{addr}$ are ordered incrementally (first by $\texttt{addr}$ and then by $\texttt{step}$). A combination of Eqs. (2) and (3) gives the desired topology.
+In other words, whenever a transition does not change the address in question, verify that $\texttt{step}' > \texttt{step}$; otherwise verify that $\texttt{addr}' > \texttt{addr}$. Therefore, Equation (3) ensures that both $\texttt{step}$ and $\texttt{addr}$ are ordered incrementally (first by $\texttt{addr}$ and then by $\texttt{step}$). A combination of Equations (2) and (3) gives the desired topology.
 
 ### Operation Selectors
 
-Let's continue with the operation selectors: $\texttt{mOp}$ and $\texttt{mWr}$.
-
+Let us continue with the operation selectors: $\texttt{mOp}$ and $\texttt{mWr}$.
+<!-- Parse Error to be asked below -->
 $$
 \begin{align}
 &\texttt{mOp} \cdot (\texttt{mOp} - 1) = 0, \tag{4}\\
@@ -235,7 +235,7 @@ $$
 \end{align}
 $$
 
-Eqs. (4) and (5) ensure that $\texttt{mOp}$ and $\texttt{mWr}$ are, effectively, selectors. Eq. (6) is imposing a restriction to $\texttt{mWr}$ (and binding it with $\texttt{mOp}$) in the following sense: $\texttt{mWr}$ can be set to $1$ only if $\texttt{mOp}$ is also set to $1$. Similarly, if $\texttt{mOp}$ is set to $0$, then $\texttt{mWr}$ should be set to $0$ as well. This restriction comes naturally from the definition of these selectors.
+Equations (4) and (5) ensure that $\texttt{mOp}$ and $\texttt{mWr}$ are, effectively, selectors. Eq. (6) imposes a restriction to $\texttt{mWr}$ (and binds it with $\texttt{mOp}$) in the following sense: $\texttt{mWr}$ can be set to $1$ only if $\texttt{mOp}$ is also set to $1$. Similarly, if $\texttt{mOp}$ is set to $0$, then $\texttt{mWr}$ should be set to $0$ as well. This restriction comes naturally from the definition of these selectors.
 
 ### Updating the Value
 
@@ -248,14 +248,14 @@ $$
 \end{align}
 $$
 
-We analyze both Eqs. (7) and (8) at the same time. Notice that we simply discuss the feasible cases:
+We analyze both equations (7) and (8) at the same time. Notice that we simply discuss the feasible cases:
 
-- $\textbf{Maintain the same value when reading:}$ If $\texttt{mWr}' = 0$ and $\texttt{lastAccess} = 0$, then it should be the case that $\texttt{val[0..7]}' = \texttt{val[0..7]}$, since this means that we will perform a read in the next step. Eq. (7) ensures this case.
+- $\textbf{Maintain the same value when reading:}$ If $\texttt{mWr}' = 0$ and $\texttt{lastAccess} = 0$, then it should be the case that $\texttt{val[0..7]}' = \texttt{val[0..7]}$, since this means that we will perform a read in the next step. Equation (7) ensures this case.
 - $\textbf{Filling the value with zeros when done:}$ If $\texttt{mOp}' = 1$, $\texttt{mWr}' = 0$ and $\texttt{lastAccess} = 1$, then it should be the case that $\texttt{val[0..7]}' = 0$, i.e., the register $\texttt{val[0..7]}$ is set to $0$ in the forthcoming steps.
 
-More cases are not possible because for an address we always start with a write operation which limits the behavior of these constraints to these cases. For example, it cannot happen that $\texttt{lastAccess = 1}$ and some of $\texttt{mOp}'$ or $\texttt{mWr}'$ is 0; because the first operation that is always performed over a memory address is a write.
+More cases are not possible because for an address, we always start with a write operation which limits the behavior of these constraints. For example, it is not possible that $\texttt{lastAccess = 1}$ and some of $\texttt{mOp}'$ or $\texttt{mWr}'$ is 0 because the first operation that is always performed over a memory address is a write.
 
-However, notice that to be able reset $\texttt{addr}$ to its state in the first row (where it is the case that $\texttt{addr}' < \texttt{addr}$) it should be the case that $\texttt{lastAccess} = 1$ in the last row of the computational case. If $\texttt{lastAccess}$ would have not been set to $1$, then Eq. (2) would not be satisfied.
+However, notice that to be able reset $\texttt{addr}$ to its state in the first row (where it is the case that $\texttt{addr}' < \texttt{addr}$), it should be the case that $\texttt{lastAccess} = 1$ in the last row of the computational case. If $\texttt{lastAccess}$ would have not been set to $1$, then equation (2) would not be satisfied.
 
 We obtain this condition by adding the following constraint:
 
@@ -265,8 +265,8 @@ $$
 
 ### Connection with the Main SM
 
-The last constraint that we need to add is to relate the execution trace of the Main SM with the execution trace of the Memory SM.
+The last constraint that we need to add relates the execution trace of the Main SM with the execution trace of the Memory SM.
 
-The constraint has to check that all the rows in the trace of the Main SM that make memory operations (i.e. rows where $\texttt{mOp} == 1$) are a permutation (any permutation) of the rows of the Memory SM where $\texttt{mOp} == 1$.
+This constraint has to check that all the rows in the trace of the Main SM that make memory operations (i.e. rows where $\texttt{mOp} == 1$) are a permutation (any permutation) of the rows of the Memory SM where $\texttt{mOp} == 1$.
 
-The key point is that if both vectors would not be a permutation of each other, then that would mean that the Main SM is performing an incorrect memory action.
+The key point is that if both the vectors would not be a permutation of each other, that would mean that the Main SM is performing an incorrect memory action.
