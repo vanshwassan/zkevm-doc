@@ -1,6 +1,6 @@
-## Global
+## Global State Machine
 
-The Global State Machine is a state machine that computes various constant polynomials used by some of the state machines of the zkEVM. These polynomials are typically used for the distinct lookup arguments that PIL is able to perform.
+The Global State Machine is a type of state machine that computes different constant polynomials used by other state machines of the zkEVM. These polynomials are typically used for the distinct lookup arguments that PIL is able to perform.
 
 At this moment, the Global SM used by the zkEVM is made of:
 
@@ -14,7 +14,7 @@ namespace Global(%N);
 ```
 
 
-At this moment, the polynomials computed by the Global SM are showed in Table 1.
+At this moment, the polynomials computed by the Global SM are shown in Table 1 below:
 
 <center>
 
@@ -32,11 +32,11 @@ At this moment, the polynomials computed by the Global SM are showed in Table 1.
 
 </center>
 
-<div align="center"><b> Table 1: Description of the polynomials computed by the Global State Machine. </b></div>
+<div align="center"><b> Table 1: Description of the Polynomials Computed by the Global State Machine </b></div>
 
 ## Byte4
 
-The Byte4 State Machine takes as input two $16$-bit numbers and generates a $32$-bit number from them. This generation is obtained through the concatenation of the input numbers. A working example can be find in Table 2.
+The Byte4 State Machine takes as input the two $16$-bit numbers and generates a $32$-bit number from them. This generation is done by concatenating the input numbers. A working example of this can be seen in Table 2 below:
 
 <center>
 
@@ -53,9 +53,10 @@ The Byte4 State Machine takes as input two $16$-bit numbers and generates a $32$
 
 </center>
 
-<div align="center"><b> Table 2: Example of they Byte4 SM. </b></div>
+<div align="center"><b> Table 2: Example of the Byte4 State Machine </b></div>
 
-The Byte4 SM works as follows. In one clock, the first input $x$ is moved to the $\textsf{out}$ column. In the following clock, $x$ is concatenated to the second input $y$ and moved to the $\textsf{out}$ column. In order to make this "moving" possible, we introduce a constant polynomial, called $\textsf{SET}$, defined as follows:
+The Byte4 SM works as follows:
+In one clock, the first input $x$ is moved to the $\textsf{out}$ column. In the following clock, $x$ is concatenated to the second input $y$ and moved to the $\textsf{out}$ column. In order to make this "move" possible, we introduce a constant polynomial called $\textsf{SET}$, which is defined as follows:
 
 \begin{aligned}
 \textsf{SET} =
@@ -72,7 +73,7 @@ Once $\textsf{SET}$ is defined, the moving action is naturally enforced with the
 \textsf{out}' = (1 - \textsf{SET}) \cdot \textsf{freeIn} + \textsf{SET} \cdot (2^{16} \cdot \textsf{out} + \textsf{freeIn}).
 \]
 
-Notice that when $\textsf{SET} = 0$, then $\textsf{out}' = \textsf{freeIn}$, i.e., $\textsf{out}$ is set to be the first input. In contrast, when $\textsf{SET} = 1$, then $\textsf{out}' = 2^{16} \cdot \textsf{out} + \textsf{freeIn}$, i.e., the previous input (stored in $\textsf{out}$) is set to be the upper part of $\textsf{out}$, while the second input is set to be the lower part of $\textsf{out}$. To achieve soundness, we must also check that both inputs are elements made at most of $2$ bytes.
+Notice that when $\textsf{SET} = 0$, $\textsf{out}' = \textsf{freeIn}$, i.e. $\textsf{out}$ is set to be the first input. In contrast, when $\textsf{SET} = 1$, then $\textsf{out}' = 2^{16} \cdot \textsf{out} + \textsf{freeIn}$, i.e. the previous input (stored in $\textsf{out}$) is set to be the upper part of $\textsf{out}$, while the second input is set to be the lower part of $\textsf{out}$. To achieve soundness, we must also check that both the inputs have the elements made of at the most $2$ bytes.
 
 The previous constraints are reflected in the PIL code for this SM:
 
