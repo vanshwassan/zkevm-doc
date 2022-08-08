@@ -31,13 +31,13 @@ nav:
   - Polygon zkEVM:
     - zkEVM Overview: "zkEVM/zkEVM-Architectural-Overview.md"
     - Basic Concepts:
-      - Introduction: "zkEVM/Basic-Concepts/introduction.md"
+      - Introduction: "zkEVM/Basic-Concepts/Basic-Concepts-Introduction.md"
       - "First Example: Fibonacci": "zkEVM/Basic-Concepts/fibonacci.md"
       - Simple State Machine: "zkEVM/Basic-Concepts/simple-state-machine.md"  
       - Modular Design: "zkEVM/Basic-Concepts/modular-design.md"  
     - Architecture:
-      - zkProver State Machines: "zkEVM/Architecture/zkProver-State-Machines.md"
-      - zkProver: "zkEVM/Architecture/zkProver.md"
+      - zkProver Overview: "zkEVM/Architecture/zkProver-Architecture-doc.md"
+      - zkASM And PIL In The zkProver: "zkEVM/Architecture/zkProver.md"
     - zkASM:
       - Introduction: "zkEVM/zkASM/introduction.md"
       - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
