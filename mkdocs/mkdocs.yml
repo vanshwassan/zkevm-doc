@@ -29,7 +29,7 @@ extra:
 
 nav:
   - Polygon zkEVM:
-    - zkEVM Overview: "zkEVM-Architectural-Overview.md"
+    - zkEVM Overview: "zkEVM/zkEVM-Architectural-Overview.md"
     - Basic Concepts:
       - Introduction: "zkEVM/Basic-Concepts/introduction.md"
       - "First Example: Fibonacci": "zkEVM/Basic-Concepts/fibonacci.md"
