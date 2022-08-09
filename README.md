@@ -9,12 +9,12 @@ pip3 install mkdocs
 
 In case you have a rendering problem with the pieces of code, please execute:
 ```
-pip install --upgrade mkdocs
+pip3 install --upgrade mkdocs
 ```
 
 ## Install mkdocs-material theme
 ```
-pip install mkdocs-material
+pip3 install mkdocs-material
 ```
 
 ## Run the webserver
