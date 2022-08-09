@@ -29,8 +29,8 @@ extra:
 
 nav:
   - Polygon zkEVM:
-    - Overview: "zkEVM/Overview/Overview.md"
     - Architecture:
+      - Overview: "zkEVM/Architecture/Overview.md"
       - zkProver: "zkEVM/Architecture/zkProver-Overview.md"
       - zkASM And PIL: "zkEVM/Architecture/zkASM-and-PIL.md"
     - Tutorial: "zkEVM/Tutorial/Tutorial.md"
