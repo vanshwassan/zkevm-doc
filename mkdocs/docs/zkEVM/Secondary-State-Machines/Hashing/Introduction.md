@@ -1,5 +1,3 @@
-[ToC]
-
 # The Hashing State Machine
 
 ## Sponge Construction

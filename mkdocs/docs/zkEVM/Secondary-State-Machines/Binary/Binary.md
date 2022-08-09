@@ -1,14 +1,4 @@
-[ToC]
-
-
-
-
-
 # Binary State Machine
-
-
-
-
 
 The Binary State Machine (SM) is one of the six secondary state machines receiving instructions, called Binary Actions, from the Main State Machine Executor.
 

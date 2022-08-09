@@ -29,40 +29,47 @@ extra:
 
 nav:
   - Polygon zkEVM:
-    - zkEVM Overview: "zkEVM/zkEVM-Architectural-Overview.md"
-    - Basic Concepts:
-      - Introduction: "zkEVM/Basic-Concepts/Basic-Concepts-Introduction.md"
-      - "First Example: Fibonacci": "zkEVM/Basic-Concepts/fibonacci.md"
-      - Simple State Machine: "zkEVM/Basic-Concepts/simple-state-machine.md"  
-      - Modular Design: "zkEVM/Basic-Concepts/modular-design.md"  
+    - Overview: "zkEVM/Overview/Overview.md"
     - Architecture:
-      - zkProver Overview: "zkEVM/Architecture/zkProver-Architecture-doc.md"
-      - zkASM And PIL In The zkProver: "zkEVM/Architecture/zkProver.md"
+      - zkProver: "zkEVM/Architecture/zkProver-Overview.md"
+      - zkASM And PIL: "zkEVM/Architecture/zkASM-and-PIL.md"
+    - Tutorial: "zkEVM/Tutorial/Tutorial.md"
+    - Proof of Efficiency:
+      - Introduction: "zkEVM/Proof-of-Efficiency/Introduction.md"
+    - The Bridge:
+      - Introduction: "zkEVM/Bridge/Introduction.md"
+    - Verifiable Computations:
+      - Introduction: "zkEVM/Verifiable-Computations/Introduction.md"
+      - "First Example: Fibonacci": "zkEVM/Verifiable-Computations/Fibonacci.md"
+      - Simple State Machine: "zkEVM/Verifiable-Computations/Simple-State-Machine.md"  
+      - Modular Design: "zkEVM/Verifiable-Computations/Modular-Design.md"  
     - zkASM:
-      - Introduction: "zkEVM/zkASM/introduction.md"
-      - Basic Syntax: "zkEVM/zkASM/basic-syntax.md"
-      - Some Examples: "zkEVM/zkASM/some-examples.md"
-      - Related Repositories: "zkEVM/zkASM/related-repos.md"
+      - Introduction: "zkEVM/zkASM/Introduction.md"
+      - Basic Syntax: "zkEVM/zkASM/Basic-Syntax.md"
+      - Some Examples: "zkEVM/zkASM/Some-Examples.md"
+      - Related Repositories: "zkEVM/zkASM/Related-Repos.md"
     - PIL:
-      - Introduction: "zkEVM/PIL/introduction.md"
-      - Hello Word Examples: "zkEVM/PIL/hello-world-examples.md"
-      - Components: "zkEVM/PIL/components.md"
-      - Cyclical Nature: "zkEVM/PIL/cyclical-nature.md"
-      - Modularity: "zkEVM/PIL/modularity.md"
-      - Advanced Features: "zkEVM/PIL/advanced-features.md"
-      - Related Repositories: "zkEVM/PIL/related-repos.md"
-    - State Machines:
-      - Arithmetic: "zkEVM/State-Machines/Arithmetic/Arithmetic-State-Machine-typ.md"
-      - Storage: "zkEVM/State-Machines/Storage/Storage-State-Machine-typ.md"
-      - Hashing: "zkEVM/State-Machines/Hashing/Hashing-State-Machine-typ.md"
-      - Binary: "zkEVM/State-Machines/Binary/Binary-State-Machine-typ.md"
-      - Memory: "zkEVM/State-Machines/Memory/memory-state-machine.md"
-      - Memory Align: "zkEVM/State-Machines/Memory-Align/memory-align-state-machine.md"
-      - Complementaries: "zkEVM/State-Machines/Complementary/complementary-state-machines.md"
-      - Configuration File: "zkEVM/State-Machines/Complementary/configuration-file.md"
-    # - Tools & Optimizations:
-    #   - Merkle Tree: "zkEVM/tools-optimizations/merkle-tree.md"
-    # - References: "zkEVM/references.md"
+      - Introduction: "zkEVM/PIL/Introduction.md"
+      - Hello Word Examples: "zkEVM/PIL/Hello-World-Examples.md"
+      - Components: "zkEVM/PIL/Components.md"
+      - Cyclical Nature: "zkEVM/PIL/Cyclical-Nature.md"
+      - Modularity: "zkEVM/PIL/Modularity.md"
+      - Advanced Features: "zkEVM/PIL/Advanced-Features.md"
+      - Related Repositories: "zkEVM/PIL/Related-Repos.md"
+    - Main State Machine:
+      - Introduction: "zkEVM/Main-State-Machine/Introduction.md"
+    - Secondary State Machines:
+      - Arithmetic: "zkEVM/Secondary-State-Machines/Arithmetic/Arithmetic.md"
+      - Storage: "zkEVM/Secondary-State-Machines/Storage/Storage.md"
+      - Hashing: "zkEVM/Secondary-State-Machines/Hashing/Introduction.md"
+      - Binary: "zkEVM/Secondary-State-Machines/Binary/Binary.md"
+      - Memory: "zkEVM/Secondary-State-Machines/Memory/Memory.md"
+      - Memory Align: "zkEVM/Secondary-State-Machines/Memory-Align/Memory-Align.md"
+      - Complementaries: "zkEVM/Secondary-State-Machines/Complementary/Complementary.md"
+      - Configuration File: "zkEVM/Secondary-State-Machines/Complementary/Configuration-File.md"
+    - zkProver:
+      - Introduction: "zkEVM/zkProver/Introduction.md"
+    - References: "zkEVM/references.md"
   - Hermez 1.0:
     - About:
       - Ethereum Scalability and zk-Rollups: "Hermez_1.0/about/scalability.md"

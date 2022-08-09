@@ -1,5 +1,3 @@
-We would like to emphasise that this documentation is still **Work In Progress** (WIP). Some aspects have been covered in more detail, while others still need further expansion. Also, sections of this documentation might later be reorganized in order to achieve better flow.
-
 ## Concept
 
 Polygon zkEVM is a zk-rollup that executes smart contracts transparently, by publishing zero-knowledge validity proofs, while maintaining opcode compatibility with the Ethereum Virtual Machine.

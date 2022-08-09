@@ -1,9 +1,3 @@
-[ToC]
-
-
-
-
-
 # The Storage State Machine
 
 

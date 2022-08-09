@@ -1,9 +1,3 @@
-[ToC]
-
-
-
-
-
 # The Arithmetic State Machine
 As a secondary state machine, the Arithmetic State Machine has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL (program) which is a set of verification rules, written in the PIL language. The Arithmetic SM Executor is written in two versions; Javascript and C/C++.
 
