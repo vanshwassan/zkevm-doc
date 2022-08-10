@@ -56,7 +56,7 @@ npm i
       - Executor needs files generated from `zkrom/build` & `zkvm pil/build`
       - it also needs an `input.json`
       - Examples:
-        - [zkrom file](https://github.com/hermeznetwork/zkrom/blob/main/build/rom.json)
+        - [zkrom file](https://github.com/hermeznetwork/zkrom/blob/main/build/rom.json) <!--Link not working-->
         - [zkvmpil file](https://github.com/hermeznetwork/zkvmpil/blob/main/build/zkevm.pil.json)
         - [input file](https://github.com/hermeznetwork/zkproverjs/blob/main/testvectors/input.json)
 
@@ -86,10 +86,10 @@ All operations are defined in the JSON file, plus `line` & `fileName` where the 
 In the `zkproverjs` repository, you can find an example of `launch.json` to debug the Executor code: https://github.com/hermeznetwork/zkproverjs/blob/main/.vscode/launch.json#L8
 
 ## Debugging Tips
-- Main executor code to debug: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L12
-- Variable `l` is the rom.json that is going to be executed: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L61
+- Main executor code to debug: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L12 <!--Link not working-->
+- Variable `l` is the rom.json that is going to be executed: https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L61 <!--Link not working-->
 - Debug Helpers
-  - [print registers](https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L1030)
+  - [print registers](https://github.com/hermeznetwork/zkproverjs/blob/main/src/executor.js#L1030) <!--Link not working-->
 - By monitoring `ctx(context)`, registers, and `op`, you will see all the states changes made by the Executor.
 - `ctx.input` contains all the variables loaded from `input.json`.
 - `storage` makes reference to the Merkle tree.
