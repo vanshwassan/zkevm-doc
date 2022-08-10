@@ -2,7 +2,6 @@
 
 
 
-A fully-developed zero-knowledge Ethereum Virtual Machine (zkEVM) was considered impossible to accomplish within the next two or three years. Yet Polygon team has open-sourced its alpha zkEVM. The announcement was made at EthCC[5]. All code has since been published, for public scrutiny.
 A fully-developed zero-knowledge Ethereum Virtual Machine (zkEVM) was, earlier, considered impossible to accomplish within the next two or three years. In spite of this, the Polygon team has come up with its open source,  alpha zkEVM. This announcement was made at EthCC[5]. All the code has since been published for public scrutiny.
 
 Although this documentation is still **Work In Progress** (WIP), it is published in the spirit of allowing the community of developers to meaningfully participate in this technology.
