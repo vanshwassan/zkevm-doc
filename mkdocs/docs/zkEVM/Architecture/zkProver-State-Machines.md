@@ -226,7 +226,7 @@ Here is a step-by-step outline of how the system achieves proof/verification of 
 
 While the polynomial constraints are written in the PIL language, the instructions that are initially part of the zk-assembly are subsequently expressed and stored in JSON format.
 
-The above outline of the proof/verification procedure is explained in the [blogpost] (https://blog.hermez.io/zkevm-documentation/) and is further detailed in the documentation [here](https://docs.hermez.io/zkEVM/architecture/introduction/). <!--this link is not working-->
+The above outline of the proof/verification procedure is explained in the blogpost (https://blog.hermez.io/zkevm-documentation/) and is further detailed in the documentation [here](https://docs.hermez.io/zkEVM/architecture/introduction/). <!--this link is not working-->
 
 Although not all verification involves a Plookup, the diagram below briefly illustrates the wide role that Plookup plays in zkProver:
 
@@ -351,7 +351,7 @@ With regards to the zkProver, the Rapid SNARK takes as inputs:
 <p align="center"><img src="figures/fig5-main-prts-zkpr.png" width="800" /></p>
 <div align="center"><b> Figure 5: Simplified Data Flow in the zkProver </b></div>
 
-
+<br>
 
 
 
