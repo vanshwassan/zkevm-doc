@@ -7,7 +7,7 @@ This last section wraps up the document by introducing some advanced features th
 Public inputs are values of a polynomial that are known prior to the execution of a state machine. In the following example, the public input $\texttt{publicInput}$ is set to be the first element of the polynomial $\texttt{a}$ and a colon "$:$" is used to indicate this to the compiler (see line 12 in the code excerpt below).
 
 ![Public Inputs PIL Example](figures/fig19-pil-eg-pub-inpts.png)
-
+<!-- why does code excerpt number begin with 19?-->
 <div align="center"><b> Code Excerpt 19: Public Inputs PIL Example </b></div>
 <br>
 Note that the use of the Lagrange polynomial $L_1$  is to create a constraint,
