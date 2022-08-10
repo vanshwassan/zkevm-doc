@@ -40,7 +40,7 @@ Following the previous discussion, it is convenient to visualize the outer state
 ![](./figures/CPU.png)
 
 <div align="center"><b> Figure 1: Block Diagram of a Basic Uniprocessor-CPU Computer. Black Lines Indicate Data Flow, whereas Red Lines Indicate Control Flow and Arrows Indicate Flow Directions. </b></div>
-
+<br>
 As an input, the microprocessor will take the transactions that we want to process along with the old state. After fetching the inputs, the ROM is used to interpret the transactions and generate a new state (the output) from them.
 
 ![](./figures/machine-cycle.png)
@@ -52,5 +52,4 @@ As an input, the microprocessor will take the transactions that we want to proce
 The zero-knowledge Assembly (zkASM) is the language used to describe, in a more abstract way, the ROM of our processor. Specifically, this ROM will tell the Executor how to interpret the distinct types of transactions that it could possibly receive as input. The Executor will be capable of generating a set of polynomials that will describe the state transition and later on, will be used by the STARK generator to generate proof of correctness of this transition.
 
 ![](./figures/big-picture.png)
-
 <div align="center"><b> Figure 3: Big Picture of the Prover in the zkEVM Project, with Focus on the zkASM Part. </b></div>
