@@ -162,7 +162,7 @@ The **Synchronizer** is, therefore, responsible for reading events from the Ethe
 <p align="center"><img src="figures/arch-fig3-zkNode-arch.png" width="600" /></p>
 <div align="center"><b> Figure 3 : Hermez 2.0 zkNode Diagram </b></div>
 
-
+<br>
 
 The architecture of the zkNode is modular and implements a set of functions as depicted in Figure 3 above.
 
@@ -179,7 +179,7 @@ Polygon zkEVM employs state-of-the-art zero-knowledge technology. It uses a zero
 <p align="center"><img src="figures/arch-fig4-zkProv-arch.png" width="650" /></p>
 <div align="center"><b> Figure 4 : A Simplified zkProver Diagram </b></div>
 
-
+<br>
 
 In a nutshell, the zkEVM expresses state changes in polynomial form. Therefore, the constraints that each proposed batch must satisfy are, in fact, the polynomial constraints or the polynomial identities. That is, all valid batches must satisfy certain polynomial constraints.
 
