@@ -43,6 +43,7 @@ Following the previous discussion, it is convenient to visualize the outer state
 <br>
 As an input, the microprocessor will take the transactions that we want to process along with the old state. After fetching the inputs, the ROM is used to interpret the transactions and generate a new state (the output) from them.
 <br>
+
 ![](./figures/machine-cycle.png)
 
 <div align="center"><b> Figure 2: Block Diagram of a Basic Machine Cycle. </b></div>
