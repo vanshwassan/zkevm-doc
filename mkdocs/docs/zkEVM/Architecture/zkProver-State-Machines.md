@@ -10,7 +10,7 @@
 
 
 
-Core to the integrity of the Polygon zkEVM is its zero-knowledge prover, dubbed as **zkProver**.
+Core to the integrity of the Polygon zkEVM is its zero-knowledge Prover, also called **zkProver**.
 
 This document seeks to provide a detailed architectural description of the zkProver without delving deep into its technical complexities. It also serves to introduce the zkProver's state machines in a cursory manner. It is, therefore, a prelude to the state machines' documentation. 
 
@@ -28,7 +28,7 @@ In order to lay the context for the state machines, recall that the zkProver mai
 
 
 <p align="center"><img src="figures/fig1-zkprv-and-node.png" width="600" /></p>
-<div align="center"><b> Figure 1: zkProver, Database and Node </b></div>
+<div align="center"><b> Figure 1: zkProver, Database, and Node </b></div>
 
 <br>
 
@@ -125,7 +125,7 @@ zkASM codes take instructions from the Main SM and generate prescriptive assembl
 
 The Polynomial Identity Language (or PIL) is especially designed for zkProver because almost all the state machines express their computations in terms of polynomials. State transitions in state machines must, therefore, satisfy the computation-specific polynomial identities.
 
-All PIL codes in the zkProver's state machines form the DNA of the verifier code. 
+All PIL codes in the zkProver's state machines form the DNA of the Verifier code. 
 
 Recall that the aim of this project is to create the most effective solution for the Blockchain Trilemma: Privacy, Security and Scalablity. And its context is that of an efficient zero-knowledge commitment scheme. Since the most secure and efficient commitment schemes are the Polynomial Commitment Schemes, it was expedient to translate computations into a polynomial language, where verification boils down to testing whether execution satisfies certain polynomial identities or not.
 
@@ -226,7 +226,7 @@ Here is a step-by-step outline of how the system achieves proof/verification of 
 
 While the polynomial constraints are written in the PIL language, the instructions that are initially part of the zk-assembly are subsequently expressed and stored in JSON format.
 
-The above outline of the proof/verification procedure is explained in the [blogpost] (https://blog.hermez.io/zkevm-documentation/)and is further detailed in the documentation [here](https://docs.hermez.io/zkEVM/architecture/introduction/). <!--this link is not working-->
+The above outline of the proof/verification procedure is explained in the [blogpost] (https://blog.hermez.io/zkevm-documentation/) and is further detailed in the documentation [here](https://docs.hermez.io/zkEVM/architecture/introduction/). <!--this link is not working-->
 
 Although not all verification involves a Plookup, the diagram below briefly illustrates the wide role that Plookup plays in zkProver:
 
@@ -274,7 +274,7 @@ The Executor also needs:
 - The PIL, which is the list of polynomials and registers
 - The ROM, which stores the list of instructions about execution
 
-So, with these inputs, the Executor executes the program on top of the hardware (i.e., the PIL) and generates the committed polynomials, which are the state machine cycles, or a list of all the states. It also generates some public data. The public data forms part of the inputs to the zk-SNARK verifier.
+So, with these inputs, the Executor executes the program on top of the hardware (i.e., the PIL) and generates the committed polynomials, which are the state machine cycles, or a list of all the states. It also generates some public data. The public data forms part of the inputs to the zk-SNARK Verifier.
 
 A full description of the Executor can be found in the Main State Machine's document.
 
@@ -342,7 +342,7 @@ Rapid SNARK is a zk-SNARK proof generator, written in C++ and intel assembly, wh
 With regards to the zkProver, the Rapid SNARK takes as inputs: 
 
 - The witness from CIRCOM
-- The STARK verifier data, which dictates how the Rapid SNARK must process the data and then generates a zk-SNARK proof.
+- The STARK Verifier data, which dictates how the Rapid SNARK must process the data and then generates a zk-SNARK proof.
 
 
 
