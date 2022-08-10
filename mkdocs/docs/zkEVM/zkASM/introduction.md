@@ -37,7 +37,7 @@ Ethereum is a state machine that transitions from an old state to a new state by
 
 Following the previous discussion, it is convenient to visualize the outer state machine as a microprocessor. What we do is create a microprocessor which interprets the EVM opcodes. This microprocessor is composed of a series of assembly instructions and an associated program (i.e., the ROM) running on top of it.
 
-<p align="center">![](./figures/CPU.png)</p>
+![](./figures/CPU.png)
 
 <div align="center"><b> Figure 1: Block Diagram of a Basic Uniprocessor-CPU Computer. Black Lines Indicate Data Flow, whereas Red Lines Indicate Control Flow and Arrows Indicate Flow Directions. </b></div>
 <br>
