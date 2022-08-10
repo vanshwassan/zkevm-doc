@@ -81,13 +81,13 @@ The _Main State Machine_ is in charge of some major tasks, but will specifically
 ![The Main State Machine Architecture](figures/fig15-main-sm-arch.png)
 
 <div align="center"><b> Figure 15: The Main State Machine Architecture </b></div>
-
+<br>
 Hence, the first task in PIL is to introduce various polynomials. See an example below:
 
 ![Arithmetic State Machine PIL Example](figures/fig15-pil-eg-main-sm.png)
 
 <div align="center"><b> Code Excerpt 15: Arithmetic State Machine PIL Example </b></div>
-
+<br>
 ![xt, proceed with the]( That is, check whether all the input polynomials (whenever necessary) are of the )if some polynomial is intended to be boolean, then a constraint that reflects so must be added.<!-- line unclear-->
 
 ![PIL Example with Added Constraint](figures/fig16-pil-eg-addd-cnstrnt.png)
@@ -99,7 +99,7 @@ Now, add various constraints regarding the evolution of the "main" state variabl
 ![Boolean Polynomials in the Main State Machine](figures/fig16-main-sm-bool-pols.png)
 
 <div align="center"><b> Figure 16: Boolean Polynommials in the Main State Machine </b></div>
-
+<br>
 In PIL, it translates to the following:
 
 ![Verification of Basic Registry Operations](figures/fig17-pil-vrfctn-reg-op.png)
@@ -111,7 +111,7 @@ Finally, the constraints reflecting the relationship between the Main and the Ar
 ![PIL Example Connect Main and Arithmetic SMs](figures/fig18-pil-eg-cnnct-main-arth.png)
 
 <div align="center"><b> Code Excerpt 18: PIL Example Connect Main and Arithmetic SMs </b></div>
-
+<br>
 The connections can be depicted in terms of a table as seen in Figure 17 below:
 
 ![Connecting Arithmetic and Main State Machines](figures/fig18-main-cnnct-Arth-Main.png)
