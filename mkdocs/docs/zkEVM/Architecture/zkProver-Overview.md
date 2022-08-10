@@ -33,7 +33,7 @@ The executor also needs;
 1. The PIL, which is the list of polynomials, the list of the registers, and
 2. The ROM, which stores the list of instructions pertaining to execution.
 
-So, with these inputs, the Executor executes all instructions on top of the PIL hardware and generates the committed polynomials; which are the state machine cycles, or a list of all the states. It also generates some public data,which forms part of the input to the zk-SNARK verifier.
+So, with these inputs, the Executor executes all instructions on top of the PIL hardware and generates the committed polynomials; which are the state machine cycles, or a list of all the states. It also generates some public data, which forms part of the input to the zk-SNARK verifier.
 
 A full description of the Executor can be found in the Main State Machine's individual document.
 
