@@ -1,35 +1,37 @@
-# Merkle Tree Specification
+# Merkle Tree Specifications
 
-This document describes the Merkle Tree that is used. Basic understanding on how Merkle trees and Merkle proofs work is assumed.
+This document describes the structure of a Merkle tree. It is assumed that the reader already has some basic understanding of the Merkle trees and the Merkle proofs.
 
 ## Glossary
 
-- **Key**: position of a leaf in the tree.
-- **Branch**: node of the tree that have children insted of data, e.g: a non-leaf node.
-- **Leaf**: node of the tree that stores data.
+- **Key**: Position of a leaf in the tree.
+- **Branch**: Node of the tree that has children instead of data, e.g: a non-leaf node.
+- **Leaf**: Node of the tree that stores data.
 
 ## Topology
 
-- Hexary (16 child per branch, could be 8 if deemed necessary to reduce complexity in zk circuits).
-- Number of levels doesn't have to be fixed, because STARK allows to compute it dynamically. Max levels is 64 due to key size. At least 32 levels (we may consider using more levels to avoid collisions. Amount of leafs = `16**levels`. 32 levels ~= 3.4e38).
+- Hexary (16 children per branch; these could be 8 if deemed necessary to reduce complexity in the zk circuits).
+- Number of levels need not be fixed because STARK allows to compute it dynamically. Maximum number of levels is restricted to 64 due to the key size. Minimum number of levels is 32 (we may consider using more levels to avoid collisions. Amount of leafs = `16**levels`. 32 levels ~= 3.4e38).
 - Sparse.
 
 ## Keys and Paths
 
-A key is the index of a leaf. They've to be generated in a way that there are no collisions and are deterministic (same leaf always have the same key). Therefore a convinient way to generate keys is by hashing some content of the leaf that uniquely identifies it. Poseidon hash will be used for that purpose (could be changed).
+A key is the index of a leaf. Keys have to be generated in a way that there are no collisions and are deterministic (a leaf always has the same key). Therefore, a convenient way to generate keys is by hashing the content of the leaf that uniquely identifies it. Poseidon hash will be used for this purpose (this can be changed in future).
 
-A path is a list of directions that enable navigation from root to a given leaf. Paths are derived from keys by taking the **last** `4bits * (Levels-1)`, each 4 bit group will represent a number (values 0 to 15) that indicates which is the child of the branch that follows the path to the leaf.
+A path is a list of directions that enable navigation from root to a given leaf. Paths are derived from the keys by taking the **last** `4bits * (Levels-1)`; each 4-bit group will represent a number (values 0 to 15) that indicates the child of the branch that follows the path to the leaf.
 
-Since poseidon hashes output 253,59 bits, and 4 bits are needed to encode each direction, the tree can have a maximum of 64 levels: `253.59bits / 4bits = Levels-1`.
+Since Poseidon hashes output 253,59 bits, and 4 bits are needed to encode each direction, the tree can have a maximum of 64 levels: `253.59bits / 4bits = Levels-1`.
 
 Keys are Finite Field Elements.
 Values are numbers between $0$ and $2^{256}-1$ (uint256).
 
 ## Example
 
-Given a tree with 8 levels (for example purposes, the actual implementation will have at least 32 levels), and the following key, the path will be this:
+Given a tree with 8 levels (the actual implementation will have at least 32 levels) and the key shown below, 
 
 Key (in Little Endian encoding): `0x21665a9251173584a82d950b0ea5f3c19297fdce2383ef325d3c01cb30191d10`
+
+the resultant path would be:
 
 Path:
 
@@ -43,18 +45,18 @@ Path:
 | L5 => L6   | 0x1       | 232:236   |
 | L6 => L7   | 0x0       | 228:232   |
 
-Graphical representation:
+Graphical Representation:
 
 [![](figures/merkle-tree.png)](https://i.imgur.com/cuN23kj.png)
 
 ## Reference Implementation
 
-Jordi has done js implementation here: [hermeznetwork/zkproverjs](https://github.com/hermeznetwork/zkproverjs/blob/main/src/smt.js)
+Look for the JS implementation here (done by Jordi): [hermeznetwork/zkproverjs](https://github.com/hermeznetwork/zkproverjs/blob/main/src/smt.js)
 
 ## Example of MT Creation
 
-Initially we have an empty MT, that has zero value as a root hash.
-For the example purpose it has 5 levels and keys are 2 bytes long (4 bits \* 4).
+Initially, we have an empty MT, i.e. the one that has zero value as the root hash.
+Let us assume that it has 5 levels and that the keys are 2 bytes long (4 bits \* 4).
 
 ### Step 1
 
@@ -69,9 +71,9 @@ Leafs:
 | -------- | ---- | ----- | --------- | ------------------------- |
 | 4321     | 1234 | 66    | -         | H[1,1234,66,0,0,0,0,0..0] |
 
-Merkle root hash equals to the hash of the leaf node, which is `H[1,1234,66,0,0..0]`, since there's no other leaves in the tree. `keyPrime` equals to Path.
+Merkle root hash equals to the hash of the leaf node, which is `H[1,1234,66,0,0..0]`, since there are no other leaves in the tree. `keyPrime` equals to Path.
 
-Graphical representation:
+Graphical Representation:
 
 [![one leaf](figures/one-leaf.png)](https://i.imgur.com/RmxHyCF.png)
 
@@ -91,7 +93,7 @@ Leafs:
 | 1234 | 66    | 123       | H[1,4,66,0,0,0,0..0] |
 | 1244 | 77    | 124       | H[1,4,77,0,0,0,0..0] |
 
-Graphical representation:
+Graphical Representation:
 
 [![two leaf](figures/two-leafs.png)](https://i.imgur.com/KqR96E8.png)
 
@@ -112,7 +114,7 @@ Leafs:
 | 1244 | 77    | 124       | H[1,4,77,0,0,0,0..0]  |
 | 1456 | 88    | 14        | H[1,56,88,0,0,0,0..0] |
 
-Graphical representation:
+Graphical Representation:
 
 [![three leafs](figures/three-leafs.png)](https://i.imgur.com/I69k5zZ.png)
 
@@ -144,20 +146,20 @@ Graphical representation:
 
 Hermez 1.5 has 2 categories of nodes:
 
-- **Leafs**: node of the tree that instead of pointing to other nodes, it holds data. There is 4 types of leafs:
+- **Leafs**: Node of the tree that, instead of pointing to other nodes, holds data. There are four types of leafs:
     - Nonce: Counter of transactions made by an account
-    - Balance: amount of Ether holded by an account
-    - SC code: code of a smart contract
-    - SC storage: persistent data stored by a smart contract
-- **Branches**: node of the tree that point to other nodes.
+    - Balance: Amount of ether held by an account
+    - SC Code: Code of a smart contract
+    - SC Storage: Persistent data stored by a smart contract
+- **Branches**: Node of the tree that points to the other nodes.
 
 ### Leafs
 
 Generic schema to generate node hash: `poseidon.Hash(1, keyPrime, V0, V1, V2, V3, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)`
 where:
 
-- `keyPrime` - is a remaining part of the key, depends on a position of the Leaf in the Tree
-- `V0, V1, V2, V3` - parts of Value split in 64 bit chunks
+- `keyPrime`: Is a remaining part of the key and depends on the position of the Leaf in the tree.
+- `V0, V1, V2, V3` - Parts of the value split in 64 bit chunks.
 
     <table>
         <tr>
@@ -184,7 +186,7 @@ where:
     </table>
 
 
-- `0 ... 0` - zero padding to get 16 inputs to poseidon hash in total, in this case 10 additional zero values
+- `0 ... 0` - Zero padding to get 16 inputs to the poseidon hash; in this case, there are 10 additional zero values.
 
 ### Branches
 
@@ -200,7 +202,7 @@ Proofs are very similar to the implementation used in Hermez 1.0.
 
 This type of proof is needed to prove that a key in Merkle Tree has specific value.
 
-Structure of the proof from a reference implementation:
+Structure of the proof from the reference implementation:
 
 ```json
 {
@@ -216,7 +218,7 @@ Structure of the proof from a reference implementation:
 
 ### Proof of Leaf Update
 
-This type of proof is needed as an input for the ZKP, to prove the transiction from one state `state A` to the next one `state B`.
+This type of proof is needed as an input for the zero-knowledge proof (ZKP) to prove the transiction from one state `state A` to the next one `state B`.
 
 Structure of the proof from a reference implementation:
 
@@ -240,25 +242,25 @@ Structure of the proof from a reference implementation:
 
 ### Balance
 
-- Value: unsigned integer of 256 bits
-- Key: key is generated by hashing the Ethereum address and a constant with value 0 using Poseidon: `key = poseidon.Hash(ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 0, 0..0)`
+- Value: Unsigned integer of 256 bits
+- Key: Key is generated by hashing the Ethereum address and a constant with value 0 using Poseidon: `key = poseidon.Hash(ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 0, 0..0)`
 - Hash: `poseidon.Hash(1, keyPrime, balanceBytes[0:8], balanceBytes[8:16], balanceBytes[16:24], balanceBytes[24:32], 0..0)`
 
 ### Nonce
 
-- Value: unsigned integer of 256 bits
-- Key: key is generated by hashing the Ethereum address and a constant with value 1 using Poseidon: `key = poseidon.Hash(ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 1, 0..0)`
+- Value: Unsigned integer of 256 bits
+- Key: Key is generated by hashing the Ethereum address and a constant with value 1 using Poseidon: `key = poseidon.Hash(ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 1, 0..0)`
 - Hash: `poseidon.Hash(1, keyPrime, nonceBytes[0:8], nonceBytes[8:16], nonceBytes[16:24], nonceBytes[24:32], 0..0)`
 
 ### SC Code
 
-- Value: byte array that represents the compiled code
-- Key: key is generated by hashing the Ethereum address and a constant with value 2 using Poseidon: `key = poseidon.Hash(1, keyPrime, ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 2, 0..0)`
+- Value: Byte array that represents the compiled code.
+- Key: Key is generated by hashing the Ethereum address and a constant with value 2 using Poseidon: `key = poseidon.Hash(1, keyPrime, ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 2, 0..0)`
 - Hash: **TBD**
-  - probably by splitting the code into chunks of 15 elements, and hashing the 15 elements and the hash of the previous chunk
+  - Probably by splitting the code into chunks of 15 elements and hashing the 15 elements and the hash of the previous chunk.
 
-### SC storage
+### SC Storage
 
-- Value: 256 bits that will be interpreted by the SC
-- Key: key is generated by hashing the Ethereum address and a constant with value 3 and the position of the storage that is being accessed: `key = poseidon.Hash(ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 3, storagePositionBytes[0:8], storagePositionBytes[8:16], storagePositionBytes[16:24], storagePositionBytes[24:32], 0..0)`
+- Value: 256 bits that will be interpreted by the smart contract.
+- Key: Key is generated by hashing the Ethereum address and a constant with value 3 and the position of the storage that is being accessed: `key = poseidon.Hash(ethAddrBytes[0:8], ethAddrBytes[8:16], ethAddrBytes[16:24], 3, storagePositionBytes[0:8], storagePositionBytes[8:16], storagePositionBytes[16:24], storagePositionBytes[24:32], 0..0)`
 - Hash: `poseidon.Hash(1, keyPrime, valueBytes[0:8], valueBytes[8:16], valueBytes[16:24], valueBytes[24:32], 0..0)`
