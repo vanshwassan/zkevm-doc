@@ -152,7 +152,7 @@ The hardware part, which speaks the Polynomial Identity Language (PIL), defines 
 <p align="center"><img src="figures/fig-micro-pro-pic.png" width="800" /></p>
 <div align="center"><b> Figure 3 : Microprocessor State Machine </b></div>
 
-
+<br>
 
 Although these two microprocessor SMs (the Main and the Storage) have the same look and feel, they differ considerably.
 
