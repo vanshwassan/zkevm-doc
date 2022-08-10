@@ -42,7 +42,7 @@ Following the previous discussion, it is convenient to visualize the outer state
 <div align="center"><b> Figure 1: Block Diagram of a Basic Uniprocessor-CPU Computer. Black Lines Indicate Data Flow, whereas Red Lines Indicate Control Flow and Arrows Indicate Flow Directions. </b></div>
 <br>
 As an input, the microprocessor will take the transactions that we want to process along with the old state. After fetching the inputs, the ROM is used to interpret the transactions and generate a new state (the output) from them.
-
+<br>
 ![](./figures/machine-cycle.png)
 
 <div align="center"><b> Figure 2: Block Diagram of a Basic Machine Cycle. </b></div>
