@@ -124,3 +124,4 @@ On one side, the $\texttt{arith}$ selector is used in the Main SM to point to th
 \begin{array}{c}
 \texttt{Main.arith} \cdot [\texttt{Main.a} , \texttt{Main.b} , \texttt{Main.c} , \texttt{Main.d}, \texttt{Main.e}] \\ \subset \\ \texttt{Arith.LATCH} \cdot [\texttt{Arith.a}, \texttt{Arith.b}, \texttt{Arith.c}, \texttt{Arith.d}, \texttt{Arith.e}].
 \end{array}
+<!-- Code Excerpt 15 mentioned two times>
