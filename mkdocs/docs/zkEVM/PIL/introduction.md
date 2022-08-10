@@ -27,7 +27,7 @@ Figure 2 below, provides a high-level description of a state machine architectur
 ![Architectural View of a State Machine](figures/fig2-alu-3states.png)
 
 <div align="center"><b> Figure 2: Architectural View of a State Machine </b></div>
-
+<br>
 Figures 3 and 4 show the comparison between the design of the circuits and the state machines in different scenarios. The former makes a comparison in the case of a program with a looping nature, and the latter shows a program with a branching nature.
 
 ![Circuit and state machine comparison in a loop-based computation](figures/fig3-crct-sm.png)
