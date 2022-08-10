@@ -57,7 +57,7 @@ core component of the Polygon zkEVM.
 
 
 
-![Figure 1: Big Picture of the zlProver](big-picture.png)
+![Figure 1: Big Picture of the zlProver](figures/big-picture.png)
 <div align="center"><b> Figure 1: Big picture of the zkProver </b></div>
 
 

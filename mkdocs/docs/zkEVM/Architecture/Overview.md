@@ -1,42 +1,28 @@
-
-
-
-
 # Polygon zkEVM Documentation
-
-
 
 Welcome to Polygon zkEVM documentation.
 
-Polygon zkEVM is a decentralized Ethereum Layer 2 scalability solution based on cryptographic zero-knowledge proofs to provide validation and fast finality to off-chain transactions computation, a zk-rollup.
+Polygon zkEVM is a decentralized Ethereum Layer 2 scalability solution based on cryptographic proofs to provide validation and fast finality to transactions.
 
-This documentation presents a description of the Polygon zkEVM. Starting with the architectural overview of Polygon zkEVM, the documentation cascades step-by-step into the finer details of zkEVM's sub-components.
+This documentation presents the Polygon zkEVM. Starting with the architectural overview of Polygon zkEVM, the documentation cascades step-by-step into the finer details of zkEVM's sub-components.
 
 We however emphasise that this documentation is still **Work In Progress** (WIP). Some aspects have been covered in more detail, while others still need further expansion. Also, sections of this documentation might later be reorganized in order to achieve better flow.
 
 
 
-
-
-
 ## zkEVM's Architectural Overview
 
-
-
-Over and above what its predecessor was designed to do, the main functionality of zkEVM is to provide smart contract support. It performs the task of state transition resulting from the Ethereum Layer 2 transaction executions (transactions that users send to the network). Subsequently, by employing zero-knowledge functionality, it generates validity proofs that attest to the correctness of these state change computations carried out off-chain.
+Over and above what its predecessor was designed to do, the main functionality of zkEVM is to provide smart contract support. It performs the task of state transition resulting from the Ethereum Layer 2 transaction executions (transactions that users send to the network). Subsequently, by employing zero-knowledge proof technology, it generates validity proofs that attest to the correctness of these state change computations carried out off-chain.
 
 The major components of zkEVM are:
 
-- Proof of Efficiency Consensus Mechanism
-- zkNode Software
-- zkProver
-- LX-to-LY Bridge
-- Sequencers
-- Aggregators 
+- Proof of Efficiency (PoE) consensus mechanism.
+- zkNode software including a synchronizer, sequencer and aggregator. 
+- LX-to-LY bridge.
+- zkProver.
 - Active users of the zkEVM network who create transactions.
 
 The skeletal architecture of zkEVM is shown below:
-
 
 
 ![Figure 1 : Skeletal Overview of zkEVM](figures/fig1-simpl-arch.png)
@@ -47,7 +33,7 @@ The skeletal architecture of zkEVM is shown below:
 
 ### Consensus Algorithm: Proof of Efficiency
 
-Our earlier version, Polygon Hermez 1.0, is based on the Proof of Donation(PoD) consensus mechanism. This model decides who would be the next batch creator. PoD is a decentralised auction that is conducted automatically and the participants (coordinators) bid a number of tokens so that they have the chance to create the next batch.
+Our earlier version, Polygon Hermez 1.0, is based on the Proof of Donation (PoD) consensus mechanism. This model decides who would be the next batch creator. PoD is a decentralised auction that is conducted automatically and the participants (coordinators) bid a number of tokens so that they have the chance to create the next batch.
 
 However, for the implementation of the current 2.0, PoD needed to be replaced with a much simpler Proof of Efficiency (PoE) model. Let us see why PoE is preferable to PoD.
 
