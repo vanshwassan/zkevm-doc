@@ -18,6 +18,7 @@ The Polygon Hermez Repo can be found here:  [https://github.com/0xPolygonHermez]
 
 The Memory SM checks memory reads and writes using 32-byte word access, while the EVM can read and write 32-byte words with offsets at a byte level.
 <!-- what does possible mean here? -->
+<!-- Table 6 is in comments-->
 Table 6 shows an example of possible byte-addressed and 32-byte-addressed memory layouts for the same content (three words).
 
 <!-- 
@@ -35,7 +36,7 @@ Table 6 shows an example of possible byte-addressed and 32-byte-addressed memory
 -->
 
 <div align="center"><b> Table 7: Sample memory layouts for byte and 32-byte access.</b></div>
-
+<!--Table 7 or 6?-->
 $$
 \begin{array}{|c|c|}
 \hline
@@ -96,7 +97,7 @@ Figure 7 shows the affected read words $\mathtt{m}_0$ and $\mathtt{m}_1$ that fo
 
 ![Schema of MLOAD example](figures/fig-schm-mld-eg.png)
 <div align="center"><b> Figure 1: Schema of MLOAD Example </b></div>
-
+<br>
 Let us now introduce the flow at the time of validating a read. Suppose that we want to validate that if we perform an $\mathtt{MLOAD}$ operation at the address $\mathtt{0x22}$, we get the previous value $\mathtt{0x1f\dotsb7236e21}$. At this point, the main state machine will perform several operations. First of all, it will have to query for the values $\mathtt{m}_0$ and $\mathtt{m}_1$. Henceforth, it must call the Memory SM in order to validate the previous queries.
 
 Observe that it is easy to extract the memory positions to query from the address $\mathtt{0x22}$. In fact, if $a$ is the memory position of the $\mathtt{MLOAD}$ operation, then $\mathtt{m}_0$ is always stored at the memory position $\lfloor \frac{a}{32} \rfloor$ and $\mathtt{m}_1$ is stored at the memory position $\lfloor \frac{a}{32} \rfloor + 1$. In our example, $a = \mathtt{0x22} = 34$. Hence, $\mathtt{m}_0$ is stored at the position $\lfloor \frac{32}{34} \rfloor = \mathtt{0x01}$ and $\mathtt{m}_1$ is stored at the position $\lfloor \frac{32}{34} \rfloor + 1= \mathtt{0x02}$.
@@ -113,15 +114,16 @@ $$
 \mathtt{val} = \mathtt{0xe201e6\dots662b}
 $$
 
-in the address $\mathtt{0x22}$ of the byte-addressed Ethereum memory. We are using the same $\mathtt{m}_0$ and $\mathtt{m}_1$ (and since we are writing into the same address as before) and they will transition into (see Figure 8 ):
+in the address $\mathtt{0x22}$ of the byte-addressed Ethereum memory. We are using the same $\mathtt{m}_0$ and $\mathtt{m}_1$ (and since we are writing into the same address as before) and they will transition into (see Figure 8):
 
 $$
 \mathtt{w}_0 = \mathtt{0x88d1}\color{-red!75}\mathtt{e201e6\dots}\color{black},\quad \mathtt{w}_1 = \mathtt{0x}\color{-red!75} \mathtt{662b}\color{black} \mathtt{ff\dots54f9}.
 $$
 
 ![Schema of MSTORE example](figures/fig-schm-mstr-eg.png)
-<div align="center"><b> Figure 8: Schema of MSTORE Example. </b></div>
-
+<div align="center"><b> Figure 8: Schema of MSTORE Example </b></div>
+<!--Figure 2 or 8?-->
+<br>
 Just as before, the main state machine will need to perform several operations. We will be given an address: $\mathtt{addr}$, an offset value: $\mathtt{offset}$, and a value to be written: $\mathtt{val}$. Identically as before, the Main SM will be in charge of reading the zkEVM memory to find $\mathtt{m}_0$ and $\mathtt{m}_1$ from the given address and offset. The validity of this query should be performed with a specific Plookup into the Memory SM, just mentioned before.
 
 Now, the Main SM can compute $\mathtt{w}_0$ and $\mathtt{w}_1$ from all the previous values in a unique way. A way of validating that we have provided the correct $\mathtt{w}_0$ and $\mathtt{w}_1$ is to perform a Plookup into the Memory Align SM. That is, we will check that the provided values $\mathtt{w}_0$ and $\mathtt{w}_1$ are correctly constructed from the provided $\mathtt{val}$, $\mathtt{m}_0$, $\mathtt{m}_1$ and $\mathtt{offset}$ values.

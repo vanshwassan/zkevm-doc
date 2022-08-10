@@ -249,7 +249,7 @@ The Verifier then checks the Prover's claim by computing the Merkle root as foll
 
 ​	(b)	Then it uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}})$  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be same as the branch node $\mathbf{B}_{\mathbf{ef}}$.
 
-**Note.** The symbol, `tilde` " $\tilde{ }$ ", is used throughout the document to indicate that the computed value, $\tilde{\Box}$, still needs to be checked or tested to be true.
+**Note** The symbol, `tilde` " $\tilde{ }$ ", is used throughout the document to indicate that the computed value, $\tilde{\Box}$, still needs to be checked or tested to be true.
 
 ​	(c)	Next, it computes  $\mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{ef}}\|\mathbf{B}_{\mathbf{gh}} \big) =: \tilde{ \mathbf{B}}_{\mathbf{efgh}}$, corresponding to the branch node $\mathbf{B}_{\mathbf{efgh}}$.
 

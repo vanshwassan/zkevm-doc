@@ -51,7 +51,7 @@ Graphical Representation:
 
 ## Reference Implementation
 
-Look for the JS implementation here (done by Jordi): [hermeznetwork/zkproverjs](https://github.com/hermeznetwork/zkproverjs/blob/main/src/smt.js)
+Look for the JS implementation here (done by Jordi): [hermeznetwork/zkproverjs](https://github.com/hermeznetwork/zkproverjs/blob/main/src/smt.js) <!--Link not working-->
 
 ## Example of MT Creation
 
