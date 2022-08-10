@@ -27,7 +27,7 @@ Figure 6 below depicts this division:
 
 ![Multiplier State Machine with the Distinct Polynomials](figures/fig6-dstnct-pols-mltpl-sm.png)
 
-<div align="center"><b> Figure 6: Multiplier State Machine with the distinct polynomials </b></div>
+<div align="center"><b> Figure 6: Multiplier State Machine with the Distinct Polynomials </b></div>
 <br>
 In order to achieve the correct behaviour of this state machine, one obvious constraint that must be satisfied is:
 
