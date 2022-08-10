@@ -11,7 +11,7 @@ This means that the description (in terms of constraints) of a state machine is 
 ![Cyclic Nature of State Machines](figures/fig10-cycl-ntr-sms.png)
 
 <div align="center"><b> Figure 10: Cyclic Nature of State Machines </b></div>
-
+<br>
 If there is some constraint that is not satisfied in the last transition, one normally overcomes this problem by adding artificial values in the later evaluations of polynomials.
 
 For example, consider the following state machine with its respective computational trace:
