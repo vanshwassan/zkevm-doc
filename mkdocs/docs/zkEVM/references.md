@@ -1,6 +1,6 @@
 ## Resources List
 
-A curated list of cryptographic protocols used in this project.
+A curated list of cryptographic protocols used in this project is shown below:
 
 - [Groth16 protocol](https://eprint.iacr.org/2016/260.pdf)
 
