@@ -47,7 +47,7 @@ Reduction of the number of free input polynomials can be achieved by introducing
 
 ![Multiplier State Machine with the Constant Polynomials](figures/fig8-cnstnt-pols-mltpl-sm.png)
 
-<div align="center"><b> Figure 6: Multiplier State Machine with the Constant Polynomials </b></div>
+<div align="center"><b> Figure 7: Multiplier State Machine with the Constant Polynomials </b></div>
 <br>
 Table 8 shows the computational trace for the optimized Multiplier state machine.
 
