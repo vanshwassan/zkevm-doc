@@ -92,7 +92,7 @@ These instructions dictate how a state should transition in a State Machine. How
 
 There are some natural dependencies such as between:
 
-- the Storage State Machine, which uses Merkle trees and the POSEIDON State Machine, which is needed for computing hash values of all the nodes in the storage's Merkle trees.
+- The Storage State Machine, which uses Merkle trees and the POSEIDON State Machine, which is needed for computing hash values of all the nodes in the storage's Merkle trees.
 - Each of the hashing state machines, i.e. the Keccak Function SM and the PoseidonG SM, and their respective padding SMs, i.e. the Padding-KK SM and the Padding-PG SM.
 
 
