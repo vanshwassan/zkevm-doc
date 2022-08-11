@@ -770,7 +770,7 @@ It is often necessary to make sure that a proof-integrity system has the zero-kn
 
 A leaf, therefore, is constructed in two steps:
 
-1. , for a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, compute the hash the value $V_\mathbf{{x}}$: 
+1. For a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, compute the hash the value $V_\mathbf{{x}}$: 
   
 \begin{aligned}
   \text{Hashed Value} = \text{HV}_\mathbf{{x}} = \mathbf{H_{noleaf}}(V_\mathbf{{x}})
@@ -927,7 +927,7 @@ In proving that $\mathbf{L}_{\mathbf{b}}$ is indeed in the tree, the Verifier do
 
 4. Completes the root-check by testing equality: $\mathbf{\tilde{root}}_{ab0} = \mathbf{{root}}_{ab0}$.  
 
-Simultaneously,
+Simultaneously, Verifier also checks the keys. 
 
 ***Checks the Keys***: 
 
@@ -971,7 +971,7 @@ For the UPDATE operation, **Step 1** is exactly the same as the READ operation. 
 
 
 
-#### Example 6 *UPDATE - Step 2*
+#### Example 6: *UPDATE - Step 2*
 
 Suppose the set key is: $K_{\mathbf{c}} = 10110100$, corresponding to the old value $V_{\mathbf{c}}$ and the new value is $V_\mathbf{new}$.
 
@@ -1895,6 +1895,7 @@ The preparation for these polynomial constraints actually starts in the Storage 
 
 </center>  
 <br>
-Every time each of these Boolean polynomials is utilised or performed, a record of a "1" is kept in its register. This is called an **Execution Trace**. 
+
+Every time each of these Boolean polynomials is utilised or performed, a record of a "1" is kept in its register. This is called **Execution Trace**.
 
 Therefore, instead of performing some expensive computations in order to verify the correctness of execution (at times, repeating the same computations being verified), the trace of execution is tested. The Verifier takes the execution trace and tests if it satisfies the polynomial constraints (or identities) in the PIL code. This technique helps the zkProver to achieve succinctness as a zero-knowledge proof and verification system.
