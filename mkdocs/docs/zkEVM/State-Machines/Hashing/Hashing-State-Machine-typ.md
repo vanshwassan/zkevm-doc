@@ -29,6 +29,7 @@ We depict a schema of the sponge construction in Figure 1 below:
 
 ![School Multiplication Example](figures/fig-sponge-construction.png)
 <div align="center"><b> Figure 1: Sponge Function Construction </b></div>
+<br>
 
 The elements that completely describe a single instance of a sponge construction are - the fixed-length permutation $f$, the padding rule pad, and the rate value $r$.
 
