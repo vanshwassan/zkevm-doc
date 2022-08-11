@@ -4,7 +4,7 @@ As a secondary state machine, the Memory State Machine has the executor part (th
 
 
 
-The Polygon Hermez Repo can be found here: [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
+**Polygon Hermez Repository**: [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
 
 **Memory SM Executor**: [sm_mem.js](https://github.com/0xPolygonHermez/zkevm-proverjs/tree/main/src/sm/sm_mem.js)
 
@@ -38,7 +38,7 @@ Now, let's see the layout in memory of the following two words $\texttt{0xc417..
 </center>
 
 <div align="center"><b> Table 1: Layout in memory of 0xc417...81a7 and 0x88d1...b723. </b></div>
-
+<br>
 Observe that each word has 32 bytes and that the words are stored in Big-Endian form. i.e. The most significant bytes are set in the lower addresses. The EVM provides three opcodes to interact with the memory area. There is an opcode to read, and an opcode to write 32-byte words providing an offset:
 
 - $\texttt{MLOAD}$: It receives an offset and returns the 32 bytes in memory starting at that offset.
@@ -64,7 +64,7 @@ Considering our previous memory contents, if we perform an $\texttt{MLOAD}$ with
 </center>
 
 <div align="center"><b> Table 2: Layout in memory after the introduction of 0x74f0...ce92. </b></div>
-
+<br>
 When the offset is not a multiple of 32 (or 0x20), as in the previous example, we have to use bytes from two different words when doing $\texttt{MLOAD}$ or $\texttt{MSTORE}$.
 
 Finally, the EVM provides a write memory operation that just writes a byte:
@@ -87,7 +87,7 @@ The Memory SM is in charge of proving the memory operations in the execution tra
 </center>
 
 <div align="center"><b> Table 3: Layout in the memory state machine. </b></div>
-
+<br>
 The Memory SM uses this latter layout, the 32-byte word access, to check reads and writes. However, as previously mentioned, the EVM can read and write with offsets at a byte level. As a result, we will need to check the relationship between byte access and 32-byte word access. For these checks, we have another state machine called Memory Align SM.
 
 ## Design
@@ -114,7 +114,7 @@ Table 4 shows an example with all the memory operations present at an execution 
 </center>
 
 <div align="center"><b> Table 4: Memory Operations and an Execution Trace of the Main SM. </b></div>
-
+<br>
 The $\texttt{step}$ is the execution step number at the Main SM and in this case, we are showing only the steps that perform memory operations. The instruction to execute a memory operation is indicated by the $\texttt{mOp}$ selector. The $\texttt{mWr}$ is also a selector that shows whether the memory operation is a read or a write. In the previous trace, we can observe that the first memory operation is performed at step 11 and it is the write of the sixth 32-byte word. The eight registers $\texttt{val[0..7]}$ provide the bytes to be written in that word.
 
 It is worth mentioning that for a specific word address, the first operation is always a write because it makes no sense to read a position that has not been previously written. Then, in this word address, there can be a sequence of reads and writes. In the previous trace, we can observe that for the sixth word, there is a write at step 11, then a read at step $55$, and finally another write at step $63$.
@@ -133,7 +133,7 @@ It is worth mentioning that for a specific word address, the first operation is 
 </center>
 
 <div align="center"><b> Table 5: Corresponding Memory SM Execution Trace. </b></div>
-
+<br>
 The trace of the Memory SM must check that the writes are done according to their steps and that the reads provide the correct words according to their steps.
 
 In order to implement these checks, the execution trace of the Memory SM sorts all the memory operations, firstly by $\texttt{addr}$ and secondly by $\texttt{step}$, as shown in Table 5. This ordering is referred to as the _topology_ of the Memory SM.
@@ -186,7 +186,7 @@ There are various important details to remark from the point in which all memory
 
 ![Complete Memory SM Execution Trace](figures/fig-exec-trc.png)
 <div align="center"><b> Table 6: Complete Memory SM Execution Trace for Our Example. </b></div>
-
+<br>
 ## Constraints
 
 ### Topology
