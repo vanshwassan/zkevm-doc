@@ -563,16 +563,12 @@ We will describe an algorithm in order to process all the bytes. We will use a c
 1. First of all, since no differences have been found up to this point, set $\texttt{carry}$ equal to $1$.
 
 2. Now, compare $a_0$ and $b_0$,
-
-   (a)	If $a_0$ and $b_0$ are equal, then leave $\texttt{carry}$ unchanged (equal to $1$).
-
-   (b)	If $a_0 \neq b_0$, then set $\texttt{carry}$ equal to $0$, which will imply that $a \neq b$.
+   1. If $a_0$ and $b_0$ are equal, then leave $\texttt{carry}$ unchanged (equal to $1$).
+   2. If $a_0 \neq b_0$, then set $\texttt{carry}$ equal to $0$, which will imply that $a \neq b$.
 
 3. When comparing bytes $a_i$ and $b_i$ for $0 < i \leq 31$:
-
-   (a)	If $a_i = b_i, \texttt{carry} = 1$, we should leave $\texttt{carry}$ unchanged and if $i = 31$, we should output a $1$ because $a = b$. The reason for demanding $\texttt{carry} = 1$ in the enter condition is because we should ensure that, if $\texttt{carry} = 0$ in a previous step, we must never enter this block and change the non-equality decision. This is because if $a_i \neq b_i$ for some $i$, then $a \neq b$.
-
-   (b)	Hence, if $a_i \neq b_i$, we should set $\texttt{carry} = 0$ and output a $0$ if $i = 31$. 
+   1. If $a_i = b_i, \texttt{carry} = 1$, we should leave $\texttt{carry}$ unchanged and if $i = 31$, we should output a $1$ because $a = b$. The reason for demanding $\texttt{carry} = 1$ in the enter condition is because we should ensure that, if $\texttt{carry} = 0$ in a previous step, we must never enter this block and change the non-equality decision. This is because if $a_i \neq b_i$ for some $i$, then $a \neq b$.
+   2. Hence, if $a_i \neq b_i$, we should set $\texttt{carry} = 0$ and output a $0$ if $i = 31$. 
 
 ​	
 
@@ -631,7 +627,7 @@ The binary operations it executes together with their specific opcodes are:
 
 
 
-### In The Nutshell
+### In the Nutshell
 
 
 First, the Binary SM Executor translates the Binary Actions into the PIL language. 
@@ -702,7 +698,7 @@ For each of the 32 triplets `freeInA`, `freeInB`, and `freeInC`, while tallying 
 1. Prepares a Plookup input vector of the form:  \{`last`, `opcode`, `freeInA`, `freeInB`, `cIn`, `freeInC`, `cOut`\}, where each element is a byte.
 2. Runs Plookup:
 
-` {last,opcode,freeInA,freeInB,cIn,freeInC,cOut} in {P_LAST,P_OPCODE,P_A,P_B,P_CIN,P_C,P_COUT};`
+   ` {last,opcode,freeInA,freeInB,cIn,freeInC,cOut} in {P_LAST,P_OPCODE,P_A,P_B,P_CIN,P_C,P_COUT};`
 
 3. Resets registry values at the end of the 32 cycles using `RESET` and utilises `FACTOR` for the correct placement of values. For e.g., `a0' = a0 * (1 - RESET) + freeInA * FACTOR[0];`
 
