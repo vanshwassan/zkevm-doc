@@ -18,7 +18,7 @@ As a secondary state machine, the Binary State Machine has the executor part (th
 
 
 
-For the Polygon Hermez Repo, click this link:  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
+**Polygon Hermez Repository**:  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
 
 **Binary SM Executor**: [sm_binary.js](https://github.com/0xPolygonHermez/zkevm-proverjs/blob/main/src/sm/sm_binary.js)
 
@@ -61,7 +61,7 @@ Figure 1 shows these codifications for 3-bit strings but the idea can easily be 
 ![Codifications of 3-bit strings for Signed and Unsigned Integers as used by the EVM ](figures/fig-cdfctn-3bit-strngs.png)
 <div align="center"><b> Figure 1: Codifications of the 3-bit Strings for the Signed and Unsigned Integers as used by the EVM </b></div>
 
-
+<br>
 
 Adding two strings is performed bit-by-bit using the corresponding carry.
 
@@ -112,7 +112,7 @@ Table 1 depicts the truth tables of $\text{AND}$, $\text{OR}$, and $\text{XOR}$ 
 
 ![Truth Tables of bit-wise operations](figures/fig-trth-tbls-bitws.png)
 <div align="center"><b> Table 1: Truth Tables of Bit-wise Operations </b></div>
-
+<br>
 
 
 Notice that we do not consider the $\text{NOT}$ operation. This is because the $\text{NOT}$ operation can be easily implemented with the $\text{XOR}$ operation, by taking an $\text{XOR}$ of the 256-bit string and $\texttt{0xff...ff}$.
@@ -123,7 +123,7 @@ Notice that we do not consider the $\text{NOT}$ operation. This is because the $
 
 
 
-## The Design Of The Binary SM 
+## The Design of the Binary SM 
 
 
 
@@ -150,7 +150,7 @@ In instances where none of the defined binary operations is carried out, the Bin
 
 
 <div align="center"><b> Table 2: All Operations Checked by the Binary SM </b></div>
-
+<br>
 <center>
 
 | $\textbf{Operation Name}$ | $\textbf{Mnemonic}$ | $\textbf{Symbol}$ | $\textbf{BinOpCode}$ |
@@ -506,9 +506,9 @@ a = \mathtt{0b11111111} = \mathtt{0xFF} < \mathtt{0x00} = \mathtt{0b00000000} = 
 $$
 because $\texttt{sgn}(a) > \texttt{sgn}(b)$ i.e. $a$ is negative and $b$ is positive. If $\texttt{sgn}(a) \neq \texttt{sgn}(b)$, we can simply compare $a$ and $b$ using the same strategy as before, because the natural lexicographic order is preserved in this case. Then, we have the following cases when comparing $a$ and $b$:
 
-1. If $\texttt{sgn}(a) = 1$ and $\texttt{sgn}(b) = 0$, then $a < b$.
-2. If $\texttt{sgn}(a) = 0$ and $\texttt{sgn}(b) = 1$, then $a > b$.
-3. If $\texttt{sgn}(a) = \texttt{sgn}(b)$, the order is the usual one and hence, we already know how to compare $a$ and $b$. 
+- If $\texttt{sgn}(a) = 1$ and $\texttt{sgn}(b) = 0$, then $a < b$.
+- If $\texttt{sgn}(a) = 0$ and $\texttt{sgn}(b) = 1$, then $a > b$.
+- If $\texttt{sgn}(a) = \texttt{sgn}(b)$, the order is the usual one and hence, we already know how to compare $a$ and $b$. 
 
 ​	
 
@@ -519,10 +519,9 @@ Recall that we are processing the bytes of $a$ and $b$ from the less significant
 
 
 1. First of all, we start comparing $a_0$ and $b_0$. 
+   1. If $a_0 < b_0$, we set $\texttt{carry} = 1$.
 
-​	a. If $a_0 < b_0$, we set $\texttt{carry} = 1$.
-
-​	b. Otherwise we set $\texttt{carry} = 0$.	
+​	- Otherwise we set $\texttt{carry} = 0$.	
 
 
 
