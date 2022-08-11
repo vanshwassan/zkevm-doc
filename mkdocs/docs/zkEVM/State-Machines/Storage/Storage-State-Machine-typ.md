@@ -58,7 +58,7 @@ A state machine can be monolithic, where it is a prototype of one particular com
 ![Figure 1: A Generic State Machine](figures/fig-gen-state-mchn.png)
 <div align="center"><b> Figure 1: A Generic State Machine </b></div>
 
-
+<br>
 The Storage SM performs computations on the key-value data stored in special Merkle trees called **Sparse Merkle Trees** (SMTs). The basic operations it executes are: CREATE, READ, UPDATE and DELETE.
 
 In the Storage SM, keys and values are strings of 256 bits and for convenience, can be interpreted as 256-bit unsigned integers. 
@@ -179,7 +179,7 @@ $\mathbf{H}$
 
 ![Figure 3: A Merkle Tree Example](figures/fig-mkl-tree-gen.png)
 <div align="center"><b> Figure 3: A Merkle Tree Example </b></div>
-
+<br>
 
 
 Leaves that share a parent node are called ***siblings***. The same terminology applies to branches. For example, $\mathbf{B}_{\mathbf{ab}}$ and $\mathbf{B}_{\mathbf{cd}}$ are siblings because they are branches of the same parent $\mathbf{B}_{\mathbf{abcd}}$. Similarly, $\mathbf{B}_{\mathbf{efgh}}$ and $\mathbf{B}_{\mathbf{abcd}}$ are siblings. 
@@ -188,13 +188,13 @@ Leaves that share a parent node are called ***siblings***. The same terminology 
 
 
 
-### Using Keys To Navigate A Merkle Tree
+### Using Keys to Navigate a Merkle Tree
 
 
 
 Keys are used to navigate from the root to the leaves (and backwards).
 
-***Reading the key*** starting from ***the left to the right***, and when traversing the tree ***from the root downwards***,
+***Reading the key*** starting from ***the left to the right***, and when traversing the tree ***from the root downwards***:
 
 -  a zero-key-bit "$0$" means "***follow the edge going to the left***". 
 
@@ -233,27 +233,24 @@ Merkle trees can be used as commitment schemes.
 
 Here is an example that follows the key-value pair approach used in the zkProver. 
 
-Consider the Merkle tree shown in [Figure 3]() above. 
+Consider the Merkle tree shown in [Figure 3]() above. <!--Link not taking us to Figure 3-->
 
-If the prover has committed to a value $\text{V}_{\mathbf{f}}$ by appending a new leaf $\mathbf{H}(\text{V}_{\mathbf{f}})$ to the Merkle tree as in [Figure 3](), it must avail the following information to enable verification of its claim:
+If the prover has committed to a value $\text{V}_{\mathbf{f}}$ by appending a new leaf $\mathbf{H}(\text{V}_{\mathbf{f}})$ to the Merkle tree as in [Figure 3](), it must avail the following information to enable verification of its claim:<!--Link not taking us to Figure 3-->
 
-1. The Merkle root $\mathbf{root}_{\mathbf{a..h}}$
-2. The value $\text{V}_{\mathbf{f}}$
-3. The siblings $\mathbf{H}(\text{V}_{\mathbf{e}})$, $\mathbf{B}_{\mathbf{gh}}$, and $\mathbf{B}_{\mathbf{abcd}}$.
+- The Merkle root $\mathbf{root}_{\mathbf{a..h}}$
+- The value $\text{V}_{\mathbf{f}}$
+- The siblings $\mathbf{H}(\text{V}_{\mathbf{e}})$, $\mathbf{B}_{\mathbf{gh}}$, and $\mathbf{B}_{\mathbf{abcd}}$.
 
 Instead of searching through all the hash values stored in the tree, the Verifier uses only a few hash values of the relevant siblings. That is three in this case.
 
 The Verifier then checks the Prover's claim by computing the Merkle root as follows:
 
-​	(a)	It computes  $\mathbf{H}(\text{V}_{\mathbf{f}})$, which is the hash of the value $\text{V}_{\mathbf{f}}$.
+1. It computes  $\mathbf{H}(\text{V}_{\mathbf{f}})$, which is the hash of the value $\text{V}_{\mathbf{f}}$.
+2. Then it uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}})$  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be same as the branch node $\mathbf{B}_{\mathbf{ef}}$.
 
-​	(b)	Then it uses the sibling  $\mathbf{H}(\text{V}_{\mathbf{e}})$  to compute  $\mathbf{H} \big( \mathbf{H}(\text{V}_{\mathbf{e}})\|\mathbf{H}(\text{V}_{\mathbf{f}}) \big) =: \tilde{ \mathbf{B}}_{\mathbf{ef}}$, which should be same as the branch node $\mathbf{B}_{\mathbf{ef}}$.
-
-**Note** The symbol, `tilde` " $\tilde{ }$ ", is used throughout the document to indicate that the computed value, $\tilde{\Box}$, still needs to be checked or tested to be true.
-
-​	(c)	Next, it computes  $\mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{ef}}\|\mathbf{B}_{\mathbf{gh}} \big) =: \tilde{ \mathbf{B}}_{\mathbf{efgh}}$, corresponding to the branch node $\mathbf{B}_{\mathbf{efgh}}$.
-
-​	(d)	Now, uses $\mathbf{H} \big( \mathbf{B}_{\mathbf{abcd}}\| \tilde{ \mathbf{B}}_{\mathbf{efgh}} \big) =: \tilde{ \mathbf{root}}_{\mathbf{a..h}}$.
+**Note**: The symbol, `tilde` " $\tilde{ }$ ", is used throughout the document to indicate that the computed value, $\tilde{\Box}$, still needs to be checked or tested to be true.
+3. Next, it computes  $\mathbf{H} \big( \tilde{ \mathbf{B}}_{\mathbf{ef}}\|\mathbf{B}_{\mathbf{gh}} \big) =: \tilde{ \mathbf{B}}_{\mathbf{efgh}}$, corresponding to the branch node $\mathbf{B}_{\mathbf{efgh}}$.
+4. Now, uses $\mathbf{H} \big( \mathbf{B}_{\mathbf{abcd}}\| \tilde{ \mathbf{B}}_{\mathbf{efgh}} \big) =: \tilde{ \mathbf{root}}_{\mathbf{a..h}}$.
 
 The Merkle proof is concluded by checking whether $\tilde{ \mathbf{root}}_{\mathbf{a\dots h}}$ equals to the publicly known root $\mathbf{root}_{\mathbf{a..h}}$.
 
@@ -276,7 +273,7 @@ A NULL or **empty** SMT has a zero root. That is, no key and no value is recorde
 
 #### A Binary SMT With One Key-Value Pair 
 
-A binary SMT with a **single key-value pair**, $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$, is built as follows: 
+A binary SMT with a **single key-value pair**, $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$ is built as follows: 
 
 Suppose the key is $K_{\mathbf{a}} = 11010110$. In order to build a binary SMT with this single key-value $(K_{\mathbf{a}}, \text{V}_{\mathbf{a}})$,
 
@@ -293,7 +290,7 @@ See Figure 4 below for the SMT representing the single key-value pair $(K_{\math
 
 ![Figure 4: A Single key-value pair SMT](figures/fig-sngl-kv-eg.png)
 <div align="center"><b> Figure 4: A Single Key-Value Pair SMT </b></div>
-
+<br>
 
 Note that the last nodes in binary SMT branches are generally either leaves or zero nodes. 
 
@@ -321,7 +318,7 @@ To build a binary SMT with these two key-values, $(K_{\mathbf{a}}, \text{V}_{\ma
 
 2. Sets the leaves, $\mathbf{L}_{\mathbf{a}} := \mathbf{H}( \text{V}_{\mathbf{a}})$ and $\mathbf{L}_{\mathbf{b}} := \mathbf{H}( \text{V}_{\mathbf{b}})$.
 
-3. Checks if the $\text{lsb}(K_{\mathbf{a}})$ differs from the $\text{lsb}(K_{\mathbf{b}})$,
+3. Checks if the $\text{lsb}(K_{\mathbf{a}})$ differs from the $\text{lsb}(K_{\mathbf{b}})$.
 
 4. Since the $\text{lsb}(K_{\mathbf{a}}) = 0$ and the $\text{lsb}(K_{\mathbf{b}}) = 1$, it means ***the two leaves can be siblings***.
 
@@ -335,7 +332,7 @@ See Figure 5(a) below for the SMT representing the two key-value pairs $(K_{\mat
 ![Figure 5(a): Two key-value pairs SMT - Case 1](figures/fig-a-mpt-kv-eg.png)
 <div align="center"><b> Figure 5(a): Two Key-Value Pair SMT - Case 1 </b></div>
 
-
+<br>
 
 **Case 2**: Both keys end with the same key-bit. That is, the $\text{lsb}(K_{\mathbf{a}}) = \text{lsb}(K_{\mathbf{b}})$, but their second least-significant bits differ.
 
@@ -362,7 +359,7 @@ See Figure 5(b) below that depicts the SMT representing the two key-value pairs 
 
 ![Figure 5(b): Two key-value pairs SMT - Case 2](figures/fig-b-mpt-kv-eg.png)
 <div align="center"><b> Figure 5(b): Two key-value pairs SMT - Case 2 </b></div>
-
+<br>
 
 
 **Case 3**: The first two least-significant bits of both the keys are the same but their third least-significant bits differ.
@@ -396,7 +393,7 @@ See Figure 5(c) below that depicts the SMT representing the two key-value pairs 
 ![Figure 5(c): Two key-value pairs SMT - Case 3](figures/fig-c-mpt-kv-eg.png)
 <div align="center"><b> Figure 5(c): Two Key-Value Pair SMT - Case 3 </b></div>
 
-
+<br>
 
 There are several other SMTs of two key-value pairs $(K_{\mathbf{x}}, \text{V}_{\mathbf{x}})$ and $(K_{\mathbf{z}}, \text{V}_{\mathbf{z}})$ that can be constructed depending on how long are the strings of the common least-significant bits between $K_{\mathbf{x}}$ and $K_{\mathbf{z}}$.
 
@@ -418,7 +415,7 @@ The **level of a leaf**, $\mathbf{L}_{\mathbf{x}}$, in a binary SMT is defined a
 
 
 
-#### Example 1. *Leaf Levels* 
+#### Example 1: *Leaf Levels* 
 
 Consider Figure 6 below for an SMT storing seven key-value pairs, built by following the principles explained in the foregoing subsection:
 
@@ -446,7 +443,7 @@ $\text{lvl}(\mathbf{L}_{\mathbf{e}}) = 2$, $\text{lvl}(\mathbf{L}_{\mathbf{f}}) 
 ![Figure 6: An SMT of 7 key-value pairs](figures/fig-mpt-gen-eg.png)
 <div align="center"><b> Figure 6: An SMT of 7 Key-Value pairs </b></div>
 
-
+<br>
 
 As illustrated in the above subsections, keys basically determine the shape of the SMT. They dictate where respective leaves must be placed when building the SMT. 
 
@@ -474,7 +471,7 @@ But a leaf node $\mathbf{L}_{\mathbf{x}}$ not only stores a value, $V_{\mathbf{x
 
 
 
-#### Example 2. *Remaining Keys*
+#### Example 2: *Remaining Keys*
 
 Consider again the SMT of the seven key-value pairs depicted in Figure 6 above. 
 
@@ -497,7 +494,7 @@ The characteristic of binary SMTs having leaves at different levels can be probl
 
 
 
-#### Scenario A: Fake SMT Leaf
+#### Scenario A: *Fake SMT Leaf*
 
 What if the Verifier is presented with a fake leaf?
 
@@ -517,7 +514,7 @@ Verifier is unaware that $V_{\mathbf{fk}}$ is, in fact, the concatenated value o
 ![Figure 7: MPT - Fake Leaf Attack](figures/fig-fake-leaf-eg.png)
 <div align="center"><b> Figure 7: MPT - Fake Leaf Attack </b></div>
 
-
+<br>
 
 So the Verifier being unaware that $\mathbf{L_{fk}}$ is not a properly constructed leaf starts verification in the following way: 
 
@@ -540,17 +537,17 @@ Therefore, the fake leaf $\mathbf{L_{fk}}$ passes the Merkle proof.
 
 
 
-#### Solution To The Fake-Leaf Attack
+#### Solution to the Fake-Leaf Attack
 
 In order to circumvent the Fake-Leaf Attack, we modify how the binary SMTs are built.
 
-Here is ***the trick***: When building binary SMTs, differentiate between how leaves are hashed and how branches are hashed.
+Here is the **trick**: When building binary SMTs, differentiate between how leaves are hashed and how branches are hashed.
 
 That is, use two different hash functions: one hash function to hash leaves (denote it as $\mathbf{H}_{\mathbf{leaf}}$) and the other function for hashing non-leaf nodes (denote it with $\mathbf{H}_{\mathbf{noleaf}}$).
 
 
 
-**How Does This Prevent the Fake-Leaf Attack?**
+***How Does This Prevent the Fake-Leaf Attack?***
 
 Let us reconsider Scenario A that we mentioned above. 
 
@@ -563,9 +560,9 @@ The Verifier, suspecting no foul, uses $K_{\mathbf{fk}} = 11010100$ to navigate 
 
 It subsequently starts the Merkle proof by hashing the value $\tilde{V}_{\mathbf{fk}}$ stored at the located leaf. Since this computation amounts to form a leaf, it uses the leaf-hash function: $\mathbf{H}_{\mathbf{leaf}}$. 
 
-- It then sets $\tilde{\mathbf{L}}_{\mathbf{fk}}  :=  \mathbf{H}_{\mathbf{leaf}} \big( V_{\mathbf{fk}} \big) = \mathbf{H}_{\mathbf{leaf}} \big( \mathbf{L_{a}} \| \mathbf{L_{b}} \big)$.
-- And further computes  $\tilde{ \mathbf{B}}_{\mathbf{fkcd}} = \mathbf{H}_{\mathbf{noleaf}} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)$. 
-- Again, it calculates the root:  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}} = \mathbf{H}_{\mathbf{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{fkcd}}\| \mathbf{S}_{\mathbf{ef}} \big)$.
+1. It then sets $\tilde{\mathbf{L}}_{\mathbf{fk}}  :=  \mathbf{H}_{\mathbf{leaf}} \big( V_{\mathbf{fk}} \big) = \mathbf{H}_{\mathbf{leaf}} \big( \mathbf{L_{a}} \| \mathbf{L_{b}} \big)$.
+2. It further computes  $\tilde{ \mathbf{B}}_{\mathbf{fkcd}} = \mathbf{H}_{\mathbf{noleaf}} \big( \tilde{\mathbf{L}}_{\mathbf{fk}} \| \mathbf{S}_{\mathbf{cd}}  \big)$. 
+3. Again, it calculates the root:  $\tilde{ \mathbf{root}}_{\mathbf{ab..f}} = \mathbf{H}_{\mathbf{noleaf}} \big( \tilde{ \mathbf{B}}_{\mathbf{fkcd}}\| \mathbf{S}_{\mathbf{ef}} \big)$.
 
 But the actual branch $\mathbf{{B}_{ab}}$ was constructed with the no-leaf-hash function: 
 $\mathbf{H}_{\mathbf{noleaf}}$. That is, 
@@ -601,21 +598,21 @@ Both computations involve climbing the tree from the located leaf $\mathbf{{L}_{
 <!-- what does verifier do here? -->
    In order to check key-correctness, Verifier the remaining key $\text{RK}$ and,
 
-   (a)	Concatenates $\text{kb}_\mathbf{2}$ and gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2}$.
+   1. Concatenates $\text{kb}_\mathbf{2}$ and gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2}$.
 
-   (b)	Concatenates $\text{kb}_\mathbf{1}$ then gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1}$.
+   2. Concatenates $\text{kb}_\mathbf{1}$ then gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1}$.
 
-   (c)	Concatenates $\text{kb}_\mathbf{0}$ and gets $\text{ }  \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0}$.
+   3. Concatenates $\text{kb}_\mathbf{0}$ and gets $\text{ }  \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0}$.
 
    It then sets $\tilde{K}_{\mathbf{x}} := \text{RK} \|  \text{kb}_\mathbf{2} \| \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0}$ and checks if $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$. 
 
-2. Checking the **The Merkle Proof**: That is, checking whether the value stored at the located leaf $\mathbf{{L}_{x}}$ was indeed included in computing the root: $\mathbf{{root}_{a..x}}$. 
+2. Checking the **Merkle Proof**: That is, checking whether the value stored at the located leaf $\mathbf{{L}_{x}}$ was indeed included in computing the root: $\mathbf{{root}_{a..x}}$. 
 
    This computation is illustrated several times in the discussion above. Note that checking the key for its correctness and checking the Merkle proof are carried out simultaneously. 
 
 
 
-#### Example 3. *Indistinguishable Leaves*
+#### Example 3: *Indistinguishable Leaves*
 
 Suppose a binary SMT contains a key-value pair $(K_{\mathbf{d}}, V_\mathbf{{d}})$ at the leaf $\mathbf{L_{d}}$, where $K_{\mathbf{d}} = 11100110$. 
 That is, $\mathbf{L_{d}} := \mathbf{H_{leaf}}(V_\mathbf{{d}})$.
@@ -642,30 +639,30 @@ to navigate the tree and locate the leaf $\mathbf{L_{x}}$ which is positioned at
 ![Figure 8: Non-binding Key-Value Pairs](figures/fig-non-binding-eg.png)
 <div align="center"><b> Figure 8: Non-binding Key-Value Pairs</b></div>
 
-
+<br>
 
 In order to ensure that $\mathbf{L_{x}}$ actually stores the value, $V_\mathbf{{x}}$. The Verifier first checks correctness of the key. It takes the Remaining Key $\text{RK} = 10100$ and
 
-(a)	Concatenates $\text{kb}_\mathbf{2} = 1$, and gets $\text{ } \text{RK} \| \text{kb}_\mathbf{2} = 10100 \|1$,
+1. Concatenates $\text{kb}_\mathbf{2} = 1$, and gets $\text{ } \text{RK} \| \text{kb}_\mathbf{2} = 10100 \|1$,
 
-(b)	Concatenates $\text{kb}_\mathbf{1} = 0$  to get $\text{ } \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} = 10100 \|1\|0$,
+2. Concatenates $\text{kb}_\mathbf{1} = 0$  to get $\text{ } \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} = 10100 \|1\|0$,
 
-(c)	Concatenates $\text{kb}_\mathbf{0} = 0$, yielding $\text{ }  \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0} = 10100 \|1\|0\|0$. 
+3. Concatenates $\text{kb}_\mathbf{0} = 0$, yielding $\text{ }  \text{RK} \| \text{kb}_\mathbf{2} \|  \text{kb}_\mathbf{1} \| \text{kb}_\mathbf{0} = 10100 \|1\|0\|0$. 
 
 The Verifier sets $\tilde{K}_{\mathbf{x}} := 10100 \|1\|0\|0 = 10100100$. 
 Since $\tilde{K}_{\mathbf{x}}$ equals $K_{\mathbf{x}}$, the Verifier concludes that the supplied key is correct.
 
 As the Verifier 'climbs' the tree to test key-correctness, he concurrently checks if the value $V_\mathbf{{x}}$ is included in the SMT identified by the given root, $\mathbf{{root}_{a..x}}$. That is, he executes the following computations:
 
-​	(a)	Verifier computes the hash of $V_\mathbf{{x}}$ and sets it as, $\tilde{\mathbf{L}}_\mathbf{x}:= \mathbf{H_{leaf}}(V_\mathbf{{x}})$.
+1. Verifier computes the hash of $V_\mathbf{{x}}$ and sets it as, $\tilde{\mathbf{L}}_\mathbf{x}:= \mathbf{H_{leaf}}(V_\mathbf{{x}})$.
 
-​	(b)	It then uses $\mathbf{{B}_{\mathbf{bc}}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{bcd}} = \mathbf{H_{noleaf}}(\mathbf{{B}_{\mathbf{bc}}} \|\tilde{\mathbf{L}}_\mathbf{x})$.
+2. It then uses $\mathbf{{B}_{\mathbf{bc}}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{bcd}} = \mathbf{H_{noleaf}}(\mathbf{{B}_{\mathbf{bc}}} \|\tilde{\mathbf{L}}_\mathbf{x})$.
 
-​	(c)	He also uses $\mathbf{L_{a}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \tilde{\mathbf{B}}_{\mathbf{bcd}})$.
+3. It also uses $\mathbf{L_{a}}$ to compute, $\tilde{\mathbf{B}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\mathbf{L_{a}} \| \tilde{\mathbf{B}}_{\mathbf{bcd}})$.
 
-​	(d)	It further calculates, $\tilde{\mathbf{root}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\tilde{\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}})$. 
+4. It further calculates, $\tilde{\mathbf{root}}_{\mathbf{abcd}} = \mathbf{H_{noleaf}}(\tilde{\mathbf{B}}_{\mathbf{abcd}} \| \mathbf{{S}_{\mathbf{efg}}})$. 
 
-Next, the Verifier checks if $\tilde{\mathbf{root}}_{\mathbf{abcd}}$ equals $\mathbf{root}_{\mathbf{abcd}}$.
+5. Next, the Verifier checks if $\tilde{\mathbf{root}}_{\mathbf{abcd}}$ equals $\mathbf{root}_{\mathbf{abcd}}$.
 
 Since $V_\mathbf{{x}} = V_\mathbf{{d}}$, it follows that all the corresponding intermediate values to the root are equal:
 
@@ -678,7 +675,7 @@ The Verifier, therefore, concludes that the key-value pair $(K_{\mathbf{x}}, V_\
 
 
 
-**Why is This Attack Successful?**
+**Why is this Attack Successful?**
 
 Note that equality of values, $V_\mathbf{{x}} = V_\mathbf{{d}}$, associated with two distinct keys, has nothing to do with the efficacy of this attack. In fact, for all practical purposes, it should be permissible for distinct leaves to store any value, irrespective of whether other leaves store an equivalent value or not.
 
@@ -700,7 +697,6 @@ The naïve solution which involves the keys is one option.
 
 
 
-
 ##### The Naïve Solution
 
 The naïve solution is to simply include keys in the argument of the hash function while creating leaves.
@@ -711,7 +707,7 @@ That is, when building a binary SMT, one includes a key-value pair: $(K_{\mathbf
 \mathbf{L_{x}} = \mathbf{H_{leaf}}(K_{\mathbf{x}} \| V_\mathbf{{x}} )
 \end{aligned}
 
-**Does this Change Remedy the Non-binding Problem?**
+***Does this Change Remedy the Non-binding Problem?***
 
 Suppose $(K_{\mathbf{x}}, V_\mathbf{{x}})$ and $(K_{\mathbf{z}}, V_\mathbf{{z}})$ are two key-value pairs such that $V_\mathbf{{x}} = V_\mathbf{{z}}$ , while $K_\mathbf{{x}}$ and $K_\mathbf{{z}}$ differ only in one of the most-significant bits.
 
@@ -753,9 +749,9 @@ That is, for a key-value pair, $(K_{\mathbf{x}}, V_\mathbf{{x}})$, one sets the 
 
 With this strategy, the Verifier needs the remaining key $\text{RK}_\mathbf{{x}}$, instead of the whole key in order to carry out a Merkle proof. So it adjusts the Merkle proof by:
 
-- Firstly, picking the correct hash function $\mathbf{H_{leaf}}$ for leaves. 
-- Secondly, concatenating the value $V_{\mathbf{x}}$ stored at the leaf $L_{\mathbf{x}}$ and the remaining key $\text{RK}_\mathbf{{x}}$ instead of the whole key $K_{\mathbf{x}}$.
-- Thirdly, hashing the concatenation $\mathbf{H_{leaf}}( \text{RK}_\mathbf{x}  \| \text{V}_\mathbf{{x}}) =: \mathbf{L_{x}}$.
+1. Firstly, picking the correct hash function $\mathbf{H_{leaf}}$ for leaves. 
+2. Secondly, concatenating the value $V_{\mathbf{x}}$ stored at the leaf $L_{\mathbf{x}}$ and the remaining key $\text{RK}_\mathbf{{x}}$ instead of the whole key $K_{\mathbf{x}}$.
+3. Thirdly, hashing the concatenation $\mathbf{H_{leaf}}( \text{RK}_\mathbf{x}  \| \text{V}_\mathbf{{x}}) =: \mathbf{L_{x}}$.
 
 This approach not only ensures that key-value pairs in our SMTs are now binding but also implicitly 'encodes' the levels to root in the leaf.
 
@@ -774,13 +770,13 @@ It is often necessary to make sure that a proof-integrity system has the zero-kn
 
 A leaf, therefore, is constructed in two steps:
 
-- Firstly, for a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, compute the hash the value $V_\mathbf{{x}}$: 
+1. , for a key-value pair $(K_{\mathbf{x}}, V_\mathbf{{x}})$, compute the hash the value $V_\mathbf{{x}}$: 
   
 \begin{aligned}
   \text{Hashed Value} = \text{HV}_\mathbf{{x}} = \mathbf{H_{noleaf}}(V_\mathbf{{x}})
 \end{aligned}
 
-- Secondly, create the leaf containing $V_\mathbf{{x}}$:
+2. Secondly, create the leaf containing $V_\mathbf{{x}}$:
 
 \begin{aligned}
   \mathbf{L_{x}} = \mathbf{H_{leaf}}(  \text{RK}_\mathbf{x}  \| \text{HV}_\mathbf{{x}})
@@ -792,13 +788,13 @@ The Prover, therefore, achieves zero-knowledge by providing the pair, $(K_{\math
 
 The Verifier, on the other hand, has to adjust the Merkle proof by starting with: 
 
-- Firstly, picking the correct hash function $\mathbf{H_{leaf}}$ for leaf nodes.
-- Secondly, concatenating the hashed-value $\text{HV}_\mathbf{{x}}$ and the remaining key $\text{RK}_\mathbf{{x}}$.
-- Thirdly, hashing the concatenation in order to form the leaf: $\mathbf{L_{x}} := \mathbf{H_{leaf}}( \text{RK}_\mathbf{x}  \| \text{HV}_\mathbf{{x}})$.
+1. Firstly, picking the correct hash function $\mathbf{H_{leaf}}$ for leaf nodes.
+2. Secondly, concatenating the hashed-value $\text{HV}_\mathbf{{x}}$ and the remaining key $\text{RK}_\mathbf{{x}}$.
+3. Thirdly, hashing the concatenation in order to form the leaf: $\mathbf{L_{x}} := \mathbf{H_{leaf}}( \text{RK}_\mathbf{x}  \| \text{HV}_\mathbf{{x}})$.
 
 
 
-#### Example 4. *Zero-Knowledge Merkle Proof*
+#### Example 4: *Zero-Knowledge Merkle Proof*
 
 The following example illustrates a Merkle proof when the above strategy is applied.
 
@@ -809,7 +805,7 @@ Consider an SMT where the keys are 8-bit long, and the Prover commits to the key
 ![Figure 9: ZK Merkle Proof Example](figures/fig-zk-mkl-prf.png)
 <div align="center"><b> Figure 9 : ZK Merkle Proof Example </b></div>
 
-
+<br>
 
 Since the levels to root is three, the Prover provides the least-significant key-bits: $\text{kb}_0 = 0$, $\text{kb}_1 = 0$, $\text{kb}_2 = 1$, the stored hashed-value: $\text{HV}_{\mathbf{c}}$, the root:  $\mathbf{{root}_{a..f}}$, the Remaining Key: $\mathbf{ \text{RK}_{\mathbf{c}}} = 10010$, and the siblings: $\mathbf{{S}_{ab}}$, $\mathbf{{L}_{d}}$ and $\mathbf{{S}_{\mathbf{ef}}}$.
 
@@ -860,7 +856,7 @@ Hence, in addition to $(K_{\mathbf{x}}, \text{HV}_{\mathbf{x}})$, Prover has to 
 
 
 
-**What if the Key is Not Set?**
+**What if the Key is not Set?**
 
 The next example demonstrates the READ operation when a key is not set in the tree. That is, it illustrates how to check whether a value is not on a given SMT. 
 
@@ -872,13 +868,13 @@ But if the given *key leads to an existing leaf*, the Verifier has to prove the 
 
 
 
-#### Example 5. *When the Key is Not Set*
+#### Example 5: *When the Key is not Set*
 
 Suppose the Verifier needs to prove that the keys, $K_{\mathbf{x}} = 11010101$ and $K_{\mathbf{z}} = 10101010$, are not set in the SMT depicted in Figure 10 below. 
 
 
 
-##### Case 1: When the Key Leads to a Zero Node
+##### Case 1: *When the Key Leads to a Zero Node*
 
 The Verifier receives the key $K_{\mathbf{x}}$, the remaining key: $\text{RK}_\mathbf{x} = 1101010$, the least-significant key-bit: $\text{kb}_0 = 1$, and the sibling: $\mathbf{{S}_{1}} = \mathbf{{B}_{\mathbf{ab}}}$.
 
@@ -895,12 +891,12 @@ It then checks if  $\mathbf{{\tilde{root}}_{ab0}} = \mathbf{{root}_{ab0}}$. If t
 
 
 ![Figure 10: Key Not Set Example](figures/fig-key-not-set-eg.png)
-<div align="center"><b> Figure 10: Key Not Set Example </b></div>
+<div align="center"><b> Figure 10: Example of Key Not Set </b></div>
 
 
 
 
-##### Case 2: When the Key Leads to an Existing Leaf
+##### Case 2: *When the Key Leads to an Existing Leaf*
 
 Consider again the SMT depicted in Figure 10 above and suppose that the Prover claims that the key $K_{\mathbf{z}} = 10101010$ is set.
 
@@ -921,7 +917,7 @@ Since the key navigates to a leaf, the Verifier's task is to prove two things si
 
 In proving that $\mathbf{L}_{\mathbf{b}}$ is indeed in the tree, the Verifier does the following:
 
-**Checks the Root**:
+***Checks the Root***:
 
 1. Computes the hash of the hashed-value: $\mathbf{ \tilde{L} }_{\mathbf{b}} = \mathbf{H_{leaf}} ( \text{RK}_{\mathbf{b}} \| \text{HV}_{\mathbf{b}} )$.
 
@@ -933,7 +929,7 @@ In proving that $\mathbf{L}_{\mathbf{b}}$ is indeed in the tree, the Verifier do
 
 Simultaneously,
 
-**Checks the Keys**: 
+***Checks the Keys***: 
 
 The Verifier takes the two Remaining Keys: $\text{RK}_{\mathbf{x}}$ and $\text{RK}_{\mathbf{b}}$, and the key-bits $\text{kb}_0$ and $\text{kb}_{\mathbf{1}}$
 
@@ -975,25 +971,25 @@ For the UPDATE operation, **Step 1** is exactly the same as the READ operation. 
 
 
 
-#### Example 6. *UPDATE - Step 2*
+#### Example 6 *UPDATE - Step 2*
 
 Suppose the set key is: $K_{\mathbf{c}} = 10110100$, corresponding to the old value $V_{\mathbf{c}}$ and the new value is $V_\mathbf{new}$.
 
 The Verifier is provided with the following data:
 
-​1. The $\text{RK}_{\mathbf{c}} = 10110$
+1. The $\text{RK}_{\mathbf{c}} = 10110$.
 
-​2. The least-significant key-bit: $\text{kb}_0 = 0$
+2. The least-significant key-bit: $\text{kb}_0 = 0$.
 
-3. The second least-significant key-bit:  $\text{kb}_1 = 0$
+3. The second least-significant key-bit:  $\text{kb}_1 = 0$.
 
-​4. The third least-significant key-bit:  $\text{kb}_2 = 1$
+4. The third least-significant key-bit:  $\text{kb}_2 = 1$.
 
-5. The old hashed value: $\text{HV}_{\mathbf{c}}$
+5. The old hashed value: $\text{HV}_{\mathbf{c}}$.
 
-​6. The old root:  $\mathbf{{root}_{ab..f }}$  
+6. The old root:  $\mathbf{{root}_{ab..f }}$.  
 
-​7. The siblings:  $\mathbf{{S}_{1}} = \mathbf{{S}_{\mathbf{ab}}}$,   $\mathbf{{S}_{2}} = \mathbf{{L}_{d}}$  and  $\mathbf{{S}_{3}} = \mathbf{{S}_{\mathbf{ef}}}$. 
+7. The siblings:  $\mathbf{{S}_{1}} = \mathbf{{S}_{\mathbf{ab}}}$,   $\mathbf{{S}_{2}} = \mathbf{{L}_{d}}$  and  $\mathbf{{S}_{3}} = \mathbf{{S}_{\mathbf{ef}}}$. 
 
 
 
@@ -1004,7 +1000,7 @@ Consider the SMT given in Figure 11 below:
 ![Figure 11: Value UPDATE Example](figures/fig-val-update-eg.png)
 <div align="center"><b> Figure 11: Value UPDATE Example </b></div>
 
-
+<br>
 
 The required **Step 2** of the UPDATE operation involves: 
 
@@ -1037,7 +1033,7 @@ When navigating from the root, the new key $\mathbf{K_{new}}$ can lead to either
 
 
 
-#### Case 1: New Key Navigates To A Zero Node
+#### Case 1: *New Key Navigates To A Zero Node*
 
 The first  $l$  least-significant bits of the key $\mathbf{K_{new}}$ leads to a zero node, where  $l$ is the *levels to root* of the zero node.
 
@@ -1047,21 +1043,20 @@ Once it is established that the new key $\mathbf{K_{new}}$ has led to a zero nod
 
 The CREATE operation, in this case, therefore, boils down to an UPDATE operation on the zero node. It amounts to:
 
-- Computing the hash of the new value $V_\mathbf{new}$ as,  $\text{HV}_{\mathbf{new}} = \mathbf{H_{noleaf}}(V_\mathbf{new})$ 
-- Then, forming the new leaf, $\mathbf{L_{new}} = \mathbf{H_{leaf}}( \text{RK}_{\mathbf{new}} \| \text{HV}_{\mathbf{new}})$
-- Recomputing all the nodes along the path climbing from the leaf $\mathbf{L_{new}}$ to the root including computing the new root.
+1. Computing the hash of the new value $V_\mathbf{new}$ as,  $\text{HV}_{\mathbf{new}} = \mathbf{H_{noleaf}}(V_\mathbf{new})$.
+2. Then, forming the new leaf, $\mathbf{L_{new}} = \mathbf{H_{leaf}}( \text{RK}_{\mathbf{new}} \| \text{HV}_{\mathbf{new}})$.
+3. Recomputing all the nodes along the path climbing from the leaf $\mathbf{L_{new}}$ to the root including computing the new root.
 
 
 
-#### Example 7. CREATE Operation at a Zero Node
+##### Example 7: *CREATE Operation at a Zero Node*
 
 Suppose a new leaf with the key-value pair $\big(K_{\mathbf{new}}, \text{V}_{\mathbf{new}}\big)$, where $K_{\mathbf{new}} = 11010110$, needs to be created.
 
 As illustrated in Figure 12 below, the two least-significant key-bits $\text{kb}_0 = 0$ and $\text{kb}_1 = 1$, lead to a zero node. That is, navigating from the root:
 
-​	(a)	The lsb, $\text{kb}_{0} = 0$  leads to the node $\mathbf{{B}_{ab0}}$ 
-
-​	(b)	Whilst the second lsb, $\text{kb}_{1} = 1$  leads to a zero node. 
+1. The lsb, $\text{kb}_{0} = 0$  leads to the node $\mathbf{{B}_{ab0}}$.
+2. Whilst the second lsb, $\text{kb}_{1} = 1$  leads to a zero node. 
 
 At this stage the Verifier checks if this is indeed a zero node:
 
@@ -1074,7 +1069,7 @@ At this stage the Verifier checks if this is indeed a zero node:
 
 ![Figure 12: CREATE Operation - Zero Node](figures/fig-crt-zero-node.png)
 <div align="center"><b> Figure 12: CREATE Operation - Zero Node </b></div>
-
+<br>
 
 
 Once the zero-value is checked, the Verifier now creates a non-zero leaf with the key-value pair $\big( \mathbf{K_{new}} , \text{HV}_{\mathbf{new}}\big)$.
@@ -1090,13 +1085,13 @@ Note that inserting a new key-value pair at a zero node does not change the topo
 
 
 
-#### Case 2: New Key Navigates to a Non-Zero Leaf
+#### Case 2: *New Key Navigates to a Non-Zero Leaf*
 
 This means that the first $\mathbf{l}$ least-significant bits of the key $\mathbf{K_{new}}$ leads to a non-zero leaf $\mathbf{L_z}$, where $\mathbf{l}$ is $\mathbf{L_z}$'s number of *levels to root*. This implies that the keys $\mathbf{K_{new}}$ and $\mathbf{K_{z}}$ share a common string of least-significant key-bits, which is $\mathbf{l}$ bits long.
 
 
 
-Step 1: **Checking Leaf Inclusion**
+**Step 1:** ***Checking Leaf Inclusion***
 
 The first step is to double-check that the value $V_\mathbf{z}$ stored at the leaf $\mathbf{L_z}$ is included in the root. 
 
@@ -1106,7 +1101,7 @@ Once it is established that the value $V_\mathbf{z}$ stored at the leaf $\mathbf
 
 
 
-Step 2: **Extending The SMT** 
+**Step 2**: ***Extending The SMT*** 
 
 Since it is not permissible for two distinct non-zero leaves, $\mathbf{L_{new}}$ and $\mathbf{L_z}$, to share a tree address, a CREATE Operation at $\mathbf{L_z}$ results in extending the tree by adding a new branch $\mathbf{B_{ext1}}$ at the tree-address where $\mathbf{L_z}$ has been positioned.
 
@@ -1126,14 +1121,14 @@ Here is the general procedure:
 
 
 
-Step 3: **UPDATE of Values**
+**Step 3:** ***UPDATE of Values***
 
 The CREATE Operation is actually only complete once all the values on the navigation path from the new root to the new leaf are updated.
 
 
 
 
-##### Example 8. CREATE Operation with a Single Branch Extension
+##### Example 8: *CREATE Operation with a Single Branch Extension*
 
 Suppose a leaf needs to be created to store a new key-value pair $\big({K_{\mathbf{new}}\ } , V_\mathbf{{new}}\big)$, where $K_{\mathbf{new}} = 11010110$. 
 
@@ -1141,13 +1136,13 @@ Consider the SMT shown in Figure 13(a).
 
 In this example, navigation using the least-significant key-bits, $\text{kb}_\mathbf{0} = 0$ and $\text{kb}_\mathbf{1} = 1$, leads to an existing leaf $\mathbf{L_{\mathbf{c}}}$. And the key-value pair $(V_\mathbf{\mathbf{c}}, \text{HV}_\mathbf{\mathbf{c}})$ stored at $\mathbf{L_{\mathbf{c}}}$ has the key $K_{\mathbf{c}} = 11010010$.
 
-**Value-Inclusion Check**
+***Value-Inclusion Check***
 
 A value-inclusion check of $V_\mathbf{\mathbf{c}}$ is performed before creating any new leaf. Since this amounts to a READ Operation, which has been illustrated in previous examples, we omit the process here. 
 
 Once $V_\mathbf{\mathbf{c}}$ passes the check, the CREATE Operation continues by inserting the new leaf. 
 
-**New Leaf Insertion**
+***New Leaf Insertion***
 
 In this example, the new leaf $\mathbf{L_{new}}$ cannot be inserted at the key-address `01` where $\mathbf{L_{\mathbf{c}}}$ is positioned. A branch extension $\mathbf{{B}_{ext}}$ must, therefore, be done at the address `01` with the leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ as child nodes.
 
@@ -1160,11 +1155,11 @@ Therefore, no further extension is necessary. And the CREATE Operation is comple
 ![Figure 13(a): CREATE Operation - Non-zero Leaf Node](figures/fig-a-crt-nzleaf-ext.png)
 <div align="center"><b> Figure 13(a): CREATE Operation - Non-zero Leaf Node </b></div>
 
-
+<br>
 
 The next process, after forming the branch extension is to UPDATE all the nodes along the path from the root to the new leaf $\mathbf{L_{new}}$. The Verifier follows the steps of the UPDATE operation to accomplish this. 
 
-**UPDATE of SMT Values** 
+***UPDATE of SMT Values*** 
 
 The Verifier computes the following:
 
@@ -1178,7 +1173,7 @@ This illustrates how the CREATE Operation is performed at a non-zero leaf when o
 
 
 
-##### Example 9. CREATE Operation with **Multiple Branch Extensions** 
+##### Example 9: *CREATE Operation with Multiple Branch Extensions*
 
 This example provides an illustration of the CREATE Operation at a non-zero leaf, where more than one branch extension is required.
 
@@ -1188,13 +1183,13 @@ Consider the SMT shown in Figure 13(b).
 
 Navigating the tree by using the least-significant key-bits: $\text{kb}_\mathbf{0} = 0$ and $\text{kb}_\mathbf{1} = 1$, leads to an existing leaf $\mathbf{L_{\mathbf{c}}}$. In this example, suppose the key-value pair $(K_{\mathbf{c}} , \text{HV}_\mathbf{\mathbf{c}})$ stored at $\mathbf{L_{\mathbf{c}}}$ has the key $K_{\mathbf{c}} = 11100110$.
 
-**Value-Inclusion Check**
+***Value-Inclusion Check***
 
 Before creating the new leaf, it is important to first check if $V_\mathbf{\mathbf{c}}$ is indeed included in the root, $\mathbf{root}_\mathbf{abcd}$. Since this amounts to performing a READ Operation, which has been illustrated in previous examples, we omit the process here. 
 
 Once $V_\mathbf{\mathbf{c}}$ passes the value-inclusion check, the CREATE Operation proceeds with inserting the new leaf. 
 
-**New Leaf Insertion**
+***New Leaf Insertion***
 
 Note that the first and second least-significant key-bits for both $K_\mathbf{new}$ and $K_\mathbf{c}$ are the same. 
 That is, $\text{kb}_\mathbf{0new} = 0 = \text{kb}_\mathbf{0c}$ and $\text{kb}_\mathbf{1new} = 1 = \text{kb}_\mathbf{1c}$.
@@ -1219,7 +1214,7 @@ The leaves $\mathbf{L_{new}}$ and $\mathbf{L_{c}}$ are now made child nodes of t
 
 ![Figure 13(b): CREATE Operation - Three Branch Extensions](figures/fig-b-crt-nzleaf-xt.png)
 <div align="center"><b> Figure 13(b): CREATE Operation - Three Branch Extensions </b></div>
-
+<br>
 
 
 Once unique addresses for the key-value pairs $\big( K_{\mathbf{c}} , V_\mathbf{c} \big)$ and $\big( K_\mathbf{{new}} , V_{\mathbf{new}}\big)$  are reached, and the leaf $\mathbf{L_{new}}$ is inserted, all the nodes along the navigation path from the new leaf $\mathbf{L_{new}}$ to the root are updated as follows: 
@@ -1258,23 +1253,17 @@ In the second scenario, a DELETE Operation can be tantamount to the reverse of a
 
 A DELETE Operation involves two main steps:
 
-***Step 1***: A READ of the value to be deleted is executed. That is: 
+**Step 1**: ***A READ of the value to be deleted is executed*** That means: 
+1. Navigating to the value
+2. Checking if the value is included in the root
+3. Checking if the given key (reconstructed from the given Remaining Key and the least-significant key-bits) matches the key at the leaf (reconstructed from the Remaining Key found at the leaf and the given key-bits).
 
-​	(a)	Navigating to the value 
-
-​	(b)	Checking if the value is included in the root 
-
-​	(c)	Checking if the given key (reconstructed from the given Remaining Key and the least-significant key-bits) matches the key at the leaf (reconstructed from the Remaining Key found at the leaf and the given key-bits).
-
-***Step 2***: This step depends on whether the sibling of the *leaf to be deleted* is zero or not:
-
-​	(a)	If the **sibling is not a zero node**, an UPDATE to zero is performed.
-
-​	(b)	If the **sibling is a zero node**, an UPDATE to zero is performed and the parent node is turned into a NULL node with no child nodes.
+**Step 2**: ***This step depends on whether the sibling of the leaf to be deleted is zero or not***
+1. If the **sibling is not a zero node**, an UPDATE to zero is performed.
+2. If the **sibling is a zero node**, an UPDATE to zero is performed and the parent node is turned into a NULL node with no child nodes.
 
 
-
-#### Case 1: DELETE Operation - Leaves With Non-Zero Siblings
+#### Case 1: *DELETE Operation - Leaves With Non-Zero Siblings*
 
 Consider a DELETE of a key-value pair $\big(K_{\mathbf{b}} , V_\mathbf{b} \big)$ where its leaf $\mathbf{L_b}$ has a non-zero node sibling.
 
@@ -1303,11 +1292,11 @@ See the DELETE Operation illustrated in Figure 13(a) below, and notice how the S
 ![Figure 14(a): DELETE Operation - Non-Zero Sibling](figures/fig-a-dlt-nz-sib.png)
 <div align="center"><b> Figure 14(a): DELETE Operation - Non-Zero Sibling </b></div>
 
+<br>
 
 
 
-
-#### Case 2: DELETE Operation - Leaves With Zero Siblings
+#### Case 2: *DELETE Operation - Leaves With Zero Siblings*
 
 Consider deleting a key-value pair $\big(K_{\mathbf{c}} , V_\mathbf{c} \big)$ where its leaf $\mathbf{L_c}$ has a zero node sibling.
 
@@ -1325,14 +1314,14 @@ That is, the UPDATE step of this DELETE Operation concludes as follows:
 - The parent node is now $\mathbf{B_{a0}} = \mathbf{H_{noleaf}} ( \mathbf{L_a} \| \mathbf{0}  )$.
 - And the new root: $\mathbf{{root}_{a0d}} =   \mathbf{H_{noleaf}}(\mathbf{B_{a0}} \| \mathbf{L_d})$. 
 
-Notice that, in this example, the DELETE Operation alters the topology of the SMT, as seen in Figure 14(b) below.
+Notice that, in this example, the DELETE Operation alters the topology of the SMT, as seen in Figure 14(b) below:
 
 
 
 ![Figure 14(b): DELETE Operation - Zero Sibling](figures/fig-b-dlt-z-sib.png)
 <div align="center"><b> Figure 14(b): DELETE Operation - Zero Sibling </b></div>
 
-
+<br>
 
 
 
@@ -1375,7 +1364,7 @@ In fact, almost every other 256-bit value in the Storage is expressed in the for
 
 
 
-#### How Keys Are Created
+#### How are Keys Created?
 
 In the key-value pair, the SMT context of our storage design, a key uniquely identifies a leaf. And it is because although values can change, keys do not. 
 
@@ -1419,16 +1408,13 @@ That is, the Navigation Path to the leaf corresponding to $\text{Key}_{\mathbf{0
 ![Figure 15 : Navigation Path Derivation](figures/fig-path-frm-key.png)
 <div align="center"><b> Figure 15 : Navigation Path Derivation </b></div>
 
-
+<br>
 
 Note that this construction ensures that in every quadruplet of consecutive path-bits, there is a one-to-one correspondence between the bits and the four parts of the key: $\text{Key}_{\mathbf{0}} , \text{Key}_{\mathbf{1}} , \text{Key}_{\mathbf{2}} , \text{Key}_{\mathbf{3}}$. 
 
 
 
-
-
-<!--FOLLOWING IS ALREADY EDITED-->
-#### Reconstructing The Key From Path-Bits
+#### Reconstructing the Key from Path-Bits
 
 When executing a basic operation such as an UPDATE of a value at a leaf, one has to reconstruct the key from the remaining key found at the leaf and the path-bits spent in navigating to the leaf.
 
@@ -1442,7 +1428,7 @@ Perhaps taking the level $\text{lvl}$ of a leaf and reducing it *modulo 4*, shou
 
 
 
-##### Example: Key Reconstruction
+##### Example: *Key Reconstruction*
 
 Suppose the leaf storing the key-value pair $\big( \text{Key}_{\mathbf{0123}}, \text{V}_{\mathbf{01..7}}  \big)$ is reached at level 7, the path-bits used are $0110101$, and the remaining key is $\text{RKey}_{\mathbf{0123}} = \big( \text{RKey}_{\mathbf{0}} , \text{RKey}_{\mathbf{1}} , \text{RKey}_{\mathbf{2}} , \text{RKey}_{\mathbf{3}} \big)$.
 
@@ -1463,7 +1449,7 @@ $\text{Climbs the tree to level } 1. \text{ Computes }\ 1 \text{ modulo } 4 = 1.
 The next climb is to the root. The navigation path-bits have been exhausted, and the last append has actually completed the reconstruction of the key.
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 ##### Leaf Levels and Integers Modulo 4
 
 It is now clear from the above example that there is a one-to-one correspondence between the integers *modulo* 4 (i.e., elements of the group $\mathbb{Z}_4 = \{ 0, 1, 2, 3 \}$) and remaining key parts $\text{RKey}_{\mathbf{0}} , \text{RKey}_{\mathbf{1}} , \text{RKey}_{\mathbf{2}} , \text{RKey}_{\mathbf{3}}$. 
@@ -1479,7 +1465,7 @@ The quadruple structure of the path bits and the level of leaves, therefore, hav
 Since *addition modulo n* is an expensive computation in the state machine context, it is important to find a more efficient algorithm to achieve the same result.
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 ##### Alternate Cyclic Group Of Order 4
 
 In order to explore cyclic groups of order 4, take the vector $\mathbf{x} = (1,0,0,0)$ and rotate the components of $\mathbf{x}$ one position to the left.
@@ -1511,7 +1497,7 @@ Note that the four numbers $0$, $1$, $2$, and $3$ can be expressed in their **bi
 $$
 \text{00} \mapsto (1,0,0,0),\ \ \text{01} \mapsto (0,1,0,0),\ \ \text{10} \mapsto (0,0,1,0)\  \text{ and }\ \text{11} \mapsto (0,0,0,1).
 $$
-<!--FOLLOWING IS ALREADY EDITED-->
+
 ##### A Special Cyclic Register For Leaf Levels
 
 Define a register called `LEVEL`, which is a vector of four bits, three "0" bits and one "1" bit. And the operation `ROTATE_LEVEL` which is the *left rotation* of `LEVEL`'s bits by one position.
@@ -1559,7 +1545,7 @@ Since things are rather mechanical in state machines, one or two more functions 
 
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 ### The $\text{POSEIDON}$ HASH
 
@@ -1581,7 +1567,7 @@ $\text{POSEIDON}^{\pi}$ runs 30 rounds, three times, which adds up to a total of
 ![Figure 16 : POSEIDON HASH0 ](figures/fig-posdn-eg.png)
 <div align="center"><b> Figure 16 : POSEIDON HASH0 </b></div>
 
-
+<br>
 
 In the case of the zkProver storage, two slightly different $\text{POSEIDON}$ hashes are used: $\text{HASH0}$ is used when a branch node is created, whilst $\text{HASH1}$ is used when a leaf node is created. This depends on the `hashType`, which is a boolean. So $\text{POSEIDON}$ acts as $\text{HASH1}$ when `hashType` = 1, and $\text{HASH0}$ when `hashType` = 0. 
 
@@ -1590,9 +1576,9 @@ In the case of the zkProver storage, two slightly different $\text{POSEIDON}$ ha
 Since POSEIDON Hashes outputs $4 * \lfloor(63.99)\rfloor \text{ bits} = 252$ and one bit is needed to encode each direction, the tree can, therefore, have a maximum of 252 levels.
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
 
-## The Storage State Machine's Design and Mechanism 
+
+## The Storage State Machine: Design and Mechanism 
 
 
 
@@ -1609,7 +1595,7 @@ The Storage SM is composed of three parts: Storage Assembly code, Storage Execut
 
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 ### The Storage Assembly
 
@@ -1646,7 +1632,7 @@ Note that state machines use registers in the place of variables. All values nee
 
 The `SIBLING_VALUE_HASH` and `SIBLING_RKEY` registers are only used by the `Set_InsertFound` and the `Set_DeleteFound` secondary Assembly codes. The rest of the registers are used in all the secondary Assembly codes. 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 #### SMT Action Selectors in The Primary Assembly Code
 
@@ -1667,7 +1653,7 @@ The primary and secondary Storage Assembly files are stored as JSON files in the
 
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 #### The UPDATE zkASM Code
 
@@ -1685,7 +1671,7 @@ Note that an UPDATE action involves:
 
 There is only one Set_UPDATE Assembly code [storage_sm_set_update.zkasm](https://github.com/hermeznetwork/zkasmstorage/blob/main/zkasm/storage_sm_set_update.zkasm) for all the above three computations.
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 ##### Key Reconstruction in zkASM
 
@@ -1693,7 +1679,7 @@ Key Reconstruction is achieved in two steps: Positioning of the bit "1" in the `
 
 
 
-Step 1. **Positioning the Bit "1" in the `LEVEL` Register**
+**Step 1**. ***Positioning the Bit "1" in the `LEVEL` Register***
 
 The Set_UPDATE zkASM code first initialises the `LEVEL` register to `(1,0,0,0)`. 
 
@@ -1715,7 +1701,7 @@ Then it uses the `GetLevelBit()` function to read the two least-significant bits
 
 
 
-Step 2. **Using `LEVEL` to "Climb the RKey"**
+**Step 2**. ***Using `LEVEL` to "Climb the RKey"***
 
 The Remaining Key is fetched using the `GetRKey()` function and stored in the `RKEY` register.
 
@@ -1727,7 +1713,7 @@ When climbing the tree, there are two functions that are used in the code: the C
 
 The two steps mentioned above are repeated until all the path bits used in navigation have been appended. In such a case, equality between the reconstructed key and the original key is checked. 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 ##### Checking Inclusion of Old Value in Old Root
 
@@ -1737,7 +1723,7 @@ Since checking the inclusion of the old value in the old root follows the same s
 
 Next is the discussion of the update of the old value to the new value.
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 ##### The Update Part of Set_UPDATE
 
@@ -1747,48 +1733,48 @@ All values: $\text{V}_{0123}=\big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V
 
 
 
-Step 1. **Computing the New Leaf Value**
+**Step 1**. ***Computing the New Leaf Value***
 
-(a)	The functions `GetValueLow()` and `GetValueHigh()` are used to fetch `VALUE_LOW` $=\big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ and `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$, respectively.
+1. The functions `GetValueLow()` and `GetValueHigh()` are used to fetch `VALUE_LOW` $=\big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ and `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$, respectively.
 
-(b)	The `VALUE_LOW` $= \big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ is stored in a register called `HASH_LEFT`, while `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$ is stored in another register called `HASH_RIGHT`.
+2. The `VALUE_LOW` $= \big(\text{V}_{0},\text{V}_{1},\text{V}_{2},\text{V}_{3}\big)$ is stored in a register called `HASH_LEFT`, while `VALUE_HIGH` $=\big(\text{V}_{4},\text{V}_{5},\text{V}_{6},\text{V}_{7}\big)$ is stored in another register called `HASH_RIGHT`.
 
-(c)	The hashed value of $\text{V}_{0123}$ is computed using `HASH0` as: $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ {\text{RIGHT}}\big)$. Note that this is, in fact, $\text{POSEIDON}\big(0\|0\|0\|0\|\text{VALUE}\_ {\text{LOW}}\|\text{VALUE}\_ {\text{HIGH}}\big)$. The hashed value is then stored in `HASH_RIGHT`.
+3. The hashed value of $\text{V}_{0123}$ is computed using `HASH0` as: $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ {\text{RIGHT}}\big)$. Note that this is, in fact, $\text{POSEIDON}\big(0\|0\|0\|0\|\text{VALUE}\_ {\text{LOW}}\|\text{VALUE}\_ {\text{HIGH}}\big)$. The hashed value is then stored in `HASH_RIGHT`.
 
 **Note**: This means the `HASH_RIGHT` and the `HASH_LOW` are 'make-shift' registers. Whenever a value is stored in it, the old value that was previously stored therein is simply pushed out. They hold values only for the next computation.
 
-(d)	Next, the Rkey is copied into the `HASH_LEFT` register. And the leaf value is computed by using `HASH1` as: $\text{HASH1}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ {\text{RIGHT}}\big)$, i.e. the value of the leaf is $\text{HASH1}\big( \text{RKey}\|\text{HashedValue}\big)$. The leaf value is then copied into another register called `NEW_ROOT`. 
+4. Next, the Rkey is copied into the `HASH_LEFT` register. And the leaf value is computed by using `HASH1` as: $\text{HASH1}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ {\text{RIGHT}}\big)$, i.e. the value of the leaf is $\text{HASH1}\big( \text{RKey}\|\text{HashedValue}\big)$. The leaf value is then copied into another register called `NEW_ROOT`. 
 
 
 
-Step 2. **Climbing the SMT**
+**Step 2**. ***Climbing the SMT***
 
 Check if the path bit that led to the leaf is 0 or 1, by using the `GetNextKeyBit()` function.
 
 **Case 1**: If the path bit (called 'key bit' in the code) is 0, then the corresponding sibling is on the right. Therefore, using 'Jump if Zero' `JMPZ`,  the code jumps to the `SU_SiblingIsRight` routine. 
 
-(a)	The leaf value in `NEW_ROOT` is pushed into the `HASH_LEFT` register. 
+1. The leaf value in `NEW_ROOT` is pushed into the `HASH_LEFT` register. 
 
-(b)	The hash value of the sibling node is fetched using the `GetSiblingHash()` function. And it is pushed into the `HASH_RIGHT` register.
+2. The hash value of the sibling node is fetched using the `GetSiblingHash()` function. And it is pushed into the `HASH_RIGHT` register.
 
-(c)	The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}} \|\text{HASH}\_{\text{RIGHT}}\big)$. 
+3. The hash value of the parent node is computed using `HASH0` as follows, $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}} \|\text{HASH}\_{\text{RIGHT}}\big)$. 
 
 That is, the parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{LeafValue}\|\text{SiblingHash}\big)$.
 
 **Case 2**: If the path bit is 1, then the corresponding sibling is on the left. The routine `SU_SiblingIsRight` is then executed. 
 
-(a)	The leaf value in `NEW_ROOT` is pushed into the `HASH_RIGHT` register. 
+1. The leaf value in `NEW_ROOT` is pushed into the `HASH_RIGHT` register. 
 
-(b)	The hash value of the sibling node is fetched, using the `GetSiblingHash()` function. And it is pushed into the `HASH_LEFT` register.
+2. The hash value of the sibling node is fetched, using the `GetSiblingHash()` function. And it is pushed into the `HASH_LEFT` register.
 
-(c)	The hash value of the parent node is computed using `HASH0` as follows:
+3. The hash value of the parent node is computed using `HASH0` as follows:
  $\text{HASH0}\big(\text{HASH}\_ {\text{LEFT}}\|\text{HASH}\_ \text{RIGHT}\big)$. 
 
 i.e., the parent node is $\text{POSEIDON}\big(0\|0\|0\|0\|\text{SiblingHash}\|\text{LeafValue}\big)$. 
 
 
 
-Step 3. **Check if Tree Top has been Reached**
+**Step 3**. ***Check if Tree Top has been Reached***
 
 The code uses the function `GetTopTree()` to check if the top of the tree has been reached.
 
@@ -1800,15 +1786,13 @@ The code uses the function `GetTopTree()` to check if the top of the tree has be
 
 The `SU_Latch` is an overall routine for the entire Set_UPDATE Assembly code. It is here where: 
 
-(a)	Equality between the reconstructed key and the original key is checked.
+1. Equality between the reconstructed key and the original key is checked.
 
-(b)	Equality between the computed old root value and the original old root is checked.
+2. Equality between the computed old root value and the original old root is checked.
 
 Once the consistency is established between the keys and the old roots, all new values: the new root, the new hash value, and the new leaf value are set using `LATCH_SET`. 
 
 
-
-<!--FOLLOWING IS ALREADY EDITED-->
 
 #### Rest of the Secondary Assembly Codes
 
@@ -1834,7 +1818,7 @@ Also note that there is only one `Get` Assembly code for the READ SMT Action and
 
 
 
-<!--FOLLOWING IS ALREADY EDITED-->
+
 
 ### The Storage Executor
 
@@ -1910,7 +1894,7 @@ The preparation for these polynomial constraints actually starts in the Storage 
 |                        |                        | iAddress          |
 
 </center>  
-
+<br>
 Every time each of these Boolean polynomials is utilised or performed, a record of a "1" is kept in its register. This is called an **Execution Trace**. 
 
 Therefore, instead of performing some expensive computations in order to verify the correctness of execution (at times, repeating the same computations being verified), the trace of execution is tested. The Verifier takes the execution trace and tests if it satisfies the polynomial constraints (or identities) in the PIL code. This technique helps the zkProver to achieve succinctness as a zero-knowledge proof and verification system.
