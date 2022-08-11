@@ -6,7 +6,7 @@ As a secondary state machine, the Memory Align State Machine has the executor pa
 
 
 
-The Polygon Hermez Repo can be found here:  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
+**Polygon Hermez Repository**:  [https://github.com/0xPolygonHermez](https://github.com/0xPolygonHermez)
 
 **Memory Align SM Executor**: [sm_mem_align.js](https://github.com/0xPolygonHermez/zkevm-proverjs/tree/main/src/sm/sm_mem_align.js)
 
@@ -18,7 +18,7 @@ The Polygon Hermez Repo can be found here:  [https://github.com/0xPolygonHermez]
 
 The Memory SM checks memory reads and writes using 32-byte word access, while the EVM can read and write 32-byte words with offsets at a byte level.
 <!-- what does possible mean here? -->
-<!-- Table 6 is in comments-->
+<!-- Table 6 is in comments?-->
 Table 6 shows an example of possible byte-addressed and 32-byte-addressed memory layouts for the same content (three words).
 
 <!-- 
@@ -37,6 +37,7 @@ Table 6 shows an example of possible byte-addressed and 32-byte-addressed memory
 
 <div align="center"><b> Table 7: Sample memory layouts for byte and 32-byte access.</b></div>
 <!--Table 7 or 6?-->
+
 $$
 \begin{array}{|c|c|}
 \hline
