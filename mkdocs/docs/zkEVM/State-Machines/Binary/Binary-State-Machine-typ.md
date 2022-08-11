@@ -520,36 +520,21 @@ Recall that we are processing the bytes of $a$ and $b$ from the less significant
 
 1. First of all, we start comparing $a_0$ and $b_0$. 
    1. If $a_0 < b_0$, we set $\texttt{carry} = 1$.
-
-​	- Otherwise we set $\texttt{carry} = 0$.	
-
+   2. Otherwise we set $\texttt{carry} = 0$.	
 
 
 2. For all $0 < i < 31$, we compare $a_i$ and $b_i$.
-
-​	a. If $a_i < b_i$, we set $\texttt{carry} = 1$.
-
-​	b. If $a_i = b_i$, we leave $\texttt{carry}$ unchanged from the previous step.
-
-​	c. Otherwise, we set $\texttt{carry} = 0$.
-
-
+   1. If $a_i < b_i$, we set $\texttt{carry} = 1$.
+   2. If $a_i = b_i$, we leave $\texttt{carry}$ unchanged from the previous step
+   3. Otherwise, we set $\texttt{carry} = 0$.
 
 3. Now, we have to compare the last bytes. We follow the described strategy of comparing the signs:
-
-​	a. If $\texttt{sgn}(a) > \texttt{sgn}(b)$, we output a $1$, so $a < b$.
-
-​	b. If $\texttt{sgn}(a) < \texttt{sgn}(b)$, we output a $0$, so $a < b$.
-
-​	c. If $\texttt{sgn}(a) = \texttt{sgn}(b)$, we compare the last bytes $a_{31}$ and $b_{31}$ in the same way we have compared the previous bytes. We output $0$ or $1$ accordingly.
-
-​			  (i)	If $a_{31} < b_{31}$, we output a $1$, so $a < b$.
-
-​			 (ii)	If $a_{31} = b_{31}$, we output the previous $\texttt{carry}$, maintaining the last decision.
-
-​			(iii)	Otherwise, we output a $0$, so $a \not < b$. 
-
-
+   1. If $\texttt{sgn}(a) > \texttt{sgn}(b)$, we output a $1$, so $a < b$.
+   2. If $\texttt{sgn}(a) < \texttt{sgn}(b)$, we output a $0$, so $a < b$.
+   3. If $\texttt{sgn}(a) = \texttt{sgn}(b)$, we compare the last bytes $a_{31}$ and $b_{31}$ in the same way we have compared the previous bytes. We output $0$ or $1$ accordingly.
+      1. If $a_{31} < b_{31}$, we output a $1$, so $a < b$.
+      2. If $a_{31} = b_{31}$, we output the previous $\texttt{carry}$, maintaining the last decision.
+      3. Otherwise, we output a $0$, so $a \not < b$. 
 
 Let us exemplify the previous procedure setting $a = \mathtt{0xFF FF FF 00}$ and $b = \mathtt{0x00 FF FF FF}$. We know that $a < b$, so we should output a $1$. Observe that the less significant byte of $a$ is lesser than the less significant byte of $b$. Hence, we should put $\texttt{carry}$ equal to $1$. The next two bytes of $a$ and $b$ are both equal to $\mathtt{0xFF FF}$, therefore, we maintain $\texttt{carry}$ unchanged equal to $1$. However, since $a$ is negative and $b$ is positive, we should change the decision and output a $1$, independently of the $\texttt{carry}$. 
 
