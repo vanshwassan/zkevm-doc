@@ -54,7 +54,7 @@ The Byte4 State Machine takes as input the two $16$-bit numbers and generates a 
 </center>
 
 <div align="center"><b> Table 2: Example of the Byte4 State Machine </b></div>
-
+<br>
 The Byte4 SM works as follows:
 In one clock, the first input $x$ is moved to the $\textsf{out}$ column. In the following clock, $x$ is concatenated to the second input $y$ and moved to the $\textsf{out}$ column. In order to make this "move" possible, we introduce a constant polynomial called $\textsf{SET}$, which is defined as follows:
 
