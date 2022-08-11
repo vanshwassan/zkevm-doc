@@ -238,7 +238,7 @@ Structure of the proof from a reference implementation:
 
 ---
 
-## Hermez specific Leaf Types
+## Hermez-specific Leaf Types
 
 ### Balance
 
