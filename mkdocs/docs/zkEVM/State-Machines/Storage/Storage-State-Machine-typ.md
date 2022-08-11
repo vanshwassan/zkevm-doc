@@ -595,9 +595,8 @@ Both computations involve climbing the tree from the located leaf $\mathbf{{L}_{
    That is, Verifier takes the Remaining Key: $\text{RK}_{\mathbf{x}}$ and reconstructs the key $K_{\mathbf{x}}$ by concatenating the key bits used to navigate to $\mathbf{{L}_{x}}$ from $\mathbf{{root}_{a..x}}$ in the reverse order.
 
    Suppose the *number of levels to root* is 3 and the least-significant bits used for navigation are $\text{kb}_\mathbf{2}$, $\text{kb}_\mathbf{1}$ and $\text{kb}_\mathbf{0}$.
-<!-- what does verifier do here? -->
-
-   In order to check key-correctness, Verifier the remaining key $\text{RK}$ and,
+   
+   In order to check key-correctness, Verifier the remaining key $\text{RK}$ and,<!-- what does verifier do here? -->
 
    1. Concatenates $\text{kb}_\mathbf{2}$ and gets $\text{ } \text{RK} \|  \text{kb}_\mathbf{2}$.
 
