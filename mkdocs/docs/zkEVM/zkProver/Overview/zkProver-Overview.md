@@ -14,7 +14,7 @@ In the nutshell, the zkProver uses these four components to generates verifiable
 
 
 
-![ Figure 5: Simplified Data Flow in the zkProver](figures/fig5-main-prts-zkpr.png)
+![ Figure 5: Simplified Data Flow in the zkProver](figures/fig-main-prts-zkpr.png)
 
 <div align="center"><b> Figure 1: Simplified Data Flow in the zkProver </b></div>
 

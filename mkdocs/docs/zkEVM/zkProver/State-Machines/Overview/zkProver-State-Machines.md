@@ -27,7 +27,7 @@ In order to lay the context for the state machines, recall that the zkProver mai
 
 
 
-![Figure 1: zkProver and the Node ](figures/fig1-zkprv-and-node.png)
+![Figure 1: zkProver and the Node ](figures/fig-zkprv-and-node.png)
 
 <div align="center"><b> Figure 1: zkProver and the Node </b></div>
 
@@ -77,7 +77,7 @@ These instructions dictate how a state should transition in a state machine. How
 
 
 
-![Figure 2: The Main SM Executor's Instructions](figures/fig2-actions-sec-sm.png)
+![Figure 2: The Main SM Executor's Instructions](figures/fig-actions-sec-sm.png)
 
 <div align="center"><b> Figure 2: The Main SM Executor's Instructions </b></div>
 
@@ -177,7 +177,7 @@ A full description of the Keccak SM can be found in its individual document.
 
 
 
-### The $\text{POSEIDON}$ State Machine
+### The POSEIDON State Machine
 
 
 
@@ -340,7 +340,7 @@ and then generate a zk-SNARK proof.
 
 
 
-![Figure 5: Simplified Data Flow in the zkProver](figures/fig5-main-prts-zkpr.png)
+![Figure 5: Simplified Data Flow in the zkProver](figures/fig-main-prts-zkpr.png)
 
 <div align="center"><b> Figure 5: Simplified Data Flow in the zkProver </b></div>
 
