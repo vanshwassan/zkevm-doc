@@ -25,7 +25,7 @@ The major components of zkEVM are:
 The skeletal architecture of zkEVM is shown below:
 
 
-![Figure 1 : Skeletal Overview of zkEVM](figures/fig1-simpl-arch.png)
+![Figure 1 : Skeletal Overview of zkEVM](figures/fig-simpl-arch.png)
 
 <div align="center"><b> Figure 1 : Skeletal Overview of zkEVM </b></div>
 
@@ -97,7 +97,7 @@ The PoE smart contract, therefore, makes two basic calls: A call to receive batc
 
 
 
-![Figure 2: Simplified Proof of Efficiency](figures/fig2-simple-poe.png)
+![Figure 2: Simplified Proof of Efficiency](figures/fig-simple-poe.png)
 
 <div align="center"><b> Figure 2: Simplified Proof of Efficiency </b></div>
 
@@ -142,7 +142,7 @@ The zkNode Architecture is composed of:
 
 
 
-![Figure 2: Simplified Proof of Efficiency](figures/fig3-zkNode-arch.png)
+![Figure 2: Simplified Proof of Efficiency](figures/fig-zkNode-arch.png)
 
 <div align="center"><b> Figure 3: zkEVM zkNode Diagram </b></div>
 
@@ -163,7 +163,7 @@ zkEVM employs advanced zero-knowledge technology to create validity proofs. It u
 
 
 
-![Figure 4: A Simplified zkProver Diagram](figures/fig4-zkProv-arch.png)
+![Figure 4: A Simplified zkProver Diagram](figures/fig-zkProv-arch.png)
 
 <div align="center"><b> Figure 4: A Simplified zkProver Diagram </b></div>
 
@@ -197,7 +197,7 @@ See **Figure 5** below for dependencies among these SMs.
 
 While some SMs use both zkASM and PIL, others rely only on one of these languages depending upon the specific operations each SM is responsible for.
 
-![Figure 4: A Simplified zkProver Diagram](figures/fig5-col-sm-zkprov.png)
+![Figure 4: A Simplified zkProver Diagram](figures/fig-col-sm-zkprov.png)
 
 <div align="center"><b> Figure 5: zkEVM State Machines </b></div>
 
@@ -226,7 +226,7 @@ Bridge L1 Contract requires two Merkle trees in order to perform the above opera
 
 The exit tree structure is depicted in **Figure 6** below:
 
-![Figure 4: A Simplified zkProver Diagram](figures/fig6-exit-tr-strct.png)
+![Figure 4: A Simplified zkProver Diagram](figures/fig-exit-tr-strct.png)
 
 <div align="center"><b> Figure 6: The Exit Tree Structure </b></div>
 
