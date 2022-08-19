@@ -12,6 +12,11 @@ theme:
     - navigation.tracking
 repo_url: https://github.com/hermeznetwork/zkevmdoc
 markdown_extensions:
+  - pymdownx.highlight:
+      anchor_linenums: true
+  - pymdownx.inlinehilite
+  - pymdownx.snippets
+  - pymdownx.superfences
   - pymdownx.arithmatex:
       generic: true
 extra_javascript:
@@ -31,7 +36,7 @@ nav:
   - Polygon zkEVM:
     - zkEVM Overview: "zkEVM/Overview/Overview.md"
     - zkProver:
-      - zkProver Overview: "zkEVM/zkProver/Overview/zkProver-Overview.md"
+      - zkProver Intro: "zkEVM/zkProver/Overview/zkProver-Intro.md"
       - States Machines:
         - State Machines Overview: "zkEVM/zkProver/State-Machines/Overview/zkProver-State-Machines.md"
         # - Main State Machine:
