@@ -56,6 +56,7 @@ nav:
         # - "First Example: Fibonacci": "zkEVM/zkProver/Verifiable-Computations/Fibonacci.md"
         # - Simple State Machine: "zkEVM/zkProver/Verifiable-Computations/Simple-State-Machine.md"  
         # - Modular Design: "zkEVM/zkProver/Verifiable-Computations/Modular-Design.md"  
+      - zkProver's Math Tools: "zkEVM/zkProver/Math-Tools/zkProver-MathTools.md"
     - zk Tooling:
       - zkASM:
         - Introduction: "zkEVM/zk-Tooling/zkASM/Introduction.md"

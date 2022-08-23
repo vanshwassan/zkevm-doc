@@ -200,19 +200,9 @@ $$
 
 Both [Pinocchio](https://eprint.iacr.org/2013/279.pdf) and its optimized version [Groth16](https://eprint.iacr.org/2016/260.pdf) prove a special equation with linear combinations of polynomials $a_i(X)$'s,  $b_i(X)$'s, and $c_i(X)$'s with the witness and public inputs. Groth16 is the most efficient way of proving a system, the main drawback is that it is necessary to run a Trusted Setup per circuit. Both protocols are called **Succinct Non-Interactive ARgument of Knowledge (SNARK)**. 
 
-To generate a valid proof of the multiplicative Fibonacci we will use a **CIRCOM** as before, in order to generate the R1CS constraint system and **snarkjs**, to generate the proof of the previously computed R1CS. First of all, we create a .json file containing the private inputs 
+To generate a valid proof of the multiplicative Fibonacci we will use a **CIRCOM** as before, in order to generate the R1CS constraint system and **snarkjs**, to generate the proof of the previously computed R1CS. 
 
-```json
-{"s0": 2, "s1": 1}
-```
-
-Execute the command to generate the witness binary file (with WASM):
-
-```
-mfibonacci_js$ node generate_witness.js mfibonacci.wasm input.json witness.wtns
-```
-
-Start a powers of tau:
+We begin with the generic part of the trusted setup that is valid for all the circuits. This phase is also known as  "powers of tau".The powers of tau generates generic randomness valid for all the circuits and known as SRS (Structured Reference String). To start the powers of tau, we use the following command:
 
 ```
 snarkjs powersoftau new bn128 12 pot12_0000.ptau -v
@@ -247,6 +237,18 @@ Export the verification key:
 ```
 snarkjs zkey export verificationkey mfibonacci_0001.zkey verification_key.json 
 ```
+
+Now, we follow the steps of the prover by first creating the input file called $\texttt{input.json}$:
+
+```js
+{"s0":1, "s1": 2}
+```
+Execute the command to generate the witness binary file (in this case with WASM):
+
+```
+mfibonacci_js$ node generate_witness.js mfibonacci.wasm input.json witness.wtns
+```
+
 
 Once the witness is computed and the trusted setup is already executed, we can generate a zk-proof associated to the circuit and the witness:
 
@@ -540,6 +542,56 @@ and build the parsers
 ```sh
 $ npm run build
 ```
+Now, we can compile the PIL file corresponding to the Fibonacci State Machine:
+
+```
+pilcom/src$ node pil.js myproject/mfib.pil -o myproject/mfib.pil.json
+```
+
+```
+Input Pol Commitments: 2
+Q Pol Commitments: 1
+Constant Pols: 1
+Im Pols: 1
+plookupIdentities: 0
+permutationIdentities: 0
+connectionIdentities: 0
+polIdentities: 3
+```
+
+The output of the command provides some information about the diferent polynomials used. The JSON obtained from the compilation contains the parsed PIL description:
+
+```js
+{
+ "nCommitments": 2,
+ "nQ": 1,
+ "nIm": 1,
+ "nConstants": 1,
+ "publics": [],
+ "references": { 
+  "mFibonacci.ISLAST": {"type": "constP","id": 0,"polDeg": 1024,"isArray": false},
+  "mFibonacci.a": {"type": "cmP","id": 0,"polDeg": 1024,"isArray": false },
+  "mFibonacci.b": {"type": "cmP","id": 1,"polDeg": 1024,"isArray": false },
+  "mFibonacci.ab": {"type": "imP","id": 0,"polDeg": 1024,"isArray": false }
+ },
+ "expressions": [ ... ],
+ "plookupIdentities": [],
+ "permutationIdentities": [],
+ "connectionIdentities": []
+}
+```
+
+The JSON file specifies, under the references key, all the polynomials that are references in the .pil file. The references key-value stores, in its keys, the name and the $\texttt{namespace}$ associated to each polynomial in the form $\texttt{nameSpace.name}$. Each value describes a property associated to each polynomial such:
+
+- **type**: specifies if a certain polynomial is commited, constant, calculated...
+- **id**: unique id associated to each polynomial among the ones of its same type.
+- **polDeg**: reflects the resulting polynomial degree.
+- **isArray**: flag to control array-based polynomial definitions (more information in the detailed PIL description).
+
+Among all the contents of the .json file, there is a key called expressions which is an array containing all the identities and operations among the corresponding polynomials. Moreover, there exists other keys which represent all inclusion, permutation and copy constrain arguments. Other important fields for debugging purposes are:
+
+- **nCommitements**: which specifies the total number of commited polynomials.
+- **nConstants**: which specifies the total number of constant polynomials referenced in the PIL file.
 
 Now, our main purpose is to integrate both the PIL and the program that realizes the computation of the execution trace (that we will call **Executor**) and produce a valid proof using the [pil-stark](https://github.com/0xPolygonHermez/pil-stark) tool. First of all, we will generate a $\mathtt{pols}$ object which will contain an empty version of all the PIL-involved polynomials. At the beginning we should compile the PIL file. 
 
@@ -689,7 +741,7 @@ const mFib = require("./executor_mfib");
 const input = require("./mfib.input.json");
 const starkStruct = require("./mfib.starkstruct.json")
 
-async function test() {
+async function generateAndVerifyStark() {
 
     const pil = await compile(FGL, path.join(__dirname, "mfib.pil"));
     const constPols =  newConstantPolsArray(pil);
@@ -720,7 +772,7 @@ async function test() {
     
 }
 
-test();
+generateAndVerifyStark();
 ```
 
 When running it, it should output **The proof is VALID!**
