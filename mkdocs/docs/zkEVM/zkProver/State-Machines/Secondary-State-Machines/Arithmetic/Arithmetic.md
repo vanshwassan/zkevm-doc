@@ -16,7 +16,7 @@ The Polygon Hermez Repo is here  [https://github.com/0xPolygonHermez](https://gi
 
 The Arithmetic State Machine (SM) is one of the six secondary state machines receiving instructions from the Main SM Executor. As a secondary state machine, the Arithmetic SM has the executor part (the Arithmetic SM Executor) and an internal Arithmetic PIL program written in the PIL language.
 
-The main purpose of the Arithmetic SM is carry out elliptic curve arithmetic operations, such as Point Addition and Point Doubling.
+The main purpose of the Arithmetic SM is carry out elliptic curve arithmetic operations, such as Point Addition and Point Doubling as well as performing $256$-bits operations like addition, product or division. 
 
 
 
@@ -37,20 +37,6 @@ Set the coefficients $a = 0$ and $b = 7$, so that $E$ reduces to
 y^2 = x^3 + 7.
 \end{aligned}
 
-
-
-#### Field Arithmetic 
-
-Consider points $( x_1, y_1)$ , $( x_2, y_2)$, and $( x_3, y_3)$ on $E$.
-
-Here, $y_2$ and $y_3$ are the result of performing field arithmetic over $x_1,y_1$ and $x_2$. That is,
-$$
-x_1 \cdot y_1 + x_2 = y_2 \cdot 2^{256} + y_3.
-$$
-Note that,
-
-1. If $y_1$ is set to $1$, the above equation represents field addition. 
-2. Similarly, if $x_2$ is set to $0$, then the equation represents field multiplication.
 
 
 
@@ -85,6 +71,35 @@ where
 \begin{aligned}
 s = \dfrac{3x_1^2}{2y_1}.
 \end{aligned}
+
+
+
+
+
+
+#### Field Arithmetic 
+
+We can express several $256$-bits operations in the following form
+
+$$
+A \cdot B + C = D \cdot 2^{256} + E
+$$
+
+where $A, B, C, D$ and $E$ are $256$-bits integers.
+
+For example, if $C = 0$, we are stating that the result of multiplying $A$ and $B$ is
+$E$ with a carry of $D$ (that is, the chunk that exceeds $256$ bits). Or, setting $B = 1$ we state that the result
+of add $A$ and $C$ is the same as before. We can also express divisions, modular reductions, etc.
+
+We will perform this kind of operations in the Arithmetic State Machine, with registers satisfying the PIL relation
+
+$$
+\text{EQ}_0 \colon \quad &x_1 \cdot y_1 + x_2 - y_2 \cdot 2^{256} - y_3 = 0
+$$
+
+
+
+
 
 
 ***Remark***:
