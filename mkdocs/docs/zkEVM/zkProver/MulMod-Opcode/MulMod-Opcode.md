@@ -303,14 +303,14 @@ mulARITH: ; assembly subroutine for multiplication
                     :JMP(RR)
 ```
 
-At line 10, $D$ is computed by taking the bits 256 to 511 of $\texttt{_mulArith}$ and stored at the $\texttt{D}$ registry.
+- At line 10, $D$ is computed by taking the bits 256 to 511 of $\texttt{_mulArith}$ and stored at the $\texttt{D}$ registry.
 
-A line 11, $E$ is computed by taking the bits 0 to 255 of \texttt{\_mulArith}. At this line, the $E$ value is at $\texttt{op}$, $\texttt{:ARITH}$ checks the operation and the $E$ value is stored at the $\texttt{E}$ registry. 
+- A line 11, $E$ is computed by taking the bits 0 to 255 of \texttt{\_mulArith}. At this line, the $E$ value is at $\texttt{op}$, $\texttt{:ARITH}$ checks the operation and the $E$ value is stored at the $\texttt{E}$ registry. 
 
-At lines 12 and 13 the result of the operation is stored in memory:
+- At lines 12 and 13 the result of the operation is stored in memory:
 $E$ in $\texttt{arithRes1}$ and $D$ in $\texttt{arithOverflow}$.
 
-Finally, in line 14 we restore the previous values of registries, in line 15 we read the return code address and finally jump to this address in line 16.
+- Finally, in line 14 we restore the previous values of registries, in line 15 we read the return code address and finally jump to this address in line 16.
 
 
 
@@ -408,6 +408,7 @@ values and load them into the proper memory labels:
   B              :MSTORE(arithB) ; [arithB=B]
   ${var _mulAB = A * B}          ; FIX with $$
 ```
+
 - Line 1 checks that we have 3 elements at the top of the stack to
 do the MULMOD operation.
 - Line 2 positions the $\texttt{SP}$ at the address of the top element.
