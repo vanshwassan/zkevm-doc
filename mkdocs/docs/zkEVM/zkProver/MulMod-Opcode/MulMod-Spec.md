@@ -3,7 +3,7 @@
 
 ## The EVM MULMOD Opcode
 
-The **MULMOD** opcode performs a modular multiplication of two numbers, that is, it performs the folowing operation $R = A \cdot B \ \mathit{mod} \ N$. For example, if $A = 11, B = 2$ and $N = 6$, then the result is $R = 4 = 11 \cdot 2 \ \mathit{mod} \ 6$. 
+The **MULMOD** opcode performs a modular multiplication of two numbers, that is, it performs the following operation $R = A \cdot B \ \mathit{mod} \ N$. For example, if $A = 11, B = 2$ and $N = 6$, then the result is $R = 4 = 11 \cdot 2 \ \mathit{mod} \ 6$. 
 
 This can also be expressed as 
 
