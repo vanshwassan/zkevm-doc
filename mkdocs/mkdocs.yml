@@ -37,7 +37,7 @@ nav:
     - zkEVM Overview: "zkEVM/Overview/Overview.md"
     - zkProver:
       - zkProver Overview: "zkEVM/zkProver/Overview/zkProver-Overview.md"
-      - MULMOD Opcode Implementation: "zkEVM/zkProver/MulMod-Opcode/MulMod-Opcode.md"
+      - MULMOD Opcode Implementation: "zkEVM/zkProver/MulMod-Opcode/MulMod-Spec.md"
       - States Machines:
         - State Machines Overview: "zkEVM/zkProver/State-Machines/Overview/zkProver-State-Machines.md"
         # - Main State Machine:

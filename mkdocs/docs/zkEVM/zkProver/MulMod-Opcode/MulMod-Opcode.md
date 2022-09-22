@@ -14,7 +14,7 @@ $$
 \end{align}
 $$
 
-The condition $R < N$ guarantees that, for a given $(A, B, N)$, the tuple $(K, N)$ is unique. In our example,
+The condition $R < N$ guarantees that, for a given $(A, B, N)$, the tuple $(K, R)$ is unique. In our example,
 
 $$
 (A, B, N) = (11, 2, 6) \to (3, 4) = (K, N) \Rightarrow 11 \cdot 2 = 3 \cdot 6 + 4. 
