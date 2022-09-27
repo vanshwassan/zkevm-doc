@@ -78,7 +78,7 @@ Several exceptions can occur meanwhile checking the modular multiplication opcod
     We can invoke a maximum of $2$ times the **Binary** (two $\texttt{:LT}$ instructions) and $3$ times the **Arith** (three $\texttt{:ARITH}$ instructions). Hence, we will add the following code at the beginning of the opcode
         ```linenums="1"
         %MAX_CNT_ARITH - CNT_ARITH - 3 :JMPN(outOfCounters)                 
-        %MAX_CNT_BINARY - CNT_BINARY - 3 :JMPN(outOfCounters)
+        %MAX_CNT_BINARY - CNT_BINARY - 2 :JMPN(outOfCounters)
         ```
     Here $\texttt{%MAX_CNT_ARITH}, \texttt{%MAX_CNT_BINARY}$ and $\texttt{%MAX_CNT_STEPS}$ are constants that define the maximum steps can take each of these state machines. 
     
