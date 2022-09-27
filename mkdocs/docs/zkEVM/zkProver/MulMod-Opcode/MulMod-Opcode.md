@@ -621,7 +621,7 @@ We can invoke a maximum of $2$ times the **Binary** (two $\texttt{:LT}$ instruct
 
 ```linenums="1"
 %MAX_CNT_ARITH - CNT_ARITH - 3 :JMPN(outOfCounters)
-%MAX_CNT_BINARY - CNT_BINARY - 3 :JMPN(outOfCounters)
+%MAX_CNT_BINARY - CNT_BINARY - 2 :JMPN(outOfCounters)
 ```
 
 Here $\texttt{%MAX_CNT_ARITH}$ and $\texttt{%MAX_CNT_BINARY}$ are constants that define the maximum steps can take each of these state machines. If we go out of counters, then, there is an error in the processing of the batch (it is not an error of the user). We log this and restore the SR to the state root previous to the batch:
