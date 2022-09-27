@@ -9,28 +9,32 @@ This can also be expressed as
 
 $$
 \begin{align}
-&A \cdot B = K \cdot N + R \\
-&\text{with } R < N
+&a \cdot b = k \cdot n + r \\
+&\text{with } r < n
 \end{align}
 $$
 
-The condition $R < N$ guarantees that, for a given $(A, B, N)$, the tuple $(K, R)$ is unique. 
+The condition $r < n$ guarantees that, for a given $(a, b, n)$, the tuple $(k, r)$ is unique. In our example,
+
+$$
+(a, b, n) = (11, 2, 6) \to (3, 4) \Rightarrow 11 \cdot 2 = 3 \cdot 6 + 4. 
+$$
 
 In the case of the EVM, it must be taken into account it uses a $256$-bits arithmetic
 
 $$
-A, B, N, R \in \{ 0, 1, \dots, 2^{256} - 1 \}.
+a, b, n, r \in \{ 0, 1, \dots, 2^{256} - 1 \}.
 $$
 
 
 ## Reducing the Implementation to Arithmetic State Machine checks
 
-In our zkEVM architecture, we have a state machine called **Arith** that can verify $256$-bit arithmetic operations. In particular, a combination with a sum and a multiplication. In more detail, providing the tuple $(A, B, C, D, E)$ **Arith** can verify that the tuple fulfills the following expression
+In our zkEVM architecture, we have a state machine called **Arith** that can verify $256$-bit arithmetic operations. In particular, a combination with a sum and a multiplication. In more detail, providing the tuple $(x_1, y_1, x_2, y_2, y_3)$ **Arith** can verify that the tuple fulfills the following expression
 
 $$
 \begin{align}
-&A \cdot B + C = D \cdot 2^{256} + E \\
-&\text{with } A, B, C, D, E \in \{ 0, 1, \dots, 2^{256} - 1 \}
+&x_1 \cdot y_1 + x_2 = y_2 \cdot 2^{256} + y_3 \\
+&\text{with } x_1, y_1, x_2, y_2, y_3 \in \{ 0, 1, \dots, 2^{256} - 1 \}
 \end{align}
 $$
 
@@ -39,17 +43,22 @@ Thus, to implement the **MULMOD** opcode using **Arith**, we have to express the
 
 ## Implementation Summary 
 
-It can be deduced that if we provide a tuple $(A, B, N, D, E, K_h, K_l, D_1, R)$ that fulfills the following equations
+Packing all the conditions, if we provide a tuple $(a, b, n, d, e, k_h, k_l, d_1, r)$ that fulfills the following equations
 
-- $A \cdot B + 0 = D \cdot 2^{256} + E$.
-- $K_l \cdot N + R = D_1 \cdot 2^{256} + E$.
-- $K_h \cdot N + D_1 = 0 \cdot 2^{256} + D$.
-- $R < N$.
-- $A, B, N, D, E, K_h, K_l, D_1, R \in \{0, 1, \dots, 2^{256} - 1 \}.$
+- $a \cdot b + 0 = d \cdot 2^{256} + e$.
+- $k_l \cdot n + r = d_1 \cdot 2^{256} + e$.
+- $k_h \cdot n + d_1 = 0 \cdot 2^{256} + d$.
+- $r < n$.
+- $a, b, n, d, e, k_h, k_l, d_1, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
 
-Then $R = A \cdot B \ \mathit{mod} \ N$. 
+Then $r = a \cdot b \ \mathit{mod} \ n$. 
 
-Observe that the previous constraints can be checked with the Arithmetic State Machine and the Binary State Machine. We need to take into account the special cases where $N = 0$ and $N =1$. In this case, $R = 0$. 
+The previous equations will be checked with the $256$-bit arithmetic state machine. Finally, we need to take into account the special cases where $n = 0$ and $n =1$. In this case, $r = 0$. Moreover, we will distinguish the special case in which $k_h = 0$. In this case, $d_1 = d$ and we can reduce the checks to provide the tuple $(a, b, n, d, e, k_l, r)$ that fulfills the following equations
+
+- $a \cdot b + 0 = d \cdot 2^{256} + e$.
+- $k_l \cdot n + r = d \cdot 2^{256} + e$.
+- $r < n$.
+- $a, b, n, d, e, k_l, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
 
 
 ## Exceptions 
