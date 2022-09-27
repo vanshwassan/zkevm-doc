@@ -75,7 +75,7 @@ Several exceptions can occur meanwhile checking the modular multiplication opcod
         ```linenums="1"
         %MAX_CNT_STEPS - STEP - 150 :JMPN(outOfCounters)
         ```
-    Moreover, we can invoke a maximum of $3$ times the Binary and $3$ times the Binary (three $\texttt{:ARITH}$ instructions). Hence, we add the following code at the beginning of the opcode
+    We can invoke a maximum of $2$ times the **Binary** (two $\texttt{:LT}$ instructions) and $3$ times the **Arith** (three $\texttt{:ARITH}$ instructions). Hence, we will add the following code at the beginning of the opcode
         ```linenums="1"
         %MAX_CNT_ARITH - CNT_ARITH - 3 :JMPN(outOfCounters)                 
         %MAX_CNT_BINARY - CNT_BINARY - 3 :JMPN(outOfCounters)
