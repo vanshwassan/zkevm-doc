@@ -3,9 +3,7 @@
 
 ## The EVM MULMOD Opcode
 
-The **MULMOD** opcode performs a modular multiplication of two numbers, that is, it performs the following operation $R = A \cdot B \ \mathit{mod} \ N$. For example, if $A = 11, B = 2$ and $N = 6$, then the result is $R = 4 = 11 \cdot 2 \ \mathit{mod} \ 6$. 
-
-This can also be expressed as 
+The **MULMOD** opcode performs a modular multiplication of two numbers, that is, it performs the following operation $R = A \cdot B \ \mathit{mod} \ N$. This can also be expressed as:
 
 $$
 \begin{align}
@@ -14,22 +12,20 @@ $$
 \end{align}
 $$
 
-The condition $r < n$ guarantees that, for a given $(a, b, n)$, the tuple $(k, r)$ is unique. In our example,
-
-$$
-(a, b, n) = (11, 2, 6) \to (3, 4) \Rightarrow 11 \cdot 2 = 3 \cdot 6 + 4. 
-$$
-
-In the case of the EVM, it must be taken into account it uses a $256$-bits arithmetic
+The condition $r < n$ guarantees that, for a given $(a, b, n)$, the tuple $(k, r)$ is unique. 
+In the case of the EVM, it must be taken into account it uses $256$-bit operands:
 
 $$
 a, b, n, r \in \{ 0, 1, \dots, 2^{256} - 1 \}.
 $$
 
+## Used State Machines 
 
-## Reducing the Implementation to Arithmetic State Machine checks
+In the polygon zkEVM architecture, we have different state machines to prove specific parts of the computation made by Opcodes. The implementation of the MULMOD Opcode involves using the Arith, Binary and Memory state machines.
 
-In our zkEVM architecture, we have a state machine called **Arith** that can verify $256$-bit arithmetic operations. In particular, a combination with a sum and a multiplication. In more detail, providing the tuple $(x_1, y_1, x_2, y_2, y_3)$ **Arith** can verify that the tuple fulfills the following expression
+### Arithmetic State Machine
+
+The **Arith** SM  can verify $256$-bit arithmetic operations. In particular, a combination with a sum and a multiplication. In more detail, providing the tuple $(x_1, y_1, x_2, y_2, y_3)$ **Arith** can verify that the tuple fulfills the following expression
 
 $$
 \begin{align}
@@ -40,30 +36,44 @@ $$
 
 Thus, to implement the **MULMOD** opcode using **Arith**, we have to express the modular multiplication as a set of equations with the previous form.
 
+### Binary State Machine
 
-## Implementation Summary 
+The binary SM  can check binary operations. More specifically, the binary state machine implements $\textbf{additions}, \textbf{subtractions}$, comparators ($\textbf{less than for signed and unsigned integers}$ and $\textbf{equality checks}$) and bitwise operations ($\textbf{AND}, \textbf{OR}$ and $\textbf{XOR}$).
 
-Packing all the conditions, if we provide a tuple $(a, b, n, d, e, k_h, k_l, d_1, r)$ that fulfills the following equations
+### Memory State Machine
 
-- $a \cdot b + 0 = d \cdot 2^{256} + e$.
-- $k_l \cdot n + r = d_1 \cdot 2^{256} + e$.
-- $k_h \cdot n + d_1 = 0 \cdot 2^{256} + d$.
-- $r < n$.
-- $a, b, n, d, e, k_h, k_l, d_1, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
+The memory SM can check memory operations (reads and writes). The memory operates with addresses of 32 bits and words of 32 Bytes and it is used to build a stack.
+
+## Implementation 
+
+If we provide a tuple $(a, b, n, d, e, k_h, k_l, d_1, r)$ that fulfills the following equations:
+
+1. $a \cdot b + 0 = d \cdot 2^{256} + e$.
+1. $k_l \cdot n + r = d_1 \cdot 2^{256} + e$.
+1. $k_h \cdot n + d_1 = 0 \cdot 2^{256} + d$.
+1. $r < n$.
+   
+Where $a, b, n, d, e, k_h, k_l, d_1, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
 
 Then $r = a \cdot b \ \mathit{mod} \ n$. 
 
-The previous equations will be checked with the $256$-bit arithmetic state machine. Finally, we need to take into account the special cases where $n = 0$ and $n =1$. In this case, $r = 0$. Moreover, we will distinguish the special case in which $k_h = 0$. In this case, $d_1 = d$ and we can reduce the checks to provide the tuple $(a, b, n, d, e, k_l, r)$ that fulfills the following equations
+We need to take into account the special cases where $n = 0$ and $n =1$. In this case, $r = 0$. Moreover, we will distinguish the special case in which $k_h = 0$. In this case, $d_1 = d$ and we can reduce the checks to provide the tuple $(a, b, n, d, e, k_l, r)$ that fulfills the following equations:
 
-- $a \cdot b + 0 = d \cdot 2^{256} + e$.
-- $k_l \cdot n + r = d \cdot 2^{256} + e$.
-- $r < n$.
-- $a, b, n, d, e, k_l, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
+1. $a \cdot b + 0 = d \cdot 2^{256} + e$.
+2. $k_l \cdot n + r = d \cdot 2^{256} + e$.
+3. $r < n$.
 
+Where $a, b, n, d, e, k_l, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
+
+## Inputs 
+
+The values a,b,n at the top of the stack.
+
+## Outputs
+
+The value r at the top of the stack while a, b and n have been removed from the stack.
 
 ## Exceptions 
-
-Several exceptions can occur meanwhile checking the modular multiplication opcode. Below, we list all possible exceptions:
 
 - **Out of Gas Exception**: 
 
@@ -87,4 +97,19 @@ Several exceptions can occur meanwhile checking the modular multiplication opcod
 - **Stack Underflow Exception**:
 
     If current $\mathtt{SP} < 3$ (which means that there are not enough elements stored in the stack in order to be able to perform the opcode) then, there is a user error. We log this and revert all state changes. 
+
+## Tests
+
+| Inputs | Expected Output |
+| ------ | --------------- |
+| Stack: SP > 2, top of the stack with a, b, n. <br> GAS > 8 <br> MAX_CNT_STEPS - STEP - 150 > 0 <br> MAX_CNT_ARITH - CNT_ARITH - 3 > 0 <br> MAX_CNT_BINARY - CNT_BINARY - 2 > 0 | Stack: pop a,b,n and push r  <br>  GAS* = GAS-8 <br> MAX_CNT_STEPS - STEP* > 0 <br>  CNT_ARITH - CNT_ARITH* < 4 <br>  CNT_BINARY - CNT_BINARY* < 3 <br>  |
+| Stack: SP < 3 | Stack Underflow Exception |
+| Stack: GAS < 8 | Out of Gas Exception |
+| MAX_CNT_STEPS - STEP - 150 < 1 | Out of Counters Exception |
+|MAX_CNT_ARITH - CNT_ARITH  < 3 | Out of Counters Exception |
+|MAX_CNT_BINARY - CNT_BINARY < 2 | Out of Counters Exception |
+
+'*' means values after the execution.
+
+ 
 
