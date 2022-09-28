@@ -67,11 +67,11 @@ Where $a, b, n, d, e, k_l, r \in \{0, 1, \dots, 2^{256} - 1 \}.$
 
 ## Inputs 
 
-The values a,b,n at the top of the stack.
+The values $a, b$ and $n$ at the top of the stack.
 
 ## Outputs
 
-The value r at the top of the stack while a, b and n have been removed from the stack.
+The value $r$ at the top of the stack while $a, b$ and $n$ have been removed from the stack.
 
 ## Exceptions 
 
@@ -102,12 +102,12 @@ The value r at the top of the stack while a, b and n have been removed from the 
 
 | Inputs | Expected Output |
 | ------ | --------------- |
-| Stack: SP > 2, top of the stack with a, b, n. <br> GAS > 8 <br> MAX_CNT_STEPS - STEP - 150 > 0 <br> MAX_CNT_ARITH - CNT_ARITH - 3 > 0 <br> MAX_CNT_BINARY - CNT_BINARY - 2 > 0 | Stack: pop a,b,n and push r  <br>  GAS* = GAS-8 <br> MAX_CNT_STEPS - STEP* > 0 <br>  CNT_ARITH - CNT_ARITH* < 4 <br>  CNT_BINARY - CNT_BINARY* < 3 <br>  |
-| Stack: SP < 3 | Stack Underflow Exception |
-| Stack: GAS < 8 | Out of Gas Exception |
-| MAX_CNT_STEPS - STEP - 150 < 1 | Out of Counters Exception |
-|MAX_CNT_ARITH - CNT_ARITH  < 3 | Out of Counters Exception |
-|MAX_CNT_BINARY - CNT_BINARY < 2 | Out of Counters Exception |
+| **Stack**: $\mathtt{SP} > 2$, top of the stack with $a, b, n$. <br> $\mathtt{GAS} > 8$ <br> $\mathtt{MAX\_CNT\_STEPS} - \mathtt{STEP} - 150 > 0$ <br> $\mathtt{MAX\_CNT\_ARITH} - \mathtt{CNT\_ARITH} - 3 > 0$ <br> $\mathtt{MAX\_CNT\_BINARY} - \mathtt{CNT\_BINARY} - 2 > 0$ | **Stack**: pop $a, b, n$ and push $r$  <br>  $\mathtt{GAS}^* = \mathtt{GAS}-8$ <br> $\mathtt{MAX\_CNT\_STEPS} - \mathtt{STEP}^* > 0$ <br>  $\mathtt{CNT\_ARITH} - \mathtt{CNT\_ARITH}^* < 4$ <br>  $\mathtt{CNT\_BINARY} - \mathtt{CNT\_BINARY}^* < 3$ <br>  |
+| **Stack**: $\mathtt{SP} < 3$ | Stack Underflow Exception |
+| **Stack**: $\mathtt{GAS} < 8$ | Out of Gas Exception |
+| $\mathtt{MAX\_CNT\_STEPS} - \mathtt{STEP} - 150 < 1$ | Out of Counters Exception |
+| $\mathtt{MAX\_CNT\_ARITH} - \mathtt{CNT\_ARITH}  < 3$ | Out of Counters Exception |
+| $\mathtt{MAX\_CNT\_BINARY} - \mathtt{CNT\_BINARY} < 2$ | Out of Counters Exception |
 
 '*' means values after the execution.
 
