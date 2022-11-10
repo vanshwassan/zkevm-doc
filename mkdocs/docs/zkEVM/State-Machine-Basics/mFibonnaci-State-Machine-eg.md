@@ -1,117 +1,15 @@
-[ToC]
-
-
-
-
-
-## Introduction - zkProver's Design Approach
-
-
-
-The zkEVM's overall design follows the state machine model, and thus emulates the Ethereum Virtual Machine (EVM) by not only carrying out payments and transfers of ERC20 tokens, but by also running Ethereum smart contracts. 
-
-In addition, the zkEVM is not just a rollup but a zero-knowledge rollup. Yet the EVM was not designed with zero-knowledge in mind. This in itself presents a few challenges because ZK technology has not reached its maturity, and is still plagued by implementation problems such as inefficiency and lack of sufficient scalability.
-
-The main aim, with the zkEVM, is to save gas costs for Ethereum users and reducing transactions' finality time. The strategy in achieving this objective is to develop a zkProver to batch thousands of transactions, prove their validity and correctness, and only publish a minimally-sized validity proof for verification.
-
-The zkProver's design takes advantage of the best known techniques in the ZK folklore, while introducing novel ZK tools For example, the Polynomial Identity Language (PIL), which is pivotal in enabling the zkProver produce verifiable proofs.
-
-State machines are therefore best suited for iterative computations, which are common in Ethereum. Arithmetic circuits, on the contrary, would need loops to be unrolled, and hence resulting in undesirably larger circuits.
-
-
-
-### The Basic Design Approach
-
-The general approach to designing the zkProver so as to realise a proof system based on state machines is as follows,
-
-- Firstly, turn the required deterministic computation into a **state machine** computation.
-
-- Secondly, describe state transitions in terms of **algebraic constraints**. These are like rules that every state transition must satisfy.
-
-- Thirdly, use **interpolation** of state values to build polynomials that describe the state machine.
-
-- Fourthly, define **polynomial identities** that all state values must satisfy.
-
-- Fifthly, a specially designed **cryptographic proving system** (e.g. a STARK, a SNARK, or a combination of the two) is used to produce a verifiable proof, which anyone can verify.
-
-The first four steps are commonly referred to as **Arithmetization**. An arithmetization can be seen, in the case of STARKs, as the Algebraic Intermediate Representation (AIR), while in the case of SNARKs (which use arithmetic circuits) it can be seen as the R1CS system.
-
-Also, since the context of the zkProver's deployment is that of a public-key cryptographic system, a commitment scheme is required. In particular, the underpinnings of the zkProver's capability to prove correctness of computations and allow any independent party verify the validity proofs is a **polynomial commitment scheme**.
-
-
-
-![Figure 1 : General Approach to the zkProver's Design](figures/prover-design-approach.png)
-
-<div align="center"><b> Figure 1 : General Approach to the zkProver's Design </b></div>
-
-
-
-
-
-
-
-## State Machine Basics
-
-
-
-A state machine is composed of registries that carry numerical values. These values are often called, **registry values**. At a given point in time, registry values constitute what is called a **state** of the state machine.
-
-A **state machine** is so called, because it is a machine whose behaviour is described in terms of its states and the rules that determine how one state transitions to another.
-
-Hence, the next concept pertinent to state machines, and arithmetization of computations, is that of a **clock**. A state transition in a state machine occurs at each tick of the **clock**. A clock thus controls registries of a state machine, determining the timing and order of execution.
-
-A computation is **deterministic** if, given a particular input, it will always produce the same output. This type of computations are consequently verifiable. The zkProver executes these deterministic computations in order to produce verifiable proofs of correctness. Verifiability of these proofs is enabled by involving three types of values in computations;
-
-(a) **Computation constants** which are constants specifically related to the computation being carried out.
-
-(b) **Publics**, $\mathbf{x}$, which are variables; values that can be changed to generate proofs for the same computation but with different public values. These values are known by both the prover and the verifier.
-
-(c) **Privates**, $\large{\mathtt{w}}$, which are private values, also known as (a.k.a) ”the witness”. These values are only known by the prover.
-
-
-
-![Simplified State Machine](figures/simplified-sm-eg.png)
-
-<div align="center"><b> Figure 2: Simplified State Machine in terms of indexed registries </b></div>
-
-
-
-The **execution trace** of a state machine is the record of all its registry values, commonly represented in table form, where the rows represent the states, and the columns depict its distinct variables (or polynomials). Each column records the values of a particular registry across time, while each row represents the state of the entire machine at one point in time.
-
-Each state machine has **initial state values**. Figure 3 below depicts the execution trace of a state machine with $\mathtt{K}$ variables and $\mathtt{T+1}$ states, where typically, $\mathtt{T}$ is some power of $2$. The number of rows is $\mathtt{T + 1}$ simply because the machine gets initialized to the initial state before the first tick of the clock (ie., before the state machine begins to execute $\mathtt{T}$ state transitions.)
-
-State machines are best suited for iterative computations because of their cyclic nature. That is, after a specific number of state changes, a typical state machine loops back to its initial state. For instance, the state machine such as the one depicted in Figure 3 reverts back to its initial state after $\mathtt{T}$.  Generally, every state machine has a **cycle** of length $\mathtt{2^t}$ for some integer $\mathtt{t}$.
-
-
-
-![Figure 2 : Simplified State Machine with different types of values](figures/sm-compt-trace.png)
-
-<div align="center"><b> Figure 3: Computation Trace of a State Machine </b></div>
-
-
-
-**Arithmetic constraints** are used to enforce correctness of the computation. These constraints are reffered to as *arithmetic* because they are equations containing arithmetic operations such as addition or multiplication. Arithmetic constraints define how values of a particular state and its previous state are related.
-
-The process of efficiently proving a computation involves interpolating certain values into polynomials, and subsequently forming polynomial equations, a.k.a. **polynomial identities**.
-
-
-
-
-
-
-
 ## An Example Of A State Machine
 
 
 
-Consider a verifiable-proof-of-correctness scheme, using an arbitrary Polynomial Commitment Scheme, where users have to prove knowledge of the n-th member of a multiplicative Fibonacci Series, for specific initial conditions.
+Consider a proof/verification scheme, using an arbitrary Polynomial Commitment Scheme, where users have to prove knowledge of the N-th member of a multiplicative Fibonacci Series, for specific initial conditions.
 
 
 
 ### The Multiplicative Fibonacci Series
 
 
-The multiplicative Fibonacci Series (or simply mFibonacci Series), denoted by  $\mathbf{a_0, a_1, a_2, \dots , a_n}$, has the property that the product of every two consecutive members $\mathbf{a_{i-1}}$ and $\mathbf{a_i}$ gives the value of the next member $\mathbf{a_{i+1}}$. That is, $\mathbf{ a_{i+1} = a_{i-1}\cdot a_i }$, where the initial values are specified as $\mathbf{a_0} = 2$ and $\mathbf{a_1} = 1$.
+The multiplicative Fibonacci Series (or simply mFibonacci Series), denoted by  $\mathbf{a_0, a_1, a_2, \dots , a_n}$, has the property that the product of every two consecutive members $\mathbf{a_{i-1}}$ and $\mathbf{a_i}$ gives the value of the next member $\mathbf{a_{i+1}}$. That is, $\mathbf{ a_{i+1} = a_{i-1}\cdot a_i }$. And, the initial values are specified as $\mathbf{a_0} = 2$ and $\mathbf{a_1} = 1$.
 
 Here are the first ten members of the mFibonacci Series,
 
@@ -120,7 +18,7 @@ $$
 $$
 As a trivial example, the challenge may be: Prove knowledge of the initial values that produced $\mathbf{a_{10} = 17179869184}$, the eleventh member of the mFibonacci Series, without revealing the initial values. 
 
-The task therefore, is to first build a state machine that would enable anyone to prove knowledge of the initial values $\mathbf{a_0}$ and $\mathbf{a_1}$ that yields a specific n-th member of the mFibonacci Series.
+The task therefore, is to first build a state machine that would enable anyone to prove knowledge of the initial values $\mathbf{a_0}$ and $\mathbf{a_1}$ that yields a specific N-th member of the mFibonacci Series.
 
 
 
@@ -143,7 +41,7 @@ $$
 { A_{i+1} = B_i \quad\text{ }\text{ }\text{ }  } \\
 { B_{i+1} = A_i \cdot B_i }
 $$
-The aim here is to express the evolution of the execution trace in terms of polynomials, build corresponding polynomial identities, and ultimately construct a ZK proof-of-correctness scheme for our mFibonacci state machine. 
+The aim here is to; express the evolution of the execution trace in terms of polynomials, build corresponding polynomial identities, and ultimately construct a ZK proof/verification scheme for our mFibonacci state machine.
 
 
 
@@ -152,7 +50,7 @@ The aim here is to express the evolution of the execution trace in terms of poly
 
 ### Building The Polynomial Identities
 
-The polynomials that represent the two registries are taken from the set of polynomials $\mathbb{F}_p [X]$, where the coefficients are elements of a prime field $\mathbb{F}_p$ and $p = 2^{64} − 2^{32} + 1$. The polynomials are evaluated over the subgroup ${\mathcal{H}} = \{ \omega, \omega^2, \omega^3, \dots , \omega^7, \omega^8 = 1 = \omega^0 \} = \langle \omega \rangle \subseteq \mathbb{F}_p$ of order $8$.
+The polynomials that represent the two registries are taken from the set of polynomials $\mathbb{F}_p [X]$, where the coefficients are elements of a prime field $\mathbb{F}_p$ and $p = 2^{64} − 2^{32} + 1$. The polynomials are evaluated over the subgroup ${\mathcal{H}} = \{ \omega, \omega^2, \omega^3, \dots , \omega^7, \omega^8 = 1 = \omega^0 \} = \langle \omega \rangle \subseteq \mathbb{F}_p^*$ of order $8$.
 
 Define two polynomials $P(X)$ and $Q(X)$ such that
 $$
@@ -181,7 +79,7 @@ If these polynomial identities should accurately express the two registries, the
 
 Note that the definition of ${\mathcal{H}}$ does not restrict the values of $i$ to be less than $8$. Even if we set $i = 27$, the element  $\omega^{27}$  is in ${\mathcal{H}}$ because $\ \omega^{27} = w^8 \cdot \omega^8 \cdot \omega^8 \cdot \omega^3 = 1 \cdot 1 \cdot 1 \cdot \omega^3 = \omega^3$. However, the unrestricted value of $i$, which implies there is no bound on the number of state changes (i.e., on the clock), presents problems with the above polynomial identities.
 
-Let's test if the polynomial identities hold true for all permissible values of  $i$. Let $X = \omega^7$ and refer to the registry values given in Figure 4.
+Let's test if the polynomial identities hold true for all permissible values of $i$. Let $X = \omega^7$ and refer to the registry values given in Figure 4.
 
 - For the first identity we get, 
 
@@ -234,7 +132,7 @@ P(X \cdot \omega) = \bigg\lvert_{\mathcal{H}}\ \
 Q(X\cdot \omega) = \bigg\lvert_{\mathcal{H}}\ \ 
 (1 − R(X)) \cdot P(X)\cdot Q(X) + R(X)\cdot B_0
 $$
-Note that, for all the states where the new registry $C[i] = 0$, these new identities coincide with the previous ones (when only registries $A$ and $B$ were used).
+Note that, for all the states where the new registry $C[i] = 0$, these new identities coincide with the previous ones (where only registries $A$ and $B$ were used).
 
 These polynomial identities can be rewritten as,
 $$
@@ -265,7 +163,7 @@ $$
 
 
 
-These polynomial identities enforce correct state transitioning, and are therefore referred to as *transition constraints*. They apply to every pair of consecutive states. That is, every pair of consecutive rows in terms of the execution trace of the SM.
+These polynomial identities enforce correct state transitioning, and are therefore referred to as *transition constraints*. They apply to every pair of consecutive states. That is, every pair of consecutive rows in the execution trace of the SM.
 
 
 
@@ -286,7 +184,7 @@ $$
 \big( 1 − R(X) \big) \cdot \big[ P(X\cdot \omega) − Q(X) \big] + R(X)\cdot \big[ P(X \cdot \omega) − 23 \big] = \bigg\lvert_{\mathcal{H}}\ 0\quad\text{ }\text{ }\text{ } \\
 (1 − R(X)) · [Q(Xω) − (P(X) · Q(X))] + R(X)\cdot [Q(Xω) − 46] = \bigg\lvert_{\mathcal{H}}\ 0
 $$
-In the context of our mFibonacci SM, the verifier can set the initial conditions $\big( A_0 , B_0 \big) $ to values of his or her own choice, and generate the state machine while keeping $A_0$ and $B_0$ secret. The prover's task is therefore, to prove knowledge of $A_0$ and $B_0$ that led to a given n-th term of the mFibonacci Series.
+In the context of our mFibonacci SM, the verifier can set the initial conditions $\big( A_0 , B_0 \big) $ to values of his or her own choice, and generate the state machine while keeping $A_0$ and $B_0$ secret. The prover's task is therefore, to prove knowledge of $A_0$ and $B_0$ that led to a given N-th term of the mFibonacci Series.
 
 
 
@@ -294,7 +192,7 @@ In the context of our mFibonacci SM, the verifier can set the initial conditions
 
 Boundary constraints apply to particular registry values, and are used to enforce that the correct initial state was applied.
 
-The idea here is to set up a specific boundary constraint, which the verifier can use to check that correct initial conditions were applied, when the prover was computing a particular n-th term of the mFibonacci Series. Yet, the verifier must not disclose any information about the secret values $A_0$ and $B_0$.
+The idea here is to set up a specific boundary constraint, which the verifier can use to check that correct initial conditions were applied, when the prover was computing a particular N-th term of the mFibonacci Series. Yet, the verifier must not disclose any information about the secret values $A_0$ and $B_0$.
 
 Therefore, the first thing to do, is removing terms in the identities bearing the initial values $A_0$ and $B_0$. This means modifying our polynomial identities to the ones below,
 $$
@@ -303,9 +201,9 @@ $$
 $$
 Secondly, knowing that $A_0$ and $B_0$ yield the $k$-th term $A_{k-1} = P(\omega^{k-1}) =: \mathcal{K}$, the verifier adds the boundary constraint,
 $$
-P(\omega^k) = \mathcal{K}
+P(\omega^{k-1}) = \mathcal{K}
 $$
-In other words, the prover has to provide three polynomials $P(X)$, $Q(X)$, $P(X\omega)$ and $Q(X\omega)$ together with the correct $k$-th term. The verifier then tests if these polynomials conform to the above constraints. If all three constraints are satisfied, then  the prover knows the correct initial values $A_0$ and $B_0$.
+In other words, the prover has to provide three polynomials $P(X)$, $Q(X)$, $P(X\omega)$ and $Q(X\omega)$ together with the correct $k$-th term. The verifier then tests if these polynomials conform to the above constraints. If all three constraints are satisfied, then the prover knows the correct initial values $A_0$ and $B_0$.
 
 This logic is valid simply because the computations carried out by the state machine are deterministic by nature.
 
@@ -347,7 +245,7 @@ In practice though, the so-called **Fiat-Shamir transformation** is used to turn
 
 ### Commitment Scheme Protocol (An Interactive Setting)
 
-In the case of our mFibonacci state machine, the Prover needs to commit to the polynomials $P(X)$, $Q(X)$ and $R(X)$, and the Verifier will request the Prover to evaluate these polynomials at randomly selected points (i.e., field elements).
+In the case of our mFibonacci state machine, the Prover needs to commit to the polynomials $P(X)$, $Q(X)$ $P(X\omega)$ and $Q(X\omega)$, and the Verifier will request the Prover to evaluate these polynomials at randomly selected points (i.e., field elements).
 
 The general protocol, in an interactive setting, is as follows;
 
@@ -356,7 +254,7 @@ The general protocol, in an interactive setting, is as follows;
 3. This *back and forth* interaction can occur as many times as the number of openings the Verifier deems sufficient to guarantee soundness.  
 4. The Verifier uses relevant polynomial constraints to test veracity of the Prover's openings.
 
-If all the relevant constraints hold true, then the Verifier accepts that the Prover has knowledge of the correct polynomials $P(X)$, $Q(X)$ and $R(X)$.
+If all the relevant constraints hold true, then the Verifier accepts that the Prover has knowledge of the correct polynomials $P(X)$, $Q(X)$, $P(X\omega)$ and $Q(X\omega)$.
 
 
 
@@ -451,11 +349,11 @@ $$
 
 Define the so-called *vanishing polynomial* on $\mathcal{H}$, denoted by $\mathtt{Z}_{\mathcal{H}}(X)$, as the monomial of maximal degree such that $\mathtt{Z}_{\mathcal{H}}(X) = 0$ for all $X \in \mathcal{H}$. Therefore, 
 $$
-\mathtt{Z}_{\mathcal{H}}(X) = (X-1)\cdot(X-\omega)\cdot(X-\omega^2)\cdots(X-\omega^{n-1}) = X^{n+1} - 1
+\mathtt{Z}_{\mathcal{H}}(X) = (X-1)\cdot(X-\omega)\cdot(X-\omega^2)\cdots(X-\omega^{n-1}) = X^{n} - 1
 $$
 Since  $p_i(X) = 0$  for all  $X \in \mathcal{H} = \{ \omega, \omega^2, \omega^3, \dots , \omega^n = 1 \}$, then
 $$
-p_i(X)\ =\ \big((X-1)\cdot(X-\omega)\cdot(X-\omega^2)\cdots(X-\omega^{n-1})\big)\cdot q_i(X)\ =\ \big( X^{n+1} - 1 \big) \cdot q_i(X)
+p_i(X)\ =\ \big((X-1)\cdot(X-\omega)\cdot(X-\omega^2)\cdots(X-\omega^{n-1})\big)\cdot q_i(X)\ =\ \big( X^{n} - 1 \big) \cdot q_i(X)
 $$
 for some quotient polynomial $q_i(X)$, for each $i \in \{ 1, 2, 3 \}$.
 
@@ -465,7 +363,7 @@ $$
 \big(1 − R(X)\big) · [Q(X\cdot \omega) − (P(X) · Q(X))] = \mathtt{Z}_{\mathcal{H}}(X)\cdot q_2(X) \text{}\text{ }\\
 \big(P(\omega^{\mathtt{T}}) - \mathcal{K} \big)\cdot R(X) = \mathtt{Z}_{\mathcal{H}}(X)\cdot q_3(X) \qquad\text{}\text{}\quad\qquad\qquad\qquad\text{ }
 $$
-The representatives $R(X)$ and $Z_{\mathcal{H}}(X)$ in the PCS, can be preprocessed and be made public (i.e., known to both the Prover and the Verifier). The Verifier can ask the Prover to send openings of these polynomials, $R(X)$ and $Z_{\mathcal{H}}(X)$.
+The representatives $R(X)$ and $Z_{\mathcal{H}}(X)$ in the PCS, can be preprocessed and be made public (i.e., known to both the Prover and the Verifier). The Verifier can check specific openings of these polynomials, $R(X)$ and $Z_{\mathcal{H}}(X)$.
 
 
 

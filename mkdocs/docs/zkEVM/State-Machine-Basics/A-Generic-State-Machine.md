@@ -1,9 +1,3 @@
-[ToC]
-
-
-
-
-
 
 # A Generic State Machine
 
@@ -23,11 +17,11 @@ See Figure below, for such a state machine, with registries $\texttt{A}$ and $\t
 
 
 
-The aim with this document is to explain how the machinery used in the mFibonacci SM; to execute computations, produce proofs of correctness of execution, and verify these proofs; can apply to a generic state machine.
+The aim with this document is to explain how the machinery used in the mFibonacci SM; to execute computations, produce proofs of correctness of execution, and verify these proofs; can extend to a generic state machine.
 
 Think of our state machine as being composed of two parts; the part that has to do with generating the execution trace, while the other part is focused on verifying that the executions were correctly executed. 
 
-- The former part is more like the "software" of the state machine, as it is concerned with interpreting program instructions and correctly generating the execution trace. A novel language dubbed the **Zero-knowledge Assembly Language** (zkASM) is  used in this part. 
+- The former part is more like the "software" of the state machine, as it is concerned with interpreting program instructions and correctly generating the execution trace. A novel language dubbed the **Zero-knowledge Assembly Language** (zkASM) is used in this part.
 - But the latter part is more like the "hardware" as it consists of a set of arithmetic constraints (or their equivalent, polynomial identities) that every correctly generated execution trace must satisfy. Since these arithmetic constraints are transformed into polynomial identities (via an interpolation process), they are described in a novel language called the **Polynomial Identity Language** (PIL).
 
 
@@ -58,7 +52,7 @@ The main difference in the Generic State Machine case, is the inclusion of a pro
 
 
 
-So then, instead of programming the SM executor ourselves with a specific set of instructions as we did with the mFibonacci SM, the Generic SM executor is programmed to read arbitrary instructions encapsulated in some program (depending on the capacity of the SM or the SM's context of application). As mentioned above, each of these programs is written, not in a language like Javascript, but in the zkASM language.
+So then, instead of programming the SM executor ourselves with a specific set of instructions as we did with the mFibonacci SM, the Generic SM executor is programmed to read arbitrary instructions encapsulated in some program (depending on the capacity of the SM or the SM's context of application). As mentioned above, each of these programs is initially written, not in a language like Javascript, but in the zkASM language.
 
 
 
@@ -90,9 +84,9 @@ $$
 Suppose the state machine starts with the initial state $\big(\texttt{A},\texttt{B}\big) = \big(\texttt{0},\texttt{0} \big)$. The SM executor sequentially executes each instruction as follows;  
 
 - Firstly, "$\mathtt{\$\{getAFreeInput()\} => A}$" is a request to execute the function $\texttt{getAFreeInput()}$. That is, the executor must get a free input value and move it into register $\texttt{A}$. Note that "free input" simply means the input can be any value.
-- Secondly, "$\mathtt{3 => B}$" means the executor must move the constant value $\mathtt{3}$ into register $\mathtt{B}$. Since the value $\texttt{3}$ is part of an instruction, it is referred to as the *constant of the execution*. Also, it is called a constant because,  for a given program, it cannot be freely chosen.
+- Secondly, "$\mathtt{3 => B}$" means the executor must move the constant value $\mathtt{3}$ into register $\mathtt{B}$. Since the value $\texttt{3}$ is part of an instruction, it is referred to as the *constant of the execution*. Also, it is called a constant because, for a given program, it cannot be freely chosen.
 - Thirdly, "$\mathtt{:ADD }$" instructs the executor to compute the sum of registry values in $\mathtt{A}$ and $\mathtt{B}$, and save the output into register $\mathtt{A}$.
-- Lastly, "$\mathtt{:END }$" tells the executor to reset the registers $\mathtt{A}$ and $\mathtt{B}$ to their initial values, and thus achieving the cyclic behaviour.
+- Lastly, "$\mathtt{:END }$" tells the executor to reset the registers $\mathtt{A}$ and $\mathtt{B}$ to their initial values in the next state, and thus achieving the cyclic behaviour.
 
 
 
@@ -241,8 +235,6 @@ $$
 $$
 Clearly, the next registry values of both $\mathtt{A}$ and $\mathtt{B}$ are reset to zeros as per the fourth instruction.
 
-
-
 The execution trace can now be updated to reflect the selector columns, as shown below.
 
 
@@ -287,8 +279,6 @@ $$
 
 
 
-
-
 **Remarks**: 
 
 (a)	The $\texttt{CONST}$ column stores the constants of the computation. It should however, not be mistaken for a constant polynomial. The term 'constant' refers to the fact that the column contains constants of the computations.
@@ -305,13 +295,13 @@ In order to match the type of commitment scheme used in the zkEVM, these arithme
 
 ### A Deeper Context For The Executor
 
-Up to this stage, we have only mentioned that the SM executor reads instructions in a program written in zkASM, and it may take some *free* inputs in order to produce an execution trace. There is however a lot more details that goes into this process.
+Up to this stage, we have only mentioned that the SM executor reads instructions in a program written in zkASM, and it may take some *free* inputs in order to produce an execution trace. There is however a lot more detail that goes into this process.
 
 For example, the executor does not really read the zkASM program as is. But rather, the zkASM program (which we name here, $\texttt{program.zkasm}$), is first compiled with a tool called $\bf{zkasmcom}$, into a JSON file (call the JSON file, $\texttt{program.json}$).
 
-Also, the *free* inputs may come in the form of another JSON file, let's name it $\texttt{input.json}$. In addition, the executor can read information in databases and receive relevant input such as the $\texttt{PIL.json}$.
+Also, the *free* inputs may come in the form of another JSON file, let's name it $\texttt{input.json}$. In addition, the executor can read information in databases and receive relevant input such as the $\texttt{PIL.json}$. (As was seen in the case of the mFibonacci SM).
 
-See Figure below for an elaborate description of what the executor does.
+See Figure below for an concise description of what the executor does.
 
 
 
@@ -321,7 +311,11 @@ See Figure below for an elaborate description of what the executor does.
 
 
 
-Although the execution trace is composed of the evaluations of the committed polynomials and the evaluations of the constant polynomials, the two evaluations do not happen simultaneously. Instead, the constant polynomials are preprocessed only once, because they do not change and are specific for a particular state machine. The committed polynomials, on the other hand, can vary. And are therefore only processed *as and when* their corresponding verifiable proof is required.
+Although the execution trace is composed of the evaluations of the committed polynomials and the evaluations of the constant polynomials, the two evaluations do not happen simultaneously. 
+
+Instead, the constant polynomials are preprocessed only once, because they do not change and are specific for a particular state machine. 
+
+The committed polynomials, on the other hand, can vary. And are therefore only processed *as and when* their corresponding verifiable proof is required.
 
 
 
@@ -380,7 +374,7 @@ As far as boundary constraints are concerned, we can, for instance,
 
 - create public 'variables'; $\texttt{input}$ and $\texttt{output}$,
 
-- aset boundary constraints,
+- set boundary constraints,
   $$
   \mathtt{L1(x) \cdot \big(FREE(\omega^0) - input\big) = 0} \\
   \mathtt{L2(x) \cdot \big(A(\omega^{3}) - output\big) = 0}\quad \\
@@ -717,29 +711,24 @@ Since the instructions require the executor to perform varied operations, and th
 
 4. **Publics Are Placed At Known Steps**.
 
-   We must ensure that all $\texttt{publics}$ (the inputs and the outputs) are in the known position. So, $\texttt{publics}$ should be placed at known steps.
-
-   This ensures that the SM's PIL does not have to change with every execution. 
+   We must ensure that all $\texttt{publics}$ (the inputs and the outputs) are in the known position. So, $\texttt{publics}$ should be placed at known steps. This ensures that the SM's PIL does not have to change with every execution. 
 
    For this reason, $\texttt{publics}$ are going to be placed in either the first positions of the polynomial or the last positions of the polynomial (these are specified positions in the arrays representing the columns of the trace).
 
 5. **Correct Program (ROM) Execution**.
 
-   Although the polynomial identities are there to monitor correct state transitions (checking that each instruction does what it is supposed to do), and also that the correct sequence of instructions is followed, one still needs to make sure the instruction being executed belongs to the program in the first place. 
-
-   So, if for instance, the third instruction is being executed, is it really the third instruction of the right program or not.
+   Although the polynomial identities are there to monitor correct state transitions (checking that each instruction does what it is supposed to do), and also that the correct sequence of instructions is followed, one still needs to make sure the instruction being executed belongs to the program in the first place.  So, if for instance, the third instruction is being executed, is it really the third instruction of the right program or not.
 
    One of the implications of a dynamic execution trace, due to the inclusion of jumps, is that some of the previously *constant* (or preprocessed) polynomials must now be *committed* polynomials.
 
-   If we are going to allow polynomials (i.e., columns in the execution trace) corresponding to the instructions to be committed, we need to be cautious that only instructions belonging to the right program are being executed. 
-
-   For this purpose, we are going to use a tool called [$\mathbf{Plookup}$](https://eprint.iacr.org/2020/315.pdf).
+   If we are going to allow polynomials (i.e., columns in the execution trace) corresponding to the instructions to be committed, we need to be cautious that only instructions belonging to the right program are being executed. For this purpose, we are going to use a tool called [$\mathbf{Plookup}$](https://eprint.iacr.org/2020/315.pdf).
 
 
 
 
 
-### Checking Instructions’ Sequence
+
+### Checking Sequence Of Instructions 
 
 
 
@@ -1267,9 +1256,4 @@ Notice that, in the above example, the final loop added to Assembly program repe
 So if, for example, the execution result or state machine output is the state of registry $\mathtt{A}$ at the end of all the instructions, we will find this value at $\mathtt{A(N-1)}$.
 
 This is important for verification purposes, because then, we need only add the proper boundary constraint in the PIL, referencing a specific step in the execution trace.   
-
-
-
-
-
 
