@@ -45,9 +45,9 @@ Although taking on this revolutionary design approach was a hard decision to mak
 
 
 
-#### <b>Start [here](zkEVM/Overview/Overview.md) for Hermez 2.0 documentation</b>
+#### <b>Continue [here](zkEVM/Overview/Overview.md) for Polygon zkEVM documentation</b>
 
-#### <b>Start [here](Hermez_1.0/about/scalability.md) for Hermez 1.0 documentation</b>
+#### <b>Continue [here](Hermez_1.0/about/scalability.md) for Hermez 1.0 documentation</b>
 
 
 

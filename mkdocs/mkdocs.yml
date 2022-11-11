@@ -30,6 +30,10 @@ extra:
 nav:
   - Polygon zkEVM:
     - zkEVM Overview: "zkEVM/Overview/Overview.md"
+    - Basic Concepts:
+      - Introduction: "zkEVM/Basic-Concepts/Intro-zkProver's-Design-Approach.md"
+      - Multiplicative Fibonacci SM: "zkEVM/Basic-Concepts/mFibonnaci-State-Machine-eg.md"
+      - A Generic State Machine: "zkEVM/Basic-Concepts/A-Generic-State-Machine.md"
     - zkProver:
       - zkProver Overview: "zkEVM/zkProver/Overview/zkProver-Overview.md"
       - States Machines:
