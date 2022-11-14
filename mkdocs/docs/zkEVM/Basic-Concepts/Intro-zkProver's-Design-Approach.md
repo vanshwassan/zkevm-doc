@@ -4,7 +4,7 @@ The overall design of the Polygon zkEVM follows the state machine model, and thu
 
 The rollup strategy is to develop a zkProver that takes a batch of many transactions, proves their validity, and only publishes a minimally-sized validity proof for verification. This helps to reduce transaction finality time and saves gas costs for Ethereum users. 
 
-But the zkEVM is not just a rollup but a zero-knowledge rollup. Its design takes advantage of the best known techniques in the ZK folklore, while introducing novel ZK tools. For instance, the Polynomial Identity Language (PIL), which is pivotal in enabling the zkProver produce verifiable proofs.
+However, the zkEVM is not just a rollup but a zero-knowledge rollup. Its design takes advantage of the best known techniques in the ZK folklore, while introducing novel ZK tools. For instance, the Polynomial Identity Language (PIL), which is pivotal in enabling the zkProver produce verifiable proofs.
 
 The **state machine model** is best suited for iterative deterministic computations, which are a common place in the Ethereum blockchain. This model is preferred over the arithmetic circuit model, which would need loops to be unrolled, and hence resulting in undesirably larger circuits.
 

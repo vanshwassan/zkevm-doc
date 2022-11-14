@@ -74,7 +74,7 @@ Q(X\cdot \omega) &= Q(\omega^{i+1})  =  B_{i+1}.
 $$
 The previously stated constraints, imposed on the state transitions $\mathtt{S} \to \mathtt{S}'$ of the mFibonacci state machine, translate into the following polynomial identities,
 $$
-P(X\cdot \omega) = \bigg\lvert_{\mathcal{H}}\  Q(X)\qquad\text{ }\text{ }\text{ }\text{ }  \\
+P(X\cdot \omega) = \bigg\lvert_{\mathcal{H}}\  Q(X),\qquad\text{ }\text{ }\text{ }\text{ }  \\
 Q(X\cdot \omega) = \bigg\lvert_{\mathcal{H}}\  P(X) \cdot Q(X)
 $$
 If these polynomial identities should accurately express the two registries, then every state transition of the mFibonacci SM must satisfy them.
@@ -869,7 +869,7 @@ First of all, the overall inputs to PIL-STARK are; the $\texttt{.pil}$ file desc
 
 In our earlier description of PIL-STARK, the $\texttt{Executor}$ was 'split' into the $\texttt{Setup} \texttt{ executor}$ and the $\texttt{Prover } \texttt{executor}$. This was done for simplicity's sake. The two $\texttt{executors}$ are but one program that generates the evaluations of the constant polynomial, as well as the evaluations of the committed polynomials.
 
-Create a new file and call it  $\texttt{executor\_mfibonacci.js}$. Copy the code-text shown below, into this $\texttt{.js}$ file and save it in the $\mathtt{mfibonacci\_sm}$ subdirectory.
+Create a new file and call it  $\mathtt{executor\_mfibonacci.js}$. Copy the code-text shown below, into this $\texttt{.js}$ file and save it in the $\mathtt{mfibonacci\_sm}$ subdirectory.
 
 
 
